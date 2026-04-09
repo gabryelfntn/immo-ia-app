@@ -14,6 +14,18 @@ import { UpdateContactStatusControl } from "./update-contact-status";
 
 type Props = { params: Promise<{ id: string }> };
 
+function formatDateTimeFr(iso: string | null | undefined): string {
+  if (!iso || typeof iso !== "string") return "—";
+  try {
+    return new Intl.DateTimeFormat("fr-FR", {
+      dateStyle: "long",
+      timeStyle: "short",
+    }).format(new Date(iso));
+  } catch {
+    return "—";
+  }
+}
+
 function formatBudgetRange(
   min: number | null,
   max: number | null
@@ -93,6 +105,10 @@ export default async function ContactDetailPage({ params }: Props) {
   const followupOptOut = Boolean(
     (row as { followup_opt_out?: boolean }).followup_opt_out
   );
+  const ext = row as {
+    last_contacted_at?: string | null;
+    last_followup_sent_at?: string | null;
+  };
 
   return (
     <div className="mx-auto max-w-3xl">
@@ -149,6 +165,21 @@ export default async function ContactDetailPage({ params }: Props) {
           </dd>
         </dl>
       </div>
+
+      <dl className="mt-6 rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury">
+        <dt className="text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-500">
+          Dernière relance email envoyée
+        </dt>
+        <dd className="mt-2 font-medium text-zinc-100">
+          {formatDateTimeFr(ext.last_followup_sent_at)}
+        </dd>
+        <dt className="mt-6 text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-500">
+          Dernier contact enregistré (CRM)
+        </dt>
+        <dd className="mt-2 font-medium text-zinc-100">
+          {formatDateTimeFr(ext.last_contacted_at)}
+        </dd>
+      </dl>
 
       <div className="mt-6">
         <FollowupOptOutToggle contactId={id} initialOptOut={followupOptOut} />

@@ -2,7 +2,9 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { History, Mail } from "lucide-react";
+import { currentMonthRangeISO } from "@/lib/dashboard/time";
 import { RelancesSubnav } from "../_components/relances-subnav";
+import { ExportFollowupsButton } from "../_components/export-followups-button";
 
 type FollowupRow = {
   id: string;
@@ -64,11 +66,19 @@ export default async function RelancesHistoriquePage() {
   }
 
   const agencyId = profile.agency_id as string;
+  const cur = currentMonthRangeISO();
 
-  const { data: rows, error } = await supabase
-    .from("followup_emails")
-    .select(
-      `
+  const [
+    listRes,
+    sentTotalRes,
+    failedTotalRes,
+    sentMonthRes,
+    failedMonthRes,
+  ] = await Promise.all([
+    supabase
+      .from("followup_emails")
+      .select(
+        `
       id,
       created_at,
       status,
@@ -79,10 +89,37 @@ export default async function RelancesHistoriquePage() {
       contact_id,
       contacts ( first_name, last_name, email )
     `
-    )
-    .eq("agency_id", agencyId)
-    .order("created_at", { ascending: false })
-    .limit(150);
+      )
+      .eq("agency_id", agencyId)
+      .order("created_at", { ascending: false })
+      .limit(150),
+    supabase
+      .from("followup_emails")
+      .select("id", { count: "exact", head: true })
+      .eq("agency_id", agencyId)
+      .eq("status", "sent"),
+    supabase
+      .from("followup_emails")
+      .select("id", { count: "exact", head: true })
+      .eq("agency_id", agencyId)
+      .eq("status", "failed"),
+    supabase
+      .from("followup_emails")
+      .select("id", { count: "exact", head: true })
+      .eq("agency_id", agencyId)
+      .eq("status", "sent")
+      .gte("created_at", cur.start)
+      .lte("created_at", cur.end),
+    supabase
+      .from("followup_emails")
+      .select("id", { count: "exact", head: true })
+      .eq("agency_id", agencyId)
+      .eq("status", "failed")
+      .gte("created_at", cur.start)
+      .lte("created_at", cur.end),
+  ]);
+
+  const { data: rows, error } = listRes;
 
   if (error) {
     return (
@@ -101,10 +138,14 @@ export default async function RelancesHistoriquePage() {
   }
 
   const list = (rows ?? []) as unknown as FollowupRow[];
+  const sentTotal = sentTotalRes.count ?? 0;
+  const failedTotal = failedTotalRes.count ?? 0;
+  const sentMonth = sentMonthRes.count ?? 0;
+  const failedMonth = failedMonthRes.count ?? 0;
 
   return (
     <div className="mx-auto max-w-6xl">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-500/90">
             CRM
@@ -114,7 +155,44 @@ export default async function RelancesHistoriquePage() {
           </h1>
           <p className="mt-2 text-zinc-500">
             Emails automatiques enregistrés pour votre agence ({list.length}{" "}
-            entrée{list.length !== 1 ? "s" : ""})
+            entrée{list.length !== 1 ? "s" : ""} affichée
+            {list.length !== 1 ? "s" : ""} ci-dessous, export jusqu’à 5&nbsp;000).
+          </p>
+        </div>
+        <ExportFollowupsButton />
+      </div>
+
+      <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="rounded-xl border border-white/[0.08] bg-[#12121a] px-4 py-3">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+            Envoyés (total)
+          </p>
+          <p className="mt-1 text-2xl font-bold tabular-nums text-white">
+            {sentTotal}
+          </p>
+        </div>
+        <div className="rounded-xl border border-white/[0.08] bg-[#12121a] px-4 py-3">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+            Échecs (total)
+          </p>
+          <p className="mt-1 text-2xl font-bold tabular-nums text-rose-200">
+            {failedTotal}
+          </p>
+        </div>
+        <div className="rounded-xl border border-white/[0.08] bg-[#12121a] px-4 py-3">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+            Envoyés ce mois
+          </p>
+          <p className="mt-1 text-2xl font-bold tabular-nums text-emerald-200">
+            {sentMonth}
+          </p>
+        </div>
+        <div className="rounded-xl border border-white/[0.08] bg-[#12121a] px-4 py-3">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+            Échecs ce mois
+          </p>
+          <p className="mt-1 text-2xl font-bold tabular-nums text-rose-200">
+            {failedMonth}
           </p>
         </div>
       </div>

@@ -54,6 +54,7 @@ export default async function RelancesPage({ searchParams }: Props) {
       "id, first_name, last_name, email, status, last_contacted_at, created_at"
     )
     .eq("agency_id", agencyId)
+    .eq("followup_opt_out", false)
     .order("created_at", { ascending: false });
 
   if (error) {

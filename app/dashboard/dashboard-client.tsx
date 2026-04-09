@@ -16,6 +16,8 @@ import {
   YAxis,
 } from "recharts";
 import {
+  Bell,
+  Calendar,
   Flame,
   Home,
   Percent,
@@ -192,6 +194,76 @@ export function DashboardClient({ data, todayLabel }: Props) {
           </p>
         </div>
       </header>
+
+      <section className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#12121a] shadow-[0_0_40px_-20px_rgba(245,158,11,0.18)]">
+        <div className="flex flex-col gap-4 border-b border-white/[0.06] px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="flex items-center gap-2 text-lg font-bold text-white">
+              <Bell className="h-5 w-5 text-amber-500" />
+              Relances automatiques
+            </h2>
+            <p className="mt-1 text-sm text-zinc-500">
+              Contacts inactifs (14+ j., hors opt-out), envois ce mois et
+              désinscriptions relances.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href="/dashboard/relances"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] bg-white/[0.04] px-4 py-2 text-sm font-semibold text-zinc-200 transition-colors hover:border-amber-500/30 hover:bg-amber-500/10 hover:text-white"
+            >
+              <Bell className="h-4 w-4 text-amber-500" />
+              À relancer
+            </Link>
+            <Link
+              href="/dashboard/relances/historique"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] bg-white/[0.04] px-4 py-2 text-sm font-semibold text-zinc-200 transition-colors hover:border-indigo-500/30 hover:bg-indigo-500/10 hover:text-white"
+            >
+              <Calendar className="h-4 w-4 text-indigo-400" />
+              Historique
+            </Link>
+          </div>
+        </div>
+        <div className="grid gap-4 p-6 sm:grid-cols-2 lg:grid-cols-4">
+          {(
+            [
+              {
+                label: "Inactifs 14+ j.",
+                value: data.relances.inactive14Plus,
+                hint: "Éligibles relance (sans opt-out)",
+              },
+              {
+                label: "Relances envoyées",
+                value: data.relances.followupsSentThisMonth,
+                hint: "Ce mois-ci",
+              },
+              {
+                label: "Échecs d’envoi",
+                value: data.relances.followupsFailedThisMonth,
+                hint: "Ce mois-ci",
+              },
+              {
+                label: "Opt-out relances",
+                value: data.relances.optedOutCount,
+                hint: "Contacts exclus",
+              },
+            ] as const
+          ).map((cell) => (
+            <div
+              key={cell.label}
+              className="rounded-xl border border-white/[0.06] bg-[#0a0a0f]/60 px-4 py-4"
+            >
+              <p className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+                {cell.label}
+              </p>
+              <p className="mt-2 text-3xl font-bold tabular-nums text-white">
+                <AnimatedNumber value={cell.value} />
+              </p>
+              <p className="mt-1 text-xs text-zinc-600">{cell.hint}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         {metricsLayout.map((m) => {

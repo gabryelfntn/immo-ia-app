@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { Mail, MapPin, Phone, Plus } from "lucide-react";
+import { BellOff, Mail, MapPin, Phone, Plus } from "lucide-react";
 import {
   CONTACT_STATUSES,
   CONTACT_TYPES,
@@ -268,6 +268,17 @@ export default async function ContactsPage({ searchParams }: Props) {
                         {fullName}
                       </h2>
                       <PulsingContactBadge status={status} />
+                      {Boolean(
+                        (c as { followup_opt_out?: boolean }).followup_opt_out
+                      ) ? (
+                        <span
+                          className="inline-flex items-center gap-1.5 rounded-full border border-zinc-600/40 bg-zinc-500/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-zinc-400"
+                          title="Relances email automatiques désactivées pour ce contact"
+                        >
+                          <BellOff className="h-3.5 w-3.5" aria-hidden />
+                          Sans relance auto
+                        </span>
+                      ) : null}
                     </div>
                     <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm text-zinc-400">
                       <span className="inline-flex items-center gap-2">

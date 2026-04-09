@@ -42,6 +42,13 @@ export type DashboardPayload = {
     status: string;
     created_at: string;
   }[];
+  /** Suivi relances (colonnes CRM + table followup_emails). */
+  relances: {
+    inactive14Plus: number;
+    followupsSentThisMonth: number;
+    followupsFailedThisMonth: number;
+    optedOutCount: number;
+  };
 };
 
 const STATUS_COLORS: Record<string, string> = {
@@ -62,6 +69,11 @@ function pctChange(current: number, previous: number): number | null {
 function isInRange(iso: string, startISO: string, endISO: string): boolean {
   const t = new Date(iso).getTime();
   return t >= new Date(startISO).getTime() && t <= new Date(endISO).getTime();
+}
+
+function daysSince(iso: string): number {
+  const last = new Date(iso).getTime();
+  return Math.floor(Math.max(0, Date.now() - last) / (1000 * 60 * 60 * 24));
 }
 
 export async function fetchDashboardData(
@@ -99,7 +111,9 @@ export async function fetchDashboardData(
       .eq("agency_id", agencyId),
     supabase
       .from("contacts")
-      .select("id, first_name, last_name, status, created_at")
+      .select(
+        "id, first_name, last_name, status, created_at, last_contacted_at, followup_opt_out"
+      )
       .eq("agency_id", agencyId),
     supabase
       .from("generated_listings")
@@ -260,6 +274,37 @@ export async function fetchDashboardData(
       created_at: c.created_at as string,
     }));
 
+  const optedOutCount = conts.filter((c) =>
+    Boolean((c as { followup_opt_out?: boolean }).followup_opt_out)
+  ).length;
+
+  const inactive14Plus = conts.filter((c) => {
+    if (Boolean((c as { followup_opt_out?: boolean }).followup_opt_out)) {
+      return false;
+    }
+    const lc = (c as { last_contacted_at?: string | null }).last_contacted_at;
+    const lastActivity =
+      typeof lc === "string" && lc.trim() ? lc : (c.created_at as string);
+    return daysSince(lastActivity) >= 14;
+  }).length;
+
+  let followupsSentThisMonth = 0;
+  let followupsFailedThisMonth = 0;
+  const fuRes = await supabase
+    .from("followup_emails")
+    .select("created_at, status")
+    .eq("agency_id", agencyId)
+    .limit(4000);
+
+  if (!fuRes.error && fuRes.data) {
+    for (const row of fuRes.data) {
+      const iso = row.created_at as string;
+      if (!isInRange(iso, cur.start, cur.end)) continue;
+      if (row.status === "sent") followupsSentThisMonth += 1;
+      else if (row.status === "failed") followupsFailedThisMonth += 1;
+    }
+  }
+
   return {
     userFirstName,
     agencyName,
@@ -285,5 +330,11 @@ export async function fetchDashboardData(
     chartFlux,
     recentProperties,
     recentContacts,
+    relances: {
+      inactive14Plus,
+      followupsSentThisMonth,
+      followupsFailedThisMonth,
+      optedOutCount,
+    },
   };
 }
