@@ -147,7 +147,7 @@ export default async function ContactDetailPage({ params }: Props) {
     <div className="mx-auto max-w-3xl">
       <Link
         href="/dashboard/contacts"
-        className="text-sm font-medium text-slate-500 transition-all duration-300 hover:text-violet-300"
+        className="text-sm font-medium text-slate-500 transition-all duration-300 hover:text-stone-800"
       >
         ← Retour aux contacts
       </Link>
@@ -162,14 +162,14 @@ export default async function ContactDetailPage({ params }: Props) {
           <p className="mt-1 text-sm text-slate-500">{row.phone as string}</p>
         </div>
         <div className="flex shrink-0 flex-col gap-4 sm:items-end">
-          <div className="rounded-xl border border-violet-500/20 bg-violet-500/10 px-5 py-4 text-right">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-violet-300/80">
+          <div className="rounded-xl border border-stone-500/20 bg-stone-700/10 px-5 py-4 text-right">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-500">
               Score priorité
             </p>
-            <p className="mt-1 text-4xl font-bold tabular-nums text-violet-100">
+            <p className="mt-1 text-4xl font-bold tabular-nums text-stone-900">
               {leadScore}
             </p>
-            <p className="mt-1 max-w-[12rem] text-[11px] text-violet-200/70">
+            <p className="mt-1 max-w-[12rem] text-[11px] text-stone-600">
               Chaleur, étape pipeline, données et récence.
             </p>
           </div>

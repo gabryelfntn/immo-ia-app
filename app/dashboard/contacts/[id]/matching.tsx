@@ -88,7 +88,7 @@ export function ContactMatching({ contactId }: Props) {
           <h2 className="text-lg font-bold text-slate-900">Biens compatibles</h2>
           <p className="mt-1 text-sm text-slate-500">
             L&apos;IA compare votre contact aux biens{" "}
-            <span className="text-violet-600">disponibles</span> de
+            <span className="text-stone-800">disponibles</span> de
             l&apos;agence (budget, ville, type, transaction).
           </p>
         </div>
@@ -112,7 +112,7 @@ export function ContactMatching({ contactId }: Props) {
           aria-live="polite"
         >
           <span
-            className="h-10 w-10 animate-spin rounded-full border-2 border-indigo-500/30 border-t-indigo-400"
+            className="h-10 w-10 animate-spin rounded-full border-2 border-stone-300 border-t-stone-800"
             aria-hidden
           />
           <p className="mt-4 text-sm font-medium text-slate-500">
@@ -164,7 +164,7 @@ export function ContactMatching({ contactId }: Props) {
                   <div className="flex min-w-0 flex-1 flex-col justify-center p-5 sm:p-6">
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <h3 className="text-lg font-bold text-slate-900 transition-colors group-hover:text-violet-300">
+                        <h3 className="text-lg font-bold text-slate-900 transition-colors group-hover:text-stone-800">
                           {p.title}
                         </h3>
                         <p className="mt-1 text-xl font-semibold tabular-nums text-amber-400/95">
@@ -184,7 +184,7 @@ export function ContactMatching({ contactId }: Props) {
                         <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
                           Score
                         </p>
-                        <p className="text-2xl font-bold tabular-nums text-violet-600">
+                        <p className="text-2xl font-bold tabular-nums text-stone-800">
                           {m.score}%
                         </p>
                       </div>

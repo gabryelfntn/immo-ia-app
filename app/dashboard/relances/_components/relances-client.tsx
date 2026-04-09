@@ -152,7 +152,7 @@ export function RelancesClient({ contacts, filterDays }: Props) {
           <select
             name="days"
             defaultValue={String(filterDays)}
-            className="rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+            className="rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-stone-400 focus:ring-2 focus:ring-stone-500/20"
           >
             <option value="7">Inactifs depuis 7 jours</option>
             <option value="14">Inactifs depuis 14 jours</option>
@@ -186,7 +186,7 @@ export function RelancesClient({ contacts, filterDays }: Props) {
             return (
               <li key={c.id}>
                 <article
-                  className={`card-luxury rounded-2xl border border-slate-200/90 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-500/20 sm:p-6 ${inactivityGlow(
+                  className={`card-luxury rounded-2xl border border-slate-200/90 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-stone-400/20 sm:p-6 ${inactivityGlow(
                     c.daysInactive
                   )}`}
                 >
@@ -204,12 +204,12 @@ export function RelancesClient({ contacts, filterDays }: Props) {
                           {c.status}
                         </span>
                         <span className="inline-flex items-center gap-2 text-sm text-slate-500">
-                          <Clock className="h-4 w-4 text-indigo-400/80" />
+                          <Clock className="h-4 w-4 text-stone-600/80" />
                           {c.daysInactive} jour
                           {c.daysInactive !== 1 ? "s" : ""} sans contact
                         </span>
                       </div>
-                      <p className="mt-2 text-sm text-violet-700">
+                      <p className="mt-2 text-sm text-stone-800">
                         {c.email}
                       </p>
                       <p className="mt-3 text-sm text-slate-500">

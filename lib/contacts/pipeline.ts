@@ -33,13 +33,13 @@ export function pipelineStageBadgeClass(stage: PipelineStage): string {
     case "qualifie":
       return "bg-sky-50 text-sky-900/90 ring-1 ring-sky-200/80";
     case "visite":
-      return "bg-violet-50 text-violet-900/90 ring-1 ring-violet-200/80";
+      return "bg-stone-100 text-stone-800 ring-1 ring-stone-300/90";
     case "offre":
       return "bg-amber-50 text-amber-900/90 ring-1 ring-amber-200/80";
     case "signature":
       return "bg-emerald-50 text-emerald-900/90 ring-1 ring-emerald-200/80";
     case "fidelisation":
-      return "bg-fuchsia-50 text-fuchsia-900/90 ring-1 ring-fuchsia-200/80";
+      return "bg-neutral-100 text-neutral-800 ring-1 ring-neutral-300/90";
     default:
       return "bg-slate-100 text-slate-700 ring-1 ring-slate-200/90";
   }

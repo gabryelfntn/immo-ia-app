@@ -205,7 +205,7 @@ export default async function ContactsPage({ searchParams }: Props) {
             id="filter-contact-status"
             name="status"
             defaultValue={statusFilter ?? ""}
-            className="rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+            className="rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-stone-400 focus:ring-2 focus:ring-stone-500/20"
           >
             <option value="">Tous les statuts</option>
             {CONTACT_STATUSES.map((s) => (
@@ -218,7 +218,7 @@ export default async function ContactsPage({ searchParams }: Props) {
             id="filter-contact-type"
             name="type"
             defaultValue={typeFilter ?? ""}
-            className="rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+            className="rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-stone-400 focus:ring-2 focus:ring-stone-500/20"
           >
             <option value="">Tous les types</option>
             {CONTACT_TYPES.map((t) => (
@@ -231,7 +231,7 @@ export default async function ContactsPage({ searchParams }: Props) {
             id="filter-pipeline"
             name="pipeline"
             defaultValue={pipelineFilter ?? ""}
-            className="rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-violet-500/40 focus:ring-2 focus:ring-violet-500/20"
+            className="rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-stone-500/40 focus:ring-2 focus:ring-stone-500/20"
           >
             <option value="">Toutes les étapes</option>
             {PIPELINE_STAGES.map((s) => (
@@ -306,7 +306,7 @@ export default async function ContactsPage({ searchParams }: Props) {
               <li key={c.id as string}>
                 <Link
                   href={`/dashboard/contacts/${c.id}`}
-                  className="card-luxury group flex flex-col gap-5 rounded-2xl border border-slate-200/90 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-500/25 sm:flex-row sm:items-center sm:gap-6"
+                  className="card-luxury group flex flex-col gap-5 rounded-2xl border border-slate-200/90 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-stone-400/25 sm:flex-row sm:items-center sm:gap-6"
                 >
                   <div
                     className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-lg font-bold text-slate-900 ring-2 ${avatarGradient(status)}`}
@@ -316,7 +316,7 @@ export default async function ContactsPage({ searchParams }: Props) {
 
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-3">
-                      <h2 className="text-lg font-bold text-slate-900 transition-colors duration-300 group-hover:text-violet-300">
+                      <h2 className="text-lg font-bold text-slate-900 transition-colors duration-300 group-hover:text-stone-800">
                         {fullName}
                       </h2>
                       <PulsingContactBadge status={status} />
@@ -326,7 +326,7 @@ export default async function ContactsPage({ searchParams }: Props) {
                         {PIPELINE_STAGE_LABELS[pipelineStage]}
                       </span>
                       <span
-                        className="inline-flex shrink-0 items-center rounded-full border border-violet-500/25 bg-violet-500/10 px-2.5 py-1 text-[11px] font-bold tabular-nums text-violet-200"
+                        className="inline-flex shrink-0 items-center rounded-full border border-stone-500/25 bg-stone-700/10 px-2.5 py-1 text-[11px] font-bold tabular-nums text-stone-800"
                         title="Score de priorité"
                       >
                         {leadScore}
@@ -345,7 +345,7 @@ export default async function ContactsPage({ searchParams }: Props) {
                     </div>
                     <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500">
                       <span className="inline-flex items-center gap-2">
-                        <Mail className="h-4 w-4 shrink-0 text-indigo-400/80" />
+                        <Mail className="h-4 w-4 shrink-0 text-stone-600/80" />
                         {c.email as string}
                       </span>
                       <span className="inline-flex items-center gap-2">
@@ -362,7 +362,7 @@ export default async function ContactsPage({ searchParams }: Props) {
                       ) : null}
                       {typeof c.desired_city === "string" && c.desired_city ? (
                         <span className="inline-flex items-center gap-1.5 text-slate-500">
-                          <MapPin className="h-4 w-4 text-violet-400/70" />
+                          <MapPin className="h-4 w-4 text-stone-600/70" />
                           {c.desired_city}
                         </span>
                       ) : null}

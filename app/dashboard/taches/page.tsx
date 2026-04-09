@@ -86,11 +86,11 @@ export default async function TachesPage() {
     <div className="mx-auto max-w-4xl">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-violet-500/90">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-stone-700/90">
             Organisation
           </p>
           <h1 className="mt-2 flex items-center gap-3 text-4xl font-bold tracking-tight text-slate-900">
-            <ListTodo className="h-9 w-9 text-violet-400" />
+            <ListTodo className="h-9 w-9 text-stone-600" />
             Tâches
           </h1>
           <p className="mt-2 text-slate-500">
@@ -99,7 +99,7 @@ export default async function TachesPage() {
         </div>
         <Link
           href="/dashboard"
-          className="text-sm font-medium text-slate-500 hover:text-violet-300"
+          className="text-sm font-medium text-slate-500 hover:text-stone-800"
         >
           ← Tableau de bord
         </Link>

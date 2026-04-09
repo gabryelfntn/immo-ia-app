@@ -53,7 +53,7 @@ export function UpdatePipelineStageControl({
         value={value}
         disabled={pending}
         onChange={(e) => onChange(e.target.value as PipelineStage)}
-        className="max-w-xs rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition-all duration-300 focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/25 disabled:opacity-50"
+        className="max-w-xs rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition-all duration-300 focus:border-stone-500/50 focus:ring-2 focus:ring-stone-500/25 disabled:opacity-50"
       >
         {PIPELINE_STAGES.map((s) => (
           <option key={s} value={s} className="bg-white">

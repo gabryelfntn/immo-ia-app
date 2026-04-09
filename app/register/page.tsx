@@ -73,11 +73,11 @@ export default function RegisterPage() {
     <div className="auth-grid-pattern flex min-h-screen flex-col items-center justify-center px-4 py-16">
       <div className="card-luxury relative w-full max-w-md p-8">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white shadow-lg shadow-violet-500/35">
+          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-stone-600 to-stone-900 text-white shadow-lg shadow-stone-600/35">
             <Home className="h-8 w-8" strokeWidth={1.75} />
           </div>
           <h1 className="text-3xl font-bold tracking-tight text-slate-900">ImmoAI</h1>
-          <p className="mt-2 text-sm font-semibold uppercase tracking-[0.2em] text-violet-400/90">
+          <p className="mt-2 text-sm font-semibold uppercase tracking-[0.2em] text-stone-600/90">
             Créer votre agence
           </p>
           <p className="mt-6 text-sm text-slate-500">
@@ -186,7 +186,7 @@ export default function RegisterPage() {
           Déjà inscrit ?{" "}
           <Link
             href="/login"
-            className="font-semibold text-violet-600 transition-colors hover:text-fuchsia-300"
+            className="font-semibold text-stone-800 transition-colors hover:text-stone-700"
           >
             Se connecter
           </Link>

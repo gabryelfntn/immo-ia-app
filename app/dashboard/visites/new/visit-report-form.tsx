@@ -180,7 +180,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
                 id="visit-property"
                 value={propertyId}
                 onChange={(e) => setPropertyId(e.target.value)}
-                className="w-full rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 outline-none transition-all focus:border-stone-400 focus:ring-2 focus:ring-stone-500/20"
               >
                 <option value="">Choisir un bien…</option>
                 {properties.map((p) => (
@@ -202,7 +202,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
                 id="visit-contact"
                 value={contactId}
                 onChange={(e) => setContactId(e.target.value)}
-                className="w-full rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 outline-none transition-all focus:border-stone-400 focus:ring-2 focus:ring-stone-500/20"
               >
                 <option value="">Choisir un contact…</option>
                 {contacts.map((c) => (
@@ -225,7 +225,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
                 type="date"
                 value={visitDate}
                 onChange={(e) => setVisitDate(e.target.value)}
-                className="w-full rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 outline-none transition-all focus:border-stone-400 focus:ring-2 focus:ring-stone-500/20"
               />
             </div>
 
@@ -242,7 +242,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
                 onChange={(e) => setVisitNotes(e.target.value)}
                 rows={8}
                 placeholder="Impressions du client, points forts/faibles du bien, objections, ambiance du quartier…"
-                className="w-full resize-y rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-3 text-sm leading-relaxed text-slate-700 placeholder:text-slate-600 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full resize-y rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-3 text-sm leading-relaxed text-slate-700 placeholder:text-slate-600 outline-none transition-all focus:border-stone-400 focus:ring-2 focus:ring-stone-500/20"
               />
             </div>
           </div>
@@ -294,7 +294,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
       <div className="min-h-[320px]">
         {!report ? (
           <div className="flex h-full min-h-[320px] flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200/90 bg-white/[0.025] px-6 py-16 text-center">
-            <Sparkles className="mb-4 h-10 w-10 text-indigo-500/40" />
+            <Sparkles className="mb-4 h-10 w-10 text-stone-700/40" />
             <p className="text-sm font-medium text-slate-500">
               Le rapport structuré apparaîtra ici après génération.
             </p>
@@ -343,7 +343,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
             </div>
 
             <section className="mt-8 rounded-xl border border-slate-100 bg-black/20 p-4">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-violet-600">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-stone-800">
                 Recommandation
               </h4>
               <p className="mt-2 text-sm leading-relaxed text-slate-600">
@@ -352,7 +352,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
             </section>
 
             <section className="mt-4 rounded-xl border border-slate-100 bg-black/20 p-4">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-violet-300/90">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-stone-800">
                 Prochaine étape
               </h4>
               <p className="mt-2 text-sm leading-relaxed text-slate-600">

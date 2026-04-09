@@ -45,11 +45,11 @@ function LoginForm() {
   return (
     <div className="card-luxury relative w-full max-w-md p-8">
       <div className="mb-8 text-center">
-        <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white shadow-lg shadow-violet-500/35">
+        <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-stone-600 to-stone-900 text-white shadow-lg shadow-stone-600/35">
           <Home className="h-8 w-8" strokeWidth={1.75} />
         </div>
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">ImmoAI</h1>
-        <p className="mt-2 text-sm font-semibold uppercase tracking-[0.2em] text-violet-400/90">
+        <p className="mt-2 text-sm font-semibold uppercase tracking-[0.2em] text-stone-600/90">
           Suite agence
         </p>
         <p className="mt-6 text-sm text-slate-500">
@@ -114,7 +114,7 @@ function LoginForm() {
         Pas encore de compte ?{" "}
         <Link
           href="/register"
-          className="font-semibold text-violet-400 transition-colors hover:text-fuchsia-300"
+          className="font-semibold text-stone-600 transition-colors hover:text-stone-700"
         >
           Créer un compte
         </Link>
@@ -126,7 +126,7 @@ function LoginForm() {
 function LoginFallback() {
   return (
     <div className="auth-grid-pattern flex min-h-screen items-center justify-center">
-      <div className="h-12 w-12 animate-pulse rounded-2xl bg-violet-500/25" />
+      <div className="h-12 w-12 animate-pulse rounded-2xl bg-stone-700/25" />
     </div>
   );
 }

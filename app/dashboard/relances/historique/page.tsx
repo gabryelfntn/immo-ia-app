@@ -219,7 +219,7 @@ export default async function RelancesHistoriquePage() {
             const email = c?.email ?? "—";
             return (
               <li key={r.id}>
-                <article className="card-luxury rounded-2xl border border-slate-200/90 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-500/20 sm:p-6">
+                <article className="card-luxury rounded-2xl border border-slate-200/90 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-stone-400/20 sm:p-6">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-3">
@@ -229,7 +229,7 @@ export default async function RelancesHistoriquePage() {
                           {r.status === "sent" ? "Envoyé" : "Échec"}
                         </span>
                         <span className="inline-flex items-center gap-2 text-sm text-slate-500">
-                          <Mail className="h-4 w-4 text-violet-500" />
+                          <Mail className="h-4 w-4 text-stone-700" />
                           {formatDateTime(r.created_at)}
                         </span>
                         {r.tone ? (
@@ -241,7 +241,7 @@ export default async function RelancesHistoriquePage() {
                       <h2 className="mt-3 text-lg font-bold text-slate-900">
                         {r.subject}
                       </h2>
-                      <p className="mt-2 text-sm text-violet-700">
+                      <p className="mt-2 text-sm text-stone-800">
                         <Link
                           href={`/dashboard/contacts/${r.contact_id}`}
                           className="transition-colors hover:text-amber-300"

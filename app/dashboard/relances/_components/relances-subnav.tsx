@@ -11,7 +11,7 @@ export function RelancesSubnav({ current }: Props) {
         href="/dashboard/relances"
         className={`rounded-xl px-4 py-2 text-sm font-semibold transition-all ${
           current === "liste"
-            ? "border border-indigo-500/35 bg-indigo-500/15 text-violet-700"
+            ? "border border-stone-400/50 bg-stone-200/50 text-stone-900"
             : "text-slate-500 hover:bg-slate-50 hover:text-slate-700"
         }`}
       >
@@ -21,7 +21,7 @@ export function RelancesSubnav({ current }: Props) {
         href="/dashboard/relances/historique"
         className={`rounded-xl px-4 py-2 text-sm font-semibold transition-all ${
           current === "historique"
-            ? "border border-indigo-500/35 bg-indigo-500/15 text-violet-700"
+            ? "border border-stone-400/50 bg-stone-200/50 text-stone-900"
             : "text-slate-500 hover:bg-slate-50 hover:text-slate-700"
         }`}
       >

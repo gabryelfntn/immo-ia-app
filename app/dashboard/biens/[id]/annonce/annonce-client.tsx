@@ -48,7 +48,7 @@ function CopyTextButton({ text, label }: { text: string; label: string }) {
     <button
       type="button"
       onClick={onCopy}
-      className="rounded-lg border border-slate-200/90 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-violet-700 transition-all duration-300 hover:border-indigo-500/40 hover:bg-indigo-500/10"
+      className="rounded-lg border border-slate-200/90 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-stone-800 transition-all duration-300 hover:border-stone-400 hover:bg-stone-200/60"
     >
       {done ? "Copié !" : label}
     </button>
@@ -135,7 +135,7 @@ export function AnnonceClient({ propertyId, header, listings }: Props) {
   return (
     <div className="space-y-10">
       <section className="rounded-2xl border border-slate-200/90 bg-white p-6 card-luxury sm:p-8">
-        <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-400/90">
+        <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-stone-600/90">
           Bien concerné
         </h2>
         <p className="mt-4 text-xl font-bold text-slate-900">{header.title}</p>
@@ -189,7 +189,7 @@ export function AnnonceClient({ propertyId, header, listings }: Props) {
           >
             <div className="flex flex-col items-center gap-3 rounded-2xl border border-slate-200/90 bg-white px-8 py-6 shadow-2xl">
               <span
-                className="h-9 w-9 animate-spin rounded-full border-2 border-indigo-500/30 border-t-indigo-400"
+                className="h-9 w-9 animate-spin rounded-full border-2 border-stone-300 border-t-stone-800"
                 aria-hidden
               />
               <p className="text-sm font-semibold text-slate-700">

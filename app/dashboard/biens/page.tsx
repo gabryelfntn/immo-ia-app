@@ -115,7 +115,7 @@ export default async function BiensPage({ searchParams }: Props) {
     <div className="mx-auto max-w-7xl">
       <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-400/90">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-stone-600/90">
             Portefeuille
           </p>
           <h1 className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
@@ -147,7 +147,7 @@ export default async function BiensPage({ searchParams }: Props) {
             id="filter-status"
             name="status"
             defaultValue={statusFilter ?? ""}
-            className="rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+            className="rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-stone-400 focus:ring-2 focus:ring-stone-500/20"
           >
             <option value="">Tous les statuts</option>
             {PROPERTY_STATUSES.map((s) => (
@@ -160,7 +160,7 @@ export default async function BiensPage({ searchParams }: Props) {
             id="filter-type"
             name="type"
             defaultValue={typeFilter ?? ""}
-            className="rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+            className="rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-stone-400 focus:ring-2 focus:ring-stone-500/20"
           >
             <option value="">Tous les types</option>
             {PROPERTY_TYPES.map((t) => (
@@ -171,7 +171,7 @@ export default async function BiensPage({ searchParams }: Props) {
           </select>
           <button
             type="submit"
-            className="rounded-full bg-indigo-500/20 px-5 py-2 text-sm font-semibold text-violet-700 transition-all duration-300 hover:bg-indigo-500/30"
+            className="rounded-full bg-stone-300/50 px-5 py-2 text-sm font-semibold text-stone-900 transition-all duration-300 hover:bg-stone-400/60"
           >
             Appliquer
           </button>
@@ -212,7 +212,7 @@ export default async function BiensPage({ searchParams }: Props) {
               <li key={p.id}>
                 <Link
                   href={`/dashboard/biens/${p.id}`}
-                  className="card-luxury group block overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-500/10"
+                  className="card-luxury group block overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-stone-500/10"
                 >
                   <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200/90">
                     {typeof p.image_url === "string" && p.image_url ? (
@@ -241,7 +241,7 @@ export default async function BiensPage({ searchParams }: Props) {
                     </div>
                   </div>
                   <div className="p-5">
-                    <p className="line-clamp-2 text-lg font-semibold text-slate-900 transition-colors duration-300 group-hover:text-violet-300">
+                    <p className="line-clamp-2 text-lg font-semibold text-slate-900 transition-colors duration-300 group-hover:text-stone-800">
                       {p.title}
                     </p>
                     <div className="mt-4 flex flex-wrap gap-4 text-sm text-slate-500">
@@ -250,11 +250,11 @@ export default async function BiensPage({ searchParams }: Props) {
                         {p.city as string}
                       </span>
                       <span className="inline-flex items-center gap-1.5">
-                        <Maximize className="h-4 w-4 text-indigo-400/80" />
+                        <Maximize className="h-4 w-4 text-stone-600/80" />
                         {p.surface} m²
                       </span>
                       <span className="inline-flex items-center gap-1.5">
-                        <DoorOpen className="h-4 w-4 text-violet-400/80" />
+                        <DoorOpen className="h-4 w-4 text-stone-600/80" />
                         {p.rooms} p. · {p.bedrooms} ch.
                       </span>
                     </div>

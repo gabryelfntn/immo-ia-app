@@ -177,7 +177,7 @@ export default async function VisitesPage({ searchParams }: Props) {
           <select
             name="property"
             defaultValue={propertyFilter}
-            className="max-w-[220px] rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+            className="max-w-[220px] rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-stone-400 focus:ring-2 focus:ring-stone-500/20"
           >
             <option value="">Tous les biens</option>
             {(propertiesList ?? []).map((p) => (
@@ -194,7 +194,7 @@ export default async function VisitesPage({ searchParams }: Props) {
           <select
             name="contact"
             defaultValue={contactFilter}
-            className="max-w-[220px] rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+            className="max-w-[220px] rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-stone-400 focus:ring-2 focus:ring-stone-500/20"
           >
             <option value="">Tous les contacts</option>
             {(contactsList ?? []).map((c) => (
@@ -254,7 +254,7 @@ export default async function VisitesPage({ searchParams }: Props) {
             const interest = v.client_interest as string;
             return (
               <li key={v.id}>
-                <article className="card-luxury rounded-2xl border border-slate-200/90 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-500/20 sm:p-6">
+                <article className="card-luxury rounded-2xl border border-slate-200/90 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-stone-400/20 sm:p-6">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-3">
@@ -264,7 +264,7 @@ export default async function VisitesPage({ searchParams }: Props) {
                           Intérêt : {interestLabel(interest)}
                         </span>
                         <span className="inline-flex items-center gap-2 text-sm text-slate-500">
-                          <Calendar className="h-4 w-4 text-indigo-400/80" />
+                          <Calendar className="h-4 w-4 text-stone-600/80" />
                           {formatVisitDate(v.visit_date)}
                         </span>
                       </div>
@@ -277,7 +277,7 @@ export default async function VisitesPage({ searchParams }: Props) {
                           </span>
                         ) : null}
                       </h2>
-                      <p className="mt-1 text-sm font-medium text-violet-700">
+                      <p className="mt-1 text-sm font-medium text-stone-800">
                         {cName}
                       </p>
                       <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-slate-500">

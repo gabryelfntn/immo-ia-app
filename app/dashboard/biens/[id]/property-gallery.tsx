@@ -127,9 +127,9 @@ export function PropertyGallery({
                       type="button"
                       onClick={() => setSelectedIndex(index)}
                       onKeyDown={(e) => onThumbKeyDown(index, e)}
-                      className={`relative h-16 w-28 overflow-hidden rounded-lg border-2 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+                      className={`relative h-16 w-28 overflow-hidden rounded-lg border-2 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-stone-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
                         selected
-                          ? "border-indigo-400 shadow-[0_0_16px_-4px_rgba(99,102,241,0.6)]"
+                          ? "border-stone-600 shadow-[0_0_16px_-4px_rgba(41,37,36,0.35)]"
                           : "border-transparent opacity-75 hover:border-white/12 hover:opacity-100"
                       }`}
                       aria-label={`Photo ${index + 1}`}
@@ -189,9 +189,9 @@ export function PropertyGallery({
                   type="button"
                   onClick={() => setSelectedIndex(index)}
                   onKeyDown={(e) => onThumbKeyDown(index, e)}
-                  className={`relative h-16 w-24 overflow-hidden rounded-lg border-2 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${
+                  className={`relative h-16 w-24 overflow-hidden rounded-lg border-2 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-stone-500 ${
                     selected
-                      ? "border-indigo-400 shadow-[0_0_12px_-2px_rgba(99,102,241,0.5)]"
+                      ? "border-stone-600 shadow-[0_0_12px_-2px_rgba(41,37,36,0.3)]"
                       : "border-transparent opacity-80 hover:opacity-100"
                   }`}
                   aria-label={`Afficher la photo ${index + 1}`}

@@ -50,7 +50,7 @@ export function UpdateStatusControl({ propertyId, currentStatus }: Props) {
         value={value}
         disabled={pending}
         onChange={(e) => onChange(e.target.value as PropertyStatus)}
-        className="max-w-xs rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition-all duration-300 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
+        className="max-w-xs rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition-all duration-300 focus:border-stone-500/50 focus:ring-2 focus:ring-stone-500/30 disabled:opacity-50"
       >
         {PROPERTY_STATUSES.map((s) => (
           <option key={s} value={s} className="bg-white">

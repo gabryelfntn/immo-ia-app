@@ -79,7 +79,7 @@ export function DashboardShell({ userName, agencyName, children }: Props) {
   const narrowDesktop = desktopCollapsed && isLg;
 
   return (
-    <div className="min-h-screen text-slate-900 antialiased">
+    <div className="min-h-screen text-stone-900 antialiased">
       <DashboardSidebar
         userName={userName}
         agencyName={agencyName}
@@ -91,7 +91,7 @@ export function DashboardShell({ userName, agencyName, children }: Props) {
       {mobileNavOpen && !isLg ? (
         <div
           role="presentation"
-          className="fixed inset-0 z-30 bg-slate-900/25 backdrop-blur-[3px] lg:hidden"
+          className="fixed inset-0 z-30 bg-stone-900/20 backdrop-blur-[2px] lg:hidden"
           onClick={() => setMobileNavOpen(false)}
           aria-hidden
         />

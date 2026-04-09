@@ -84,7 +84,7 @@ export function ContactTasksPanel({ contactId, tasks }: Props) {
               disabled={pending}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Ex. Relancer après visite"
-              className="rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none focus:border-violet-500/40"
+              className="rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none focus:border-stone-500/40"
             />
           </div>
           <div className="flex flex-col gap-1.5">
@@ -100,14 +100,14 @@ export function ContactTasksPanel({ contactId, tasks }: Props) {
               value={dueLocal}
               disabled={pending}
               onChange={(e) => setDueLocal(e.target.value)}
-              className="rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none focus:border-violet-500/40"
+              className="rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none focus:border-stone-500/40"
             />
           </div>
         </div>
         <button
           type="submit"
           disabled={pending}
-          className="rounded-xl bg-violet-600/90 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-violet-500 disabled:opacity-50"
+          className="rounded-xl bg-stone-800/90 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-stone-700 disabled:opacity-50"
         >
           Ajouter la tâche
         </button>

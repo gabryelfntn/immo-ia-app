@@ -130,7 +130,7 @@ export function FollowupModal(props: Props) {
           {loading ? (
             <div className="flex flex-col items-center justify-center rounded-2xl border border-slate-200/90 bg-black/20 py-16">
               <span
-                className="h-10 w-10 animate-spin rounded-full border-2 border-indigo-500/30 border-t-indigo-400"
+                className="h-10 w-10 animate-spin rounded-full border-2 border-stone-300 border-t-stone-800"
                 aria-hidden
               />
               <p className="mt-4 text-sm font-medium text-slate-500">
@@ -143,7 +143,7 @@ export function FollowupModal(props: Props) {
             </p>
           ) : !email ? (
             <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200/90 bg-white/[0.02] px-6 py-14 text-center">
-              <Sparkles className="mb-4 h-10 w-10 text-indigo-500/40" />
+              <Sparkles className="mb-4 h-10 w-10 text-stone-700/40" />
               <p className="text-sm font-medium text-slate-500">
                 Aucun email généré pour l’instant.
               </p>
@@ -160,7 +160,7 @@ export function FollowupModal(props: Props) {
                       {email.subject}
                     </p>
                   </div>
-                  <span className="inline-flex items-center gap-2 rounded-full border border-indigo-500/25 bg-indigo-500/10 px-3 py-1 text-xs font-semibold text-violet-700">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-stone-300/80 bg-stone-100 px-3 py-1 text-xs font-semibold text-stone-800">
                     <Mail className="h-4 w-4" />
                     Ton: {email.tone}
                   </span>

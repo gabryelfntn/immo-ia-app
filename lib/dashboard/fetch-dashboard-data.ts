@@ -76,10 +76,10 @@ export type DashboardPayload = {
 };
 
 const STATUS_COLORS: Record<string, string> = {
-  Froid: "#71717a",
-  Tiède: "#f59e0b",
-  Chaud: "#ef4444",
-  Client: "#34d399",
+  Froid: "#78716c",
+  Tiède: "#b45309",
+  Chaud: "#9a3412",
+  Client: "#1c1917",
 };
 
 function pctChange(current: number, previous: number): number | null {
@@ -269,7 +269,7 @@ export async function fetchDashboardData(
       return {
         name: statusLabels[s],
         value,
-        fill: STATUS_COLORS[statusLabels[s]] ?? "#6366f1",
+        fill: STATUS_COLORS[statusLabels[s]] ?? "#44403c",
       };
     }
   );

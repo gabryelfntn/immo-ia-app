@@ -33,7 +33,7 @@ export function ContactNotesForm({ contactId, initialNotes }: Props) {
   }
 
   const inputClass =
-    "w-full rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-300 placeholder:text-slate-600 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20";
+    "w-full rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-300 placeholder:text-slate-600 focus:border-stone-500/50 focus:ring-2 focus:ring-stone-500/20";
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4">

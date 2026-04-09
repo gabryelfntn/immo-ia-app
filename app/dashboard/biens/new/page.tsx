@@ -7,7 +7,7 @@ export default function NewPropertyPage() {
     <div className="mx-auto max-w-3xl pb-12">
       <Link
         href="/dashboard/biens"
-        className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-all duration-300 hover:text-violet-300"
+        className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-all duration-300 hover:text-stone-800"
       >
         <ArrowLeft className="h-4 w-4" />
         Retour aux biens
@@ -18,7 +18,7 @@ export default function NewPropertyPage() {
       <p className="mt-3 text-slate-500">
         Le statut sera « Disponible » par défaut. Les photos sont envoyées après la
         création du bien (bucket Supabase{" "}
-        <span className="font-mono text-violet-600">property-photos</span>).
+        <span className="font-mono text-stone-800">property-photos</span>).
       </p>
       <PropertyForm />
     </div>

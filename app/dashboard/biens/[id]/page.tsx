@@ -119,7 +119,7 @@ export default async function PropertyDetailPage({ params }: Props) {
     <div className="mx-auto max-w-6xl">
       <Link
         href="/dashboard/biens"
-        className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-all duration-300 hover:text-violet-300"
+        className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-all duration-300 hover:text-stone-800"
       >
         <span aria-hidden>←</span> Retour aux biens
       </Link>
@@ -149,7 +149,7 @@ export default async function PropertyDetailPage({ params }: Props) {
 
       <div className="mt-10 grid gap-6 lg:grid-cols-2">
         <section className="rounded-2xl border border-slate-200/90 bg-white p-6 card-luxury">
-          <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-violet-600">
+          <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-stone-800">
             Caractéristiques
           </h2>
           <dl className="mt-4">

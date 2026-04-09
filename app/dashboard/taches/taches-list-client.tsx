@@ -67,7 +67,7 @@ export function TachesListClient({ tasks, contactNames }: Props) {
                   {t.contact_id && contactNames[t.contact_id] ? (
                     <Link
                       href={`/dashboard/contacts/${t.contact_id}`}
-                      className="mt-2 inline-block text-sm font-medium text-violet-400 hover:text-violet-300"
+                      className="mt-2 inline-block text-sm font-medium text-stone-600 hover:text-stone-800"
                     >
                       {contactNames[t.contact_id]}
                     </Link>

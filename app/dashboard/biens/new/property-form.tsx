@@ -40,7 +40,7 @@ function FormSection({
 }) {
   return (
     <section className="rounded-2xl border border-slate-200/90 bg-slate-50/80 p-6">
-      <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-400/90">
+      <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-stone-600/90">
         {title}
       </h2>
       {subtitle ? (
@@ -185,7 +185,7 @@ export function PropertyForm() {
   }
 
   const inputClass =
-    "w-full rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-300 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20";
+    "w-full rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-300 focus:border-stone-500/50 focus:ring-2 focus:ring-stone-500/20";
   const labelClass =
     "text-xs font-semibold uppercase tracking-wider text-slate-500";
 
@@ -396,13 +396,13 @@ export function PropertyForm() {
           {...getRootProps()}
           className={`flex min-h-[10rem] cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-4 py-10 text-center text-sm transition-all duration-300 ${
             isDragActive
-              ? "border-indigo-500 bg-indigo-500/10"
-              : "border-slate-200/90 bg-slate-50/90 hover:border-indigo-500/40"
+              ? "border-stone-600 bg-stone-200/40"
+              : "border-slate-200/90 bg-slate-50/90 hover:border-stone-400"
           }`}
         >
           <input {...getInputProps()} />
           {isDragActive ? (
-            <span className="text-violet-700">Déposez les fichiers ici…</span>
+            <span className="text-stone-800">Déposez les fichiers ici…</span>
           ) : (
             <span className="text-slate-500">
               Glissez-déposez des images ou cliquez pour parcourir
@@ -424,7 +424,7 @@ export function PropertyForm() {
                   className="h-full w-full object-cover"
                 />
                 {index === 0 ? (
-                  <span className="absolute left-1 top-1 rounded-md bg-indigo-600/90 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                  <span className="absolute left-1 top-1 rounded-md bg-neutral-900 px-1.5 py-0.5 text-[10px] font-semibold text-white">
                     Principale
                   </span>
                 ) : null}

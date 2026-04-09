@@ -109,8 +109,8 @@ const metricsLayout = [
     label: "Biens actifs",
     sub: "Statut disponible · % = nouveaux biens vs M-1",
     icon: Home,
-    accent: "from-emerald-500/90 to-teal-600",
-    bar: "from-emerald-500 to-teal-500",
+    accent: "from-stone-600 to-emerald-900",
+    bar: "from-stone-600 to-emerald-800",
     decimals: 0,
     suffix: "",
     momKey: "biensActifs" as const,
@@ -120,8 +120,8 @@ const metricsLayout = [
     label: "Vendus / loués",
     sub: "Ce mois-ci",
     icon: TrendingUp,
-    accent: "from-amber-500/90 to-orange-600",
-    bar: "from-amber-500 to-orange-500",
+    accent: "from-amber-700 to-orange-900",
+    bar: "from-amber-600 to-amber-800",
     decimals: 0,
     suffix: "",
     momKey: "vendusLoues" as const,
@@ -131,8 +131,8 @@ const metricsLayout = [
     label: "Prospects chauds",
     sub: "Statut « Chaud » · % = nouveaux « chaud » vs M-1",
     icon: Flame,
-    accent: "from-red-500/90 to-rose-600",
-    bar: "from-red-500 to-rose-500",
+    accent: "from-orange-800 to-stone-900",
+    bar: "from-orange-700 to-stone-800",
     decimals: 0,
     suffix: "",
     momKey: "prospectsChauds" as const,
@@ -142,8 +142,8 @@ const metricsLayout = [
     label: "Contacts",
     sub: "Base totale · % = nouveaux contacts vs M-1",
     icon: Users,
-    accent: "from-indigo-500/90 to-violet-600",
-    bar: "from-indigo-500 to-violet-500",
+    accent: "from-stone-600 to-neutral-900",
+    bar: "from-stone-600 to-stone-800",
     decimals: 0,
     suffix: "",
     momKey: "totalContacts" as const,
@@ -153,8 +153,8 @@ const metricsLayout = [
     label: "Annonces IA",
     sub: "Générations cumulées",
     icon: Sparkles,
-    accent: "from-violet-500/90 to-fuchsia-600",
-    bar: "from-violet-500 to-fuchsia-500",
+    accent: "from-stone-700 to-neutral-900",
+    bar: "from-stone-600 to-stone-800",
     decimals: 0,
     suffix: "",
     momKey: "annoncesIA" as const,
@@ -164,8 +164,8 @@ const metricsLayout = [
     label: "Taux conversion",
     sub: "",
     icon: Percent,
-    accent: "from-cyan-500/90 to-indigo-600",
-    bar: "from-cyan-500 to-indigo-500",
+    accent: "from-neutral-800 to-stone-950",
+    bar: "from-stone-700 to-neutral-900",
     decimals: 1,
     suffix: "%",
     momKey: "tauxConversion" as const,
@@ -196,7 +196,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
               ? `Bonjour, ${data.userFirstName}`
               : `Bienvenue`}
           </h1>
-          <p className="mt-2 text-lg font-medium text-violet-400/95">
+          <p className="mt-2 text-lg font-medium text-stone-600/95">
             {data.agencyName}
           </p>
           <p className="mt-3 max-w-2xl text-slate-600">
@@ -209,7 +209,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
       <section className="grid gap-6 lg:grid-cols-3">
         <div className="card-luxury p-6 lg:col-span-2">
           <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">
-            <GitBranch className="h-5 w-5 text-violet-400" />
+            <GitBranch className="h-5 w-5 text-stone-600" />
             Pipeline commercial
           </h2>
           <p className="mt-1 text-sm text-slate-600">
@@ -224,7 +224,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
                 </div>
                 <div className="h-2 overflow-hidden rounded-full bg-slate-100">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all duration-500"
+                    className="h-full rounded-full bg-gradient-to-r from-stone-700 to-neutral-900 transition-all duration-500"
                     style={{
                       width: `${Math.round((row.count / maxPipeline) * 100)}%`,
                     }}
@@ -265,7 +265,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
           </dl>
           <Link
             href="/dashboard/taches"
-            className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200/90 bg-white py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:border-violet-400/50 hover:bg-violet-50 hover:text-violet-800"
+            className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200/90 bg-white py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:border-stone-400 hover:bg-stone-100 hover:text-stone-900"
           >
             Voir les tâches
           </Link>
@@ -275,7 +275,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
       <section className="card-luxury overflow-hidden">
         <div className="border-b border-slate-100 px-6 py-5">
           <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">
-            <Target className="h-5 w-5 text-fuchsia-400" />
+            <Target className="h-5 w-5 text-stone-600" />
             Priorités commerciales
           </h2>
           <p className="mt-1 text-sm text-slate-600">
@@ -305,13 +305,13 @@ export function DashboardClient({ data, todayLabel }: Props) {
                     <td className="py-3 pr-4">
                       <Link
                         href={`/dashboard/contacts/${row.id}`}
-                        className="font-medium text-slate-900 hover:text-violet-600"
+                        className="font-medium text-slate-900 hover:text-stone-900"
                       >
                         {row.name}
                       </Link>
                     </td>
                     <td className="py-3 pr-4">
-                      <span className="inline-flex min-w-[2.5rem] items-center justify-center rounded-lg border border-violet-300/80 bg-violet-50 px-2 py-0.5 text-xs font-bold tabular-nums text-violet-800">
+                      <span className="inline-flex min-w-[2.5rem] items-center justify-center rounded-lg border border-stone-300 bg-stone-100 px-2 py-0.5 text-xs font-bold tabular-nums text-stone-900">
                         {row.score}
                       </span>
                     </td>
@@ -333,7 +333,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
         <div className="flex flex-col gap-4 border-b border-slate-100 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">
-              <Bell className="h-5 w-5 text-violet-500" />
+              <Bell className="h-5 w-5 text-stone-700" />
               Relances automatiques
             </h2>
             <p className="mt-1 text-sm text-slate-600">
@@ -344,16 +344,16 @@ export function DashboardClient({ data, todayLabel }: Props) {
           <div className="flex flex-wrap gap-2">
             <Link
               href="/dashboard/relances"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-200/90 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:border-violet-400/50 hover:bg-violet-50 hover:text-violet-800"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-200/90 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:border-stone-400 hover:bg-stone-100 hover:text-stone-900"
             >
-              <Bell className="h-4 w-4 text-violet-500" />
+              <Bell className="h-4 w-4 text-stone-700" />
               À relancer
             </Link>
             <Link
               href="/dashboard/relances/historique"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-200/90 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:border-fuchsia-400/50 hover:bg-fuchsia-50 hover:text-fuchsia-800"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-200/90 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:border-stone-400 hover:bg-stone-100 hover:text-stone-900"
             >
-              <Calendar className="h-4 w-4 text-fuchsia-500" />
+              <Calendar className="h-4 w-4 text-stone-600" />
               Historique
             </Link>
           </div>
@@ -445,7 +445,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="card-luxury p-6">
-          <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-violet-400">
+          <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-stone-600">
             Biens ajoutés
           </h2>
           <p className="mt-1 text-xs text-slate-500">6 derniers mois</p>
@@ -472,7 +472,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
                 <Bar
                   dataKey="biens"
                   name="Biens"
-                  fill="#8b5cf6"
+                  fill="#44403c"
                   radius={[6, 6, 0, 0]}
                 />
               </BarChart>
@@ -481,7 +481,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
         </div>
 
         <div className="card-luxury p-6">
-          <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-fuchsia-400">
+          <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-stone-600">
             Contacts par statut
           </h2>
           <p className="mt-1 text-xs text-slate-500">Répartition CRM</p>
@@ -522,7 +522,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
       </div>
 
       <div className="card-luxury p-6">
-        <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-violet-400">
+        <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-stone-600">
           Flux portefeuille
         </h2>
         <p className="mt-1 text-xs text-slate-500">
@@ -558,9 +558,9 @@ export function DashboardClient({ data, todayLabel }: Props) {
                 type="monotone"
                 dataKey="disponibles"
                 name="Nouveaux disponibles"
-                stroke="#8b5cf6"
+                stroke="#44403c"
                 strokeWidth={2.5}
-                dot={{ fill: "#8b5cf6", r: 3 }}
+                dot={{ fill: "#44403c", r: 3 }}
                 activeDot={{ r: 5 }}
               />
               <Line
@@ -580,7 +580,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
       <section className="card-luxury overflow-hidden">
         <div className="border-b border-slate-100 px-6 py-5">
           <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">
-            <UserCircle className="h-5 w-5 text-violet-500" />
+            <UserCircle className="h-5 w-5 text-stone-700" />
             Activité récente
           </h2>
           <p className="mt-1 text-sm text-slate-600">
@@ -590,7 +590,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
 
         <div className="grid lg:grid-cols-2">
           <div className="border-b border-slate-100 p-6 lg:border-b-0 lg:border-r lg:border-slate-100">
-            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-violet-400">
+            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-stone-600">
               Biens
             </h3>
             <div className="mt-4 overflow-x-auto">
@@ -621,7 +621,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
                         <td className="py-3 pr-4">
                           <Link
                             href={`/dashboard/biens/${p.id}`}
-                            className="font-medium text-slate-900 hover:text-violet-600"
+                            className="font-medium text-slate-900 hover:text-stone-900"
                           >
                             <span className="line-clamp-1">{p.title}</span>
                             <span className="mt-0.5 block text-xs font-normal text-slate-500">
@@ -652,7 +652,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
           </div>
 
           <div className="p-6">
-            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-fuchsia-400">
+            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-stone-600">
               Contacts
             </h3>
             <div className="mt-4 overflow-x-auto">
@@ -683,7 +683,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
                         <td className="py-3 pr-4">
                           <Link
                             href={`/dashboard/contacts/${c.id}`}
-                            className="font-medium text-slate-900 hover:text-fuchsia-300"
+                            className="font-medium text-slate-900 hover:text-stone-700"
                           >
                             {c.name}
                           </Link>
