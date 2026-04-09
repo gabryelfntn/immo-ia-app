@@ -43,23 +43,23 @@ function LoginForm() {
   const inputClass = "input-app";
 
   return (
-    <div className="relative w-full max-w-md rounded-3xl border border-gray-200/90 bg-white p-8 shadow-[0_24px_64px_-28px_rgba(15,23,42,0.18)]">
+    <div className="card-luxury relative w-full max-w-md p-8">
       <div className="mb-8 text-center">
         <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white shadow-lg shadow-violet-500/35">
           <Home className="h-8 w-8" strokeWidth={1.75} />
         </div>
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">ImmoAI</h1>
-        <p className="mt-2 text-sm font-semibold uppercase tracking-[0.2em] text-violet-600">
+        <h1 className="text-3xl font-bold tracking-tight text-zinc-50">ImmoAI</h1>
+        <p className="mt-2 text-sm font-semibold uppercase tracking-[0.2em] text-violet-400/90">
           Suite agence
         </p>
-        <p className="mt-6 text-sm text-gray-600">
+        <p className="mt-6 text-sm text-zinc-400">
           Connectez-vous à votre espace agence
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <div className="flex flex-col gap-2">
-          <label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+          <label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
             Email
           </label>
           <input
@@ -77,7 +77,7 @@ function LoginForm() {
         <div className="flex flex-col gap-2">
           <label
             htmlFor="password"
-            className="text-xs font-semibold uppercase tracking-wider text-gray-500"
+            className="text-xs font-semibold uppercase tracking-wider text-zinc-500"
           >
             Mot de passe
           </label>
@@ -94,7 +94,7 @@ function LoginForm() {
         </div>
 
         {error ? (
-          <p className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+          <p className="rounded-2xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-300">
             {error}
           </p>
         ) : null}
@@ -110,11 +110,11 @@ function LoginForm() {
         </button>
       </form>
 
-      <p className="mt-8 text-center text-sm text-gray-600">
+      <p className="mt-8 text-center text-sm text-zinc-400">
         Pas encore de compte ?{" "}
         <Link
           href="/register"
-          className="font-semibold text-violet-600 transition-colors hover:text-fuchsia-600"
+          className="font-semibold text-violet-400 transition-colors hover:text-fuchsia-300"
         >
           Créer un compte
         </Link>
@@ -126,7 +126,7 @@ function LoginForm() {
 function LoginFallback() {
   return (
     <div className="auth-grid-pattern flex min-h-screen items-center justify-center">
-      <div className="h-12 w-12 animate-pulse rounded-2xl bg-violet-200/60" />
+      <div className="h-12 w-12 animate-pulse rounded-2xl bg-violet-500/25" />
     </div>
   );
 }

@@ -25,7 +25,7 @@ function interestBadgeClass(interest: string): string {
     case "faible":
       return "border-rose-500/30 bg-rose-500/10 text-rose-200";
     default:
-      return "border-gray-200 bg-gray-100 text-gray-700";
+      return "border-white/[0.08] bg-white/[0.06] text-zinc-300";
   }
 }
 
@@ -77,7 +77,7 @@ export default async function VisitesPage({ searchParams }: Props) {
   if (!profile?.agency_id) {
     return (
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Visites</h1>
+        <h1 className="text-3xl font-bold text-zinc-50">Visites</h1>
         <p className="mt-2 text-sm text-zinc-500">
           Aucune agence associée à votre compte.
         </p>
@@ -129,13 +129,13 @@ export default async function VisitesPage({ searchParams }: Props) {
   if (error) {
     return (
       <div className="mx-auto max-w-6xl">
-        <h1 className="text-3xl font-bold text-gray-900">Visites</h1>
+        <h1 className="text-3xl font-bold text-zinc-50">Visites</h1>
         <p className="mt-2 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
           {error.message}
         </p>
         <p className="mt-2 text-xs text-zinc-500">
           Appliquez la migration{" "}
-          <code className="rounded bg-white/10 px-1">20260409240000_visit_reports</code>{" "}
+          <code className="rounded bg-white/[0.06] px-1">20260409240000_visit_reports</code>{" "}
           dans Supabase si la table est absente.
         </p>
       </div>
@@ -151,7 +151,7 @@ export default async function VisitesPage({ searchParams }: Props) {
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-500/90">
             Activité
           </p>
-          <h1 className="mt-2 text-4xl font-bold tracking-tight text-gray-900">
+          <h1 className="mt-2 text-4xl font-bold tracking-tight text-zinc-50">
             Visites
           </h1>
           <p className="mt-2 text-zinc-500">
@@ -173,18 +173,18 @@ export default async function VisitesPage({ searchParams }: Props) {
         method="get"
         className="mt-10 flex flex-wrap items-center gap-3"
       >
-        <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-gray-200 bg-white/80 p-2 backdrop-blur-sm">
+        <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-2 backdrop-blur-sm">
           <select
             name="property"
             defaultValue={propertyFilter}
-            className="max-w-[220px] rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-800 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+            className="max-w-[220px] rounded-full border border-white/[0.08] bg-[#0c0c10] px-4 py-2 text-sm font-medium text-zinc-200 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
           >
             <option value="">Tous les biens</option>
             {(propertiesList ?? []).map((p) => (
               <option
                 key={p.id as string}
                 value={p.id as string}
-                className="bg-white"
+                className="bg-[#12121a]"
               >
                 {(p.title as string).slice(0, 60)}
                 {(p.title as string).length > 60 ? "…" : ""}
@@ -194,14 +194,14 @@ export default async function VisitesPage({ searchParams }: Props) {
           <select
             name="contact"
             defaultValue={contactFilter}
-            className="max-w-[220px] rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-800 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+            className="max-w-[220px] rounded-full border border-white/[0.08] bg-[#0c0c10] px-4 py-2 text-sm font-medium text-zinc-200 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
           >
             <option value="">Tous les contacts</option>
             {(contactsList ?? []).map((c) => (
               <option
                 key={c.id as string}
                 value={c.id as string}
-                className="bg-white"
+                className="bg-[#12121a]"
               >
                 {c.first_name as string} {c.last_name as string}
               </option>
@@ -225,9 +225,9 @@ export default async function VisitesPage({ searchParams }: Props) {
       </form>
 
       {list.length === 0 ? (
-        <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-white/50 px-8 py-20 text-center">
+        <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/[0.08] bg-white/[0.03] px-8 py-20 text-center">
           <Calendar className="mb-4 h-12 w-12 text-zinc-600" />
-          <p className="text-xl font-semibold text-gray-800">
+          <p className="text-xl font-semibold text-zinc-200">
             Aucun rapport de visite
           </p>
           <p className="mt-2 max-w-md text-sm text-zinc-500">
@@ -254,7 +254,7 @@ export default async function VisitesPage({ searchParams }: Props) {
             const interest = v.client_interest as string;
             return (
               <li key={v.id}>
-                <article className="card-luxury rounded-2xl border border-gray-200 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-500/20 sm:p-6">
+                <article className="card-luxury rounded-2xl border border-white/[0.08] bg-[#12121a] p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-500/20 sm:p-6">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-3">
@@ -268,7 +268,7 @@ export default async function VisitesPage({ searchParams }: Props) {
                           {formatVisitDate(v.visit_date)}
                         </span>
                       </div>
-                      <h2 className="mt-3 text-lg font-bold text-gray-900">
+                      <h2 className="mt-3 text-lg font-bold text-zinc-50">
                         {pTitle}
                         {pCity ? (
                           <span className="font-normal text-zinc-500">

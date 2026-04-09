@@ -40,31 +40,29 @@ export function DashboardSidebar({ userName, agencyName }: Props) {
   const pathname = usePathname();
 
   return (
-    <aside
-      className="fixed left-0 top-0 z-40 flex h-screen w-[280px] flex-col border-r border-white/[0.06] bg-app-sidebar shadow-[8px_0_40px_-16px_rgba(30,27,46,0.45)] max-lg:rounded-none lg:left-4 lg:top-4 lg:h-[calc(100vh-2rem)] lg:w-[268px] lg:rounded-[28px] lg:border lg:border-white/[0.08]"
-    >
-      <div className="border-b border-white/[0.06] px-5 py-6 lg:px-6 lg:py-7">
+    <aside className="fixed inset-y-0 left-0 z-40 flex w-[272px] flex-col border-r border-white/[0.06] bg-app-sidebar/95 shadow-[4px_0_48px_-12px_rgba(0,0,0,0.65)] backdrop-blur-xl">
+      <div className="px-5 py-7">
         <Link
           href="/dashboard"
-          className="group flex items-center gap-3 transition-opacity duration-200 hover:opacity-95"
+          className="group flex items-center gap-3.5 outline-none transition-opacity duration-300 hover:opacity-90"
         >
-          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white shadow-lg shadow-violet-900/40">
-            <Home className="h-5 w-5" strokeWidth={1.75} />
+          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white shadow-lg shadow-violet-900/50 ring-1 ring-white/10 transition-transform duration-300 group-hover:scale-[1.02]">
+            <Home className="h-[22px] w-[22px]" strokeWidth={1.65} />
           </span>
           <div>
-            <span className="block text-lg font-bold tracking-tight text-white">
+            <span className="block text-[17px] font-bold tracking-tight text-white">
               ImmoAI
             </span>
-            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-zinc-500">
               Suite agence
             </span>
           </div>
         </Link>
       </div>
 
-      <nav className="flex flex-1 flex-col gap-1 px-3 py-4">
-        <p className="mb-1 px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
-          Menu principal
+      <nav className="flex flex-1 flex-col gap-0.5 px-3">
+        <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600">
+          Navigation
         </p>
         {nav.map((item) => {
           const active =
@@ -75,17 +73,23 @@ export function DashboardSidebar({ userName, agencyName }: Props) {
             <Link
               key={item.href}
               href={item.href}
-              className={`group flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold transition-all duration-200 ${
+              className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium transition-all duration-300 ${
                 active
-                  ? "bg-white/[0.12] text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)]"
-                  : "text-slate-400 hover:bg-white/[0.06] hover:text-slate-100"
+                  ? "bg-white/[0.07] text-white"
+                  : "text-zinc-500 hover:bg-white/[0.04] hover:text-zinc-200"
               }`}
             >
+              {active ? (
+                <span
+                  className="absolute left-0 top-1/2 h-7 w-0.5 -translate-y-1/2 rounded-full bg-gradient-to-b from-violet-400 to-fuchsia-500 shadow-[0_0_12px_rgba(167,139,250,0.6)]"
+                  aria-hidden
+                />
+              ) : null}
               <Icon
-                className={`nav-icon-glow h-[18px] w-[18px] shrink-0 ${
-                  active ? "text-violet-300" : "text-slate-500"
+                className={`nav-icon-glow relative h-[18px] w-[18px] shrink-0 transition-colors duration-300 ${
+                  active ? "text-violet-300" : ""
                 }`}
-                strokeWidth={1.75}
+                strokeWidth={1.65}
               />
               {item.label}
             </Link>
@@ -93,44 +97,44 @@ export function DashboardSidebar({ userName, agencyName }: Props) {
         })}
       </nav>
 
-      <div className="mx-3 mb-3 rounded-2xl border border-violet-400/25 bg-gradient-to-br from-violet-600/35 via-violet-900/20 to-fuchsia-900/25 p-4 shadow-inner shadow-black/20">
-        <p className="text-xs font-bold text-white">Automatisation</p>
-        <p className="mt-1 text-[11px] leading-relaxed text-slate-300">
-          Relances IA, visites et matching — tout est dans le menu.
+      <div className="mx-3 mb-3 rounded-xl border border-violet-500/15 bg-gradient-to-br from-violet-500/[0.12] to-transparent p-4">
+        <p className="text-xs font-semibold text-zinc-200">Automatisation</p>
+        <p className="mt-1 text-[11px] leading-relaxed text-zinc-500">
+          Relances IA, visites et matching.
         </p>
-        <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-black/25">
+        <div className="mt-3 h-1 overflow-hidden rounded-full bg-black/40">
           <div
-            className="h-full w-3/5 rounded-full bg-gradient-to-r from-violet-400 to-fuchsia-400"
+            className="h-full w-[55%] rounded-full bg-gradient-to-r from-violet-400 to-fuchsia-500 transition-all duration-700"
             aria-hidden
           />
         </div>
       </div>
 
-      <div className="mt-auto border-t border-white/[0.06] px-3 py-3">
+      <div className="mt-auto border-t border-white/[0.06] px-3 py-2">
         <form action={signOut}>
           <button
             type="submit"
-            className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left text-sm font-medium text-slate-500 transition-colors duration-200 hover:bg-white/[0.06] hover:text-slate-200"
+            className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-medium text-zinc-600 transition-all duration-300 hover:bg-white/[0.04] hover:text-zinc-300"
           >
-            <LogOut className="h-[18px] w-[18px] shrink-0 opacity-80" />
+            <LogOut className="h-[17px] w-[17px] shrink-0 opacity-80" />
             Déconnexion
           </button>
         </form>
       </div>
 
-      <div className="border-t border-white/[0.06] px-4 py-4 lg:px-5 lg:py-5">
+      <div className="border-t border-white/[0.06] px-4 py-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500/40 to-fuchsia-500/35 text-sm font-bold text-violet-100 ring-2 ring-white/10">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/30 to-fuchsia-600/25 text-xs font-bold text-violet-100 ring-1 ring-white/10">
             {initials(userName)}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold text-slate-100">
+            <p className="truncate text-sm font-medium text-zinc-200">
               {userName}
             </p>
             {agencyName ? (
-              <p className="truncate text-xs text-slate-500">{agencyName}</p>
+              <p className="truncate text-xs text-zinc-600">{agencyName}</p>
             ) : (
-              <p className="truncate text-xs text-slate-600">Agence</p>
+              <p className="truncate text-xs text-zinc-600">Agence</p>
             )}
           </div>
         </div>

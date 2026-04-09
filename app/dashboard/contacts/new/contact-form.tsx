@@ -27,7 +27,7 @@ function FormSection({
   children: ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-gray-200 bg-gray-50/50 p-6">
+    <section className="rounded-2xl border border-white/[0.08] bg-[#0c0c10]/50 p-6">
       <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-amber-500/90">
         {title}
       </h2>
@@ -77,7 +77,7 @@ export function ContactForm() {
   }
 
   const inputClass =
-    "w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 outline-none transition-all duration-300 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20";
+    "w-full rounded-xl border border-white/[0.08] bg-[#0c0c10] px-4 py-3 text-sm text-zinc-50 outline-none transition-all duration-300 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20";
   const labelClass =
     "text-xs font-semibold uppercase tracking-wider text-zinc-500";
 
@@ -87,7 +87,7 @@ export function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mt-10 flex flex-col gap-8 rounded-2xl border border-gray-200 bg-white p-6 sm:p-10"
+      className="mt-10 flex flex-col gap-8 rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 sm:p-10"
     >
       <FormSection title="Identité">
         <div className="grid gap-5 sm:grid-cols-2">
@@ -167,7 +167,7 @@ export function ContactForm() {
             </label>
             <select id="type" className={inputClass} {...register("type")}>
               {CONTACT_TYPES.map((t) => (
-                <option key={t} value={t} className="bg-white">
+                <option key={t} value={t} className="bg-[#12121a]">
                   {CONTACT_TYPE_LABELS[t]}
                 </option>
               ))}
@@ -182,7 +182,7 @@ export function ContactForm() {
             </label>
             <select id="status" className={inputClass} {...register("status")}>
               {CONTACT_STATUSES.map((s) => (
-                <option key={s} value={s} className="bg-white">
+                <option key={s} value={s} className="bg-[#12121a]">
                   {CONTACT_STATUS_LABELS[s]}
                 </option>
               ))}
@@ -299,7 +299,7 @@ export function ContactForm() {
           type="button"
           disabled={isSubmitting}
           onClick={() => router.push("/dashboard/contacts")}
-          className="w-full rounded-xl border border-gray-200 px-4 py-4 text-sm font-semibold text-gray-700 transition-all duration-300 hover:border-gray-300 hover:bg-gray-50 sm:w-auto sm:px-8"
+          className="w-full rounded-xl border border-white/[0.08] px-4 py-4 text-sm font-semibold text-zinc-300 transition-all duration-300 hover:border-white/12 hover:bg-[#0c0c10] sm:w-auto sm:px-8"
         >
           Annuler
         </button>

@@ -48,7 +48,7 @@ function CopyTextButton({ text, label }: { text: string; label: string }) {
     <button
       type="button"
       onClick={onCopy}
-      className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-violet-700 transition-all duration-300 hover:border-indigo-500/40 hover:bg-indigo-500/10"
+      className="rounded-lg border border-white/[0.08] bg-[#0c0c10] px-3 py-1.5 text-xs font-semibold text-violet-700 transition-all duration-300 hover:border-indigo-500/40 hover:bg-indigo-500/10"
     >
       {done ? "Copié !" : label}
     </button>
@@ -75,14 +75,14 @@ function ThreeListingsColumns({
       {cols.map((c) => (
         <div
           key={c.key}
-          className="card-luxury flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white"
+          className="card-luxury flex flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-[#12121a]"
         >
-          <div className="flex items-center justify-between gap-2 border-b border-gray-100 px-4 py-3">
-            <h3 className="text-sm font-bold text-gray-900">{c.title}</h3>
+          <div className="flex items-center justify-between gap-2 border-b border-white/[0.06] px-4 py-3">
+            <h3 className="text-sm font-bold text-zinc-50">{c.title}</h3>
             <CopyTextButton text={c.body} label="Copier" />
           </div>
           <div className="flex-1 p-4">
-            <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700">
+            <p className="whitespace-pre-wrap text-sm leading-relaxed text-zinc-300">
               {c.body}
             </p>
           </div>
@@ -134,11 +134,11 @@ export function AnnonceClient({ propertyId, header, listings }: Props) {
 
   return (
     <div className="space-y-10">
-      <section className="rounded-2xl border border-gray-200 bg-white p-6 card-luxury sm:p-8">
+      <section className="rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury sm:p-8">
         <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-400/90">
           Bien concerné
         </h2>
-        <p className="mt-4 text-xl font-bold text-gray-900">{header.title}</p>
+        <p className="mt-4 text-xl font-bold text-zinc-50">{header.title}</p>
         <p className="mt-2 text-lg font-semibold tabular-nums text-amber-400/90">
           {header.priceLabel}
         </p>
@@ -147,25 +147,25 @@ export function AnnonceClient({ propertyId, header, listings }: Props) {
             <dt className="text-xs font-semibold uppercase tracking-wider text-zinc-600">
               Type
             </dt>
-            <dd className="mt-1 text-gray-800">{header.typeLabel}</dd>
+            <dd className="mt-1 text-zinc-200">{header.typeLabel}</dd>
           </div>
           <div>
             <dt className="text-xs font-semibold uppercase tracking-wider text-zinc-600">
               Transaction
             </dt>
-            <dd className="mt-1 text-gray-800">{header.transactionLabel}</dd>
+            <dd className="mt-1 text-zinc-200">{header.transactionLabel}</dd>
           </div>
           <div>
             <dt className="text-xs font-semibold uppercase tracking-wider text-zinc-600">
               Surface
             </dt>
-            <dd className="mt-1 text-gray-800">{header.surface} m²</dd>
+            <dd className="mt-1 text-zinc-200">{header.surface} m²</dd>
           </div>
           <div>
             <dt className="text-xs font-semibold uppercase tracking-wider text-zinc-600">
               Pièces
             </dt>
-            <dd className="mt-1 text-gray-800">
+            <dd className="mt-1 text-zinc-200">
               {header.rooms} pièces · {header.bedrooms} chambres
             </dd>
           </div>
@@ -173,7 +173,7 @@ export function AnnonceClient({ propertyId, header, listings }: Props) {
             <dt className="text-xs font-semibold uppercase tracking-wider text-zinc-600">
               Adresse
             </dt>
-            <dd className="mt-1 text-gray-800">
+            <dd className="mt-1 text-zinc-200">
               {header.address}, {header.zip_code} {header.city}
             </dd>
           </div>
@@ -183,16 +183,16 @@ export function AnnonceClient({ propertyId, header, listings }: Props) {
       <div className="relative">
         {loading ? (
           <div
-            className="pointer-events-none absolute inset-0 z-10 flex items-start justify-center rounded-2xl bg-gray-50/85 pt-24 backdrop-blur-sm"
+            className="pointer-events-none absolute inset-0 z-10 flex items-start justify-center rounded-2xl bg-[#0c0c10]/85 pt-24 backdrop-blur-sm"
             aria-live="polite"
             aria-busy="true"
           >
-            <div className="flex flex-col items-center gap-3 rounded-2xl border border-gray-200 bg-white px-8 py-6 shadow-2xl">
+            <div className="flex flex-col items-center gap-3 rounded-2xl border border-white/[0.08] bg-[#12121a] px-8 py-6 shadow-2xl">
               <span
                 className="h-9 w-9 animate-spin rounded-full border-2 border-indigo-500/30 border-t-indigo-400"
                 aria-hidden
               />
-              <p className="text-sm font-semibold text-gray-800">
+              <p className="text-sm font-semibold text-zinc-200">
                 Génération des annonces en cours…
               </p>
             </div>
@@ -200,7 +200,7 @@ export function AnnonceClient({ propertyId, header, listings }: Props) {
         ) : null}
 
         <div className={loading ? "min-h-[12rem] opacity-50" : ""}>
-          <div className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white/80 p-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-4 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:flex-row sm:items-center sm:justify-between">
             <p className="max-w-xl text-sm text-zinc-400">
               Claude génère trois tonalités (classique, dynamique, premium) à
               partir des données du bien.
@@ -227,13 +227,13 @@ export function AnnonceClient({ propertyId, header, listings }: Props) {
       </div>
 
       <section>
-        <h2 className="text-2xl font-bold text-gray-900">Annonces générées</h2>
+        <h2 className="text-2xl font-bold text-zinc-50">Annonces générées</h2>
         <p className="mt-2 text-sm text-zinc-500">
           Les générations les plus récentes apparaissent en premier.
         </p>
 
         {listings.length === 0 ? (
-          <p className="mt-8 rounded-2xl border border-dashed border-gray-200 bg-white/50 px-6 py-12 text-center text-sm text-zinc-500">
+          <p className="mt-8 rounded-2xl border border-dashed border-white/[0.08] bg-white/[0.03] px-6 py-12 text-center text-sm text-zinc-500">
             Aucune annonce enregistrée pour ce bien. Utilisez le bouton ci-dessus
             pour lancer une première génération.
           </p>
@@ -242,7 +242,7 @@ export function AnnonceClient({ propertyId, header, listings }: Props) {
             {listings.map((row, index) => (
               <li key={row.id}>
                 <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
-                  <span className="text-sm font-semibold text-gray-700">
+                  <span className="text-sm font-semibold text-zinc-300">
                     {index === 0 ? "Plus récente" : "Génération"}
                   </span>
                   <time

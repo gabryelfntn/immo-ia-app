@@ -7,12 +7,12 @@ export default function NewContactPage() {
     <div className="mx-auto max-w-3xl pb-12">
       <Link
         href="/dashboard/contacts"
-        className="inline-flex items-center gap-2 text-sm font-medium text-zinc-400 transition-all duration-300 hover:text-violet-600"
+        className="inline-flex items-center gap-2 text-sm font-medium text-zinc-400 transition-all duration-300 hover:text-violet-300"
       >
         <ArrowLeft className="h-4 w-4" />
         Retour aux contacts
       </Link>
-      <h1 className="mt-6 text-4xl font-bold tracking-tight text-gray-900">
+      <h1 className="mt-6 text-4xl font-bold tracking-tight text-zinc-50">
         Ajouter un contact
       </h1>
       <p className="mt-3 text-zinc-500">

@@ -23,7 +23,7 @@ export default async function NewVisitPage() {
   if (!profile?.agency_id) {
     return (
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Nouvelle visite</h1>
+        <h1 className="text-3xl font-bold text-zinc-50">Nouvelle visite</h1>
         <p className="mt-2 text-sm text-zinc-500">
           Aucune agence associée à votre compte.
         </p>
@@ -72,7 +72,7 @@ export default async function NewVisitPage() {
       <p className="mt-6 text-xs font-bold uppercase tracking-[0.2em] text-amber-500/90">
         Rapport IA
       </p>
-      <h1 className="mt-2 text-4xl font-bold tracking-tight text-gray-900">
+      <h1 className="mt-2 text-4xl font-bold tracking-tight text-zinc-50">
         Nouvelle visite
       </h1>
       <p className="mt-2 max-w-2xl text-zinc-500">

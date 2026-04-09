@@ -66,7 +66,7 @@ export function PropertyGallery({
   );
 
   const placeholderHero = (
-    <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
+    <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-[#1a1a24] to-[#12121a]">
       <span className="text-6xl opacity-40" aria-hidden>
         🏠
       </span>
@@ -77,7 +77,7 @@ export function PropertyGallery({
   if (hero) {
     const showImage = mainSrc.length > 0;
     return (
-      <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl shadow-black/40 card-luxury">
+      <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#12121a] shadow-2xl shadow-black/60 card-luxury">
         <div className="relative h-[min(60vh,720px)] min-h-[320px] w-full">
           {showImage ? (
             /* eslint-disable-next-line @next/next/no-img-element */
@@ -90,11 +90,11 @@ export function PropertyGallery({
             <div className="absolute inset-0">{placeholderHero}</div>
           )}
           <div
-            className="absolute inset-0 bg-gradient-to-t from-slate-900/30 via-slate-900/10 to-transparent"
+            className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/15 to-transparent"
             aria-hidden
           />
           <div
-            className="absolute inset-0 bg-gradient-to-r from-slate-900/25 via-transparent to-transparent"
+            className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent"
             aria-hidden
           />
 
@@ -113,7 +113,7 @@ export function PropertyGallery({
         </div>
 
         {slides.length > 1 ? (
-          <div className="border-t border-gray-100 bg-gray-50/90 px-4 py-3">
+          <div className="border-t border-white/[0.06] bg-[#0c0c10]/95 px-4 py-3">
             <ul
               className="flex gap-2 overflow-x-auto pb-1 pt-0.5"
               role="list"
@@ -127,10 +127,10 @@ export function PropertyGallery({
                       type="button"
                       onClick={() => setSelectedIndex(index)}
                       onKeyDown={(e) => onThumbKeyDown(index, e)}
-                      className={`relative h-16 w-28 overflow-hidden rounded-lg border-2 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+                      className={`relative h-16 w-28 overflow-hidden rounded-lg border-2 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#12121a] ${
                         selected
                           ? "border-indigo-400 shadow-[0_0_16px_-4px_rgba(99,102,241,0.6)]"
-                          : "border-transparent opacity-75 hover:border-gray-300 hover:opacity-100"
+                          : "border-transparent opacity-75 hover:border-white/12 hover:opacity-100"
                       }`}
                       aria-label={`Photo ${index + 1}`}
                       aria-current={selected ? "true" : undefined}
@@ -154,7 +154,7 @@ export function PropertyGallery({
 
   if (slides.length === 0) {
     return (
-      <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white">
+      <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#12121a]">
         <div className="flex aspect-[16/10] items-center justify-center">
           {placeholderHero}
         </div>
@@ -164,7 +164,7 @@ export function PropertyGallery({
 
   return (
     <div className="space-y-3">
-      <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white">
+      <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#12121a]">
         <div className="relative aspect-[16/10] w-full">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img

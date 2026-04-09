@@ -53,10 +53,10 @@ export function UpdateContactStatusControl({
         value={value}
         disabled={pending}
         onChange={(e) => onChange(e.target.value as ContactStatus)}
-        className="max-w-xs rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm font-medium text-gray-900 outline-none transition-all duration-300 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/25 disabled:opacity-50"
+        className="max-w-xs rounded-xl border border-white/[0.08] bg-[#0c0c10] px-4 py-2.5 text-sm font-medium text-zinc-50 outline-none transition-all duration-300 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/25 disabled:opacity-50"
       >
         {CONTACT_STATUSES.map((s) => (
-          <option key={s} value={s} className="bg-white">
+          <option key={s} value={s} className="bg-[#12121a]">
             {CONTACT_STATUS_LABELS[s]}
           </option>
         ))}

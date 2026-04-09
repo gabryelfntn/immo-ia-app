@@ -22,7 +22,7 @@ export async function DashboardView() {
   if (!profile?.agency_id) {
     return (
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+        <h1 className="text-3xl font-bold tracking-tight text-zinc-50">
           Tableau de bord
         </h1>
         <p className="mt-2 text-zinc-500">

@@ -38,11 +38,11 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-app-shell text-gray-900 antialiased">
+    <div className="min-h-screen text-zinc-100 antialiased">
       <DashboardSidebar userName={userName} agencyName={agencyName} />
-      <div className="min-h-screen lg:ml-[300px]">
+      <div className="min-h-screen lg:ml-[272px]">
         <DashboardHeader userName={userName} agencyName={agencyName} />
-        <main className="mx-auto max-w-[1440px] px-4 pb-10 pt-2 sm:px-6 lg:px-10 lg:pb-12">
+        <main className="dashboard-main-fade mx-auto max-w-[1440px] px-4 pb-12 pt-1 sm:px-6 lg:px-10 lg:pb-14">
           {children}
         </main>
       </div>
