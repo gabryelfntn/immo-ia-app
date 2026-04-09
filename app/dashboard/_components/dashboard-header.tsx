@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, ChevronRight, Search } from "lucide-react";
+import { Bell, ChevronRight, ChevronsLeft, ChevronsRight, Search } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -42,9 +42,17 @@ function initials(name: string): string {
 type Props = {
   agencyName: string | null;
   userName: string;
+  /** Rabattre / déplier la sidebar (optionnel, affiche un bouton sur grand écran) */
+  onMenuToggle?: () => void;
+  sidebarCollapsed?: boolean;
 };
 
-export function DashboardHeader({ agencyName, userName }: Props) {
+export function DashboardHeader({
+  agencyName,
+  userName,
+  onMenuToggle,
+  sidebarCollapsed = false,
+}: Props) {
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
 
@@ -58,10 +66,30 @@ export function DashboardHeader({ agencyName, userName }: Props) {
   return (
     <header className="sticky top-0 z-30 border-b border-white/[0.06] bg-[#08080c]/75 px-4 py-3.5 backdrop-blur-xl sm:px-6 lg:px-10">
       <div className="mx-auto flex max-w-[1440px] flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
-        <nav
-          aria-label="Fil d'Ariane"
-          className="flex min-w-0 flex-wrap items-center gap-1 text-sm"
-        >
+        <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+          {onMenuToggle ? (
+            <button
+              type="button"
+              onClick={onMenuToggle}
+              aria-expanded={!sidebarCollapsed}
+              aria-label={
+                sidebarCollapsed
+                  ? "Développer le menu latéral"
+                  : "Réduire le menu latéral"
+              }
+              className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.03] text-zinc-400 transition-all duration-300 hover:border-violet-500/25 hover:bg-violet-500/10 hover:text-violet-200 lg:inline-flex"
+            >
+              {sidebarCollapsed ? (
+                <ChevronsRight className="h-5 w-5" strokeWidth={1.65} />
+              ) : (
+                <ChevronsLeft className="h-5 w-5" strokeWidth={1.65} />
+              )}
+            </button>
+          ) : null}
+          <nav
+            aria-label="Fil d'Ariane"
+            className="flex min-w-0 flex-wrap items-center gap-1 text-sm"
+          >
           {crumbs.map((c, i) => (
             <span key={c.href} className="flex items-center gap-1">
               {i > 0 ? (
@@ -82,7 +110,8 @@ export function DashboardHeader({ agencyName, userName }: Props) {
               )}
             </span>
           ))}
-        </nav>
+          </nav>
+        </div>
 
         <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:justify-end lg:max-w-xl">
           <div className="relative hidden min-w-0 flex-1 sm:block">

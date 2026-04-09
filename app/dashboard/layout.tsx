@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { createClient } from "@/lib/supabase/server";
-import { DashboardHeader } from "./_components/dashboard-header";
-import { DashboardSidebar } from "./_components/dashboard-sidebar";
+import { DashboardShell } from "./_components/dashboard-shell";
 
 export default async function DashboardLayout({
   children,
@@ -38,14 +37,8 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen text-zinc-100 antialiased">
-      <DashboardSidebar userName={userName} agencyName={agencyName} />
-      <div className="min-h-screen lg:ml-[272px]">
-        <DashboardHeader userName={userName} agencyName={agencyName} />
-        <main className="dashboard-main-fade mx-auto max-w-[1440px] px-4 pb-12 pt-1 sm:px-6 lg:px-10 lg:pb-14">
-          {children}
-        </main>
-      </div>
-    </div>
+    <DashboardShell userName={userName} agencyName={agencyName}>
+      {children}
+    </DashboardShell>
   );
 }
