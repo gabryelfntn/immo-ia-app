@@ -19,9 +19,12 @@ import {
   Bell,
   Calendar,
   Flame,
+  GitBranch,
   Home,
+  ListTodo,
   Percent,
   Sparkles,
+  Target,
   TrendingUp,
   UserCircle,
   Users,
@@ -32,6 +35,7 @@ import type { DashboardPayload } from "@/lib/dashboard/fetch-dashboard-data";
 import { PROPERTY_STATUS_LABELS } from "@/lib/properties/labels";
 import type { PropertyStatus } from "@/lib/properties/schema";
 import { CONTACT_STATUS_LABELS } from "@/lib/contacts/labels";
+import { PIPELINE_STAGE_LABELS } from "@/lib/contacts/pipeline";
 import type { ContactStatus } from "@/lib/contacts/schema";
 
 const CHART_TOOLTIP = {
@@ -177,6 +181,10 @@ export function DashboardClient({ data, todayLabel }: Props) {
   const { metrics, chartBiensParMois, chartContactsStatut, chartFlux } = data;
 
   const donutTotal = chartContactsStatut.reduce((s, x) => s + x.value, 0);
+  const maxPipeline = Math.max(
+    1,
+    ...data.pipelineFunnel.map((f) => f.count)
+  );
 
   return (
     <div className="space-y-10">
@@ -192,11 +200,134 @@ export function DashboardClient({ data, todayLabel }: Props) {
             {data.agencyName}
           </p>
           <p className="mt-3 max-w-2xl text-zinc-600">
-            Tableau de bord en temps réel : portefeuille, pipeline commercial et
-            performance des annonces IA.
+            Tableau de bord en temps réel : portefeuille, pipeline commercial,
+            tâches et performance des annonces IA.
           </p>
         </div>
       </header>
+
+      <section className="grid gap-6 lg:grid-cols-3">
+        <div className="card-luxury p-6 lg:col-span-2">
+          <h2 className="flex items-center gap-2 text-lg font-bold text-zinc-50">
+            <GitBranch className="h-5 w-5 text-violet-400" />
+            Pipeline commercial
+          </h2>
+          <p className="mt-1 text-sm text-zinc-600">
+            Répartition des contacts par étape (mandat / vente).
+          </p>
+          <ul className="mt-5 space-y-3">
+            {data.pipelineFunnel.map((row) => (
+              <li key={row.stage}>
+                <div className="mb-1 flex justify-between text-xs">
+                  <span className="font-medium text-zinc-300">{row.label}</span>
+                  <span className="tabular-nums text-zinc-500">{row.count}</span>
+                </div>
+                <div className="h-2 overflow-hidden rounded-full bg-white/[0.06]">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all duration-500"
+                    style={{
+                      width: `${Math.round((row.count / maxPipeline) * 100)}%`,
+                    }}
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="card-luxury flex flex-col p-6">
+          <h2 className="flex items-center gap-2 text-lg font-bold text-zinc-50">
+            <ListTodo className="h-5 w-5 text-amber-400" />
+            Tâches
+          </h2>
+          <p className="mt-1 text-sm text-zinc-600">
+            Rappels et suivis à traiter.
+          </p>
+          <dl className="mt-4 flex flex-1 flex-col gap-3 text-sm">
+            <div className="flex justify-between rounded-xl border border-white/[0.06] bg-white/[0.03] px-3 py-2">
+              <dt className="text-zinc-500">Ouvertes</dt>
+              <dd className="font-bold tabular-nums text-zinc-100">
+                {data.tasksSummary.openCount}
+              </dd>
+            </div>
+            <div className="flex justify-between rounded-xl border border-rose-500/20 bg-rose-500/10 px-3 py-2">
+              <dt className="text-rose-200/90">En retard</dt>
+              <dd className="font-bold tabular-nums text-rose-100">
+                {data.tasksSummary.overdue}
+              </dd>
+            </div>
+            <div className="flex justify-between rounded-xl border border-amber-500/20 bg-amber-500/10 px-3 py-2">
+              <dt className="text-amber-200/90">Aujourd&apos;hui</dt>
+              <dd className="font-bold tabular-nums text-amber-100">
+                {data.tasksSummary.dueToday}
+              </dd>
+            </div>
+          </dl>
+          <Link
+            href="/dashboard/taches"
+            className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] py-2.5 text-sm font-semibold text-zinc-200 transition-colors hover:border-violet-500/35 hover:bg-violet-500/10"
+          >
+            Voir les tâches
+          </Link>
+        </div>
+      </section>
+
+      <section className="card-luxury overflow-hidden">
+        <div className="border-b border-white/[0.06] px-6 py-5">
+          <h2 className="flex items-center gap-2 text-lg font-bold text-zinc-50">
+            <Target className="h-5 w-5 text-fuchsia-400" />
+            Priorités commerciales
+          </h2>
+          <p className="mt-1 text-sm text-zinc-600">
+            Contacts classés par score de priorité (chaleur, étape, données,
+            récence).
+          </p>
+        </div>
+        <div className="overflow-x-auto p-6">
+          {data.topLeads.length === 0 ? (
+            <p className="text-sm text-zinc-500">Aucun contact à afficher.</p>
+          ) : (
+            <table className="w-full min-w-[480px] text-left text-sm">
+              <thead>
+                <tr className="text-xs uppercase tracking-wider text-zinc-500">
+                  <th className="pb-3 pr-4 font-semibold">Contact</th>
+                  <th className="pb-3 pr-4 font-semibold">Score</th>
+                  <th className="pb-3 pr-4 font-semibold">Étape</th>
+                  <th className="pb-3 font-semibold">Statut</th>
+                </tr>
+              </thead>
+              <tbody className="text-zinc-300">
+                {data.topLeads.map((row) => (
+                  <tr
+                    key={row.id}
+                    className="border-t border-white/[0.06] transition-colors hover:bg-white/[0.04]"
+                  >
+                    <td className="py-3 pr-4">
+                      <Link
+                        href={`/dashboard/contacts/${row.id}`}
+                        className="font-medium text-zinc-50 hover:text-violet-300"
+                      >
+                        {row.name}
+                      </Link>
+                    </td>
+                    <td className="py-3 pr-4">
+                      <span className="inline-flex min-w-[2.5rem] items-center justify-center rounded-lg border border-violet-500/25 bg-violet-500/10 px-2 py-0.5 text-xs font-bold tabular-nums text-violet-200">
+                        {row.score}
+                      </span>
+                    </td>
+                    <td className="py-3 pr-4 text-zinc-400">
+                      {PIPELINE_STAGE_LABELS[row.pipeline_stage]}
+                    </td>
+                    <td className="py-3 text-zinc-400">
+                      {CONTACT_STATUS_LABELS[row.status]}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </section>
 
       <section className="card-luxury overflow-hidden">
         <div className="flex flex-col gap-4 border-b border-white/[0.06] px-6 py-5 sm:flex-row sm:items-center sm:justify-between">

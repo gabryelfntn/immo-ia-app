@@ -1,4 +1,12 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { computeLeadScore } from "./lead-score";
+import type { ContactStatus } from "@/lib/contacts/schema";
+import type { PipelineStage } from "@/lib/contacts/schema";
+import {
+  parsePipelineStage,
+  PIPELINE_STAGE_LABELS,
+  PIPELINE_STAGES_ORDERED,
+} from "@/lib/contacts/pipeline";
 import {
   currentMonthRangeISO,
   isInLocalMonth,
@@ -49,6 +57,22 @@ export type DashboardPayload = {
     followupsFailedThisMonth: number;
     optedOutCount: number;
   };
+  /** Pipeline commercial (étapes mandat / vente). */
+  pipelineFunnel: { stage: PipelineStage; label: string; count: number }[];
+  /** Tâches ouvertes (table agency_tasks). */
+  tasksSummary: {
+    openCount: number;
+    overdue: number;
+    dueToday: number;
+  };
+  /** Contacts à prioriser (score interne). */
+  topLeads: {
+    id: string;
+    name: string;
+    score: number;
+    pipeline_stage: PipelineStage;
+    status: ContactStatus;
+  }[];
 };
 
 const STATUS_COLORS: Record<string, string> = {
@@ -74,6 +98,18 @@ function isInRange(iso: string, startISO: string, endISO: string): boolean {
 function daysSince(iso: string): number {
   const last = new Date(iso).getTime();
   return Math.floor(Math.max(0, Date.now() - last) / (1000 * 60 * 60 * 24));
+}
+
+function startOfLocalDay(): number {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d.getTime();
+}
+
+function endOfLocalDay(): number {
+  const d = new Date();
+  d.setHours(23, 59, 59, 999);
+  return d.getTime();
 }
 
 export async function fetchDashboardData(
@@ -104,6 +140,7 @@ export async function fetchDashboardData(
     { data: properties, error: propErr },
     { data: contacts, error: contErr },
     { data: listings, error: listErr },
+    tasksRes,
   ] = await Promise.all([
     supabase
       .from("properties")
@@ -112,13 +149,18 @@ export async function fetchDashboardData(
     supabase
       .from("contacts")
       .select(
-        "id, first_name, last_name, status, created_at, last_contacted_at, followup_opt_out"
+        "id, first_name, last_name, status, pipeline_stage, budget_min, budget_max, desired_city, created_at, last_contacted_at, followup_opt_out"
       )
       .eq("agency_id", agencyId),
     supabase
       .from("generated_listings")
       .select("created_at")
       .eq("agency_id", agencyId),
+    supabase
+      .from("agency_tasks")
+      .select("id, due_at, completed_at")
+      .eq("agency_id", agencyId)
+      .limit(2000),
   ]);
 
   if (propErr || contErr) {
@@ -128,6 +170,8 @@ export async function fetchDashboardData(
   const props = properties ?? [];
   const conts = contacts ?? [];
   const gens = listErr ? [] : (listings ?? []);
+  const tasksRows =
+    tasksRes.error || !tasksRes.data ? [] : tasksRes.data;
 
   const now = new Date();
   const cy = now.getFullYear();
@@ -305,6 +349,55 @@ export async function fetchDashboardData(
     }
   }
 
+  const openTasks = tasksRows.filter((t) => !t.completed_at);
+  const sod = startOfLocalDay();
+  const eod = endOfLocalDay();
+
+  let overdue = 0;
+  let dueToday = 0;
+  for (const t of openTasks) {
+    const ts = new Date(t.due_at as string).getTime();
+    if (ts < sod) overdue += 1;
+    else if (ts >= sod && ts <= eod) dueToday += 1;
+  }
+
+  const pipelineFunnel = PIPELINE_STAGES_ORDERED.map((stage) => ({
+    stage,
+    label: PIPELINE_STAGE_LABELS[stage],
+    count: conts.filter(
+      (c) =>
+        parsePipelineStage(
+          (c as { pipeline_stage?: string | null }).pipeline_stage
+        ) === stage
+    ).length,
+  }));
+
+  const scored = conts.map((c) => {
+    const pipeline_stage = parsePipelineStage(
+      (c as { pipeline_stage?: string | null }).pipeline_stage
+    );
+    const status = c.status as ContactStatus;
+    const score = computeLeadScore({
+      status,
+      pipeline_stage,
+      budget_min: c.budget_min != null ? Number(c.budget_min) : null,
+      budget_max: c.budget_max != null ? Number(c.budget_max) : null,
+      desired_city: (c as { desired_city?: string | null }).desired_city ?? null,
+      last_contacted_at:
+        (c as { last_contacted_at?: string | null }).last_contacted_at ?? null,
+      created_at: c.created_at as string,
+    });
+    return {
+      id: c.id as string,
+      name: `${c.first_name as string} ${c.last_name as string}`,
+      score,
+      pipeline_stage,
+      status,
+    };
+  });
+  scored.sort((a, b) => b.score - a.score);
+  const topLeads = scored.slice(0, 5);
+
   return {
     userFirstName,
     agencyName,
@@ -336,5 +429,12 @@ export async function fetchDashboardData(
       followupsFailedThisMonth,
       optedOutCount,
     },
+    pipelineFunnel,
+    tasksSummary: {
+      openCount: openTasks.length,
+      overdue,
+      dueToday,
+    },
+    topLeads,
   };
 }

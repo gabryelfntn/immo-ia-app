@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import {
   contactCreateSchema,
   contactStatusEnum,
+  pipelineStageEnum,
 } from "@/lib/contacts/schema";
 import { revalidatePath } from "next/cache";
 
@@ -20,6 +21,14 @@ export type UpdateContactNotesResult =
   | { ok: false; error: string };
 
 export type UpdateFollowupOptOutResult =
+  | { ok: true }
+  | { ok: false; error: string };
+
+export type UpdatePipelineStageResult =
+  | { ok: true }
+  | { ok: false; error: string };
+
+export type UpdateProspectingConsentResult =
   | { ok: true }
   | { ok: false; error: string };
 
@@ -70,6 +79,8 @@ export async function createContact(
     budget_max,
     desired_city,
     notes,
+    pipeline_stage,
+    prospecting_consent,
     ...rest
   } = parsed.data;
 
@@ -81,6 +92,8 @@ export async function createContact(
       budget_max: budget_max ?? null,
       desired_city: desired_city ?? null,
       notes: notes ?? null,
+      pipeline_stage: pipeline_stage ?? "premier_contact",
+      prospecting_consent: prospecting_consent ?? true,
       agency_id: ctx.agencyId,
       agent_id: ctx.userId,
     })
@@ -197,5 +210,76 @@ export async function updateFollowupOptOut(
   revalidatePath(`/dashboard/contacts/${contactId}`);
   revalidatePath("/dashboard/relances");
   revalidatePath("/dashboard/relances/historique");
+  return { ok: true };
+}
+
+export async function updateContactPipelineStage(
+  contactId: string,
+  stage: unknown
+): Promise<UpdatePipelineStageResult> {
+  const parsed = pipelineStageEnum.safeParse(stage);
+  if (!parsed.success) {
+    return { ok: false, error: "Étape pipeline invalide." };
+  }
+
+  const { supabase, ctx } = await requireAgencyContext();
+  if (!ctx) {
+    return { ok: false, error: "Session ou agence introuvable." };
+  }
+
+  const { data, error } = await supabase
+    .from("contacts")
+    .update({
+      pipeline_stage: parsed.data,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", contactId)
+    .eq("agency_id", ctx.agencyId)
+    .select("id");
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+
+  if (!data?.length) {
+    return { ok: false, error: "Contact introuvable." };
+  }
+
+  revalidatePath("/dashboard/contacts");
+  revalidatePath(`/dashboard/contacts/${contactId}`);
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/taches");
+  return { ok: true };
+}
+
+export async function updateProspectingConsent(
+  contactId: string,
+  consent: boolean
+): Promise<UpdateProspectingConsentResult> {
+  const { supabase, ctx } = await requireAgencyContext();
+  if (!ctx) {
+    return { ok: false, error: "Session ou agence introuvable." };
+  }
+
+  const { data, error } = await supabase
+    .from("contacts")
+    .update({
+      prospecting_consent: consent,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", contactId)
+    .eq("agency_id", ctx.agencyId)
+    .select("id");
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+
+  if (!data?.length) {
+    return { ok: false, error: "Contact introuvable." };
+  }
+
+  revalidatePath("/dashboard/contacts");
+  revalidatePath(`/dashboard/contacts/${contactId}`);
   return { ok: true };
 }

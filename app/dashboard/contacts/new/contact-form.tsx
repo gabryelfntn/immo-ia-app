@@ -4,11 +4,12 @@ import type { ReactNode } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { createContact } from "../actions";
 import {
   CONTACT_STATUSES,
   CONTACT_TYPES,
+  PIPELINE_STAGES,
   contactCreateSchema,
   type ContactCreateInput,
 } from "@/lib/contacts/schema";
@@ -16,6 +17,7 @@ import {
   CONTACT_STATUS_LABELS,
   CONTACT_TYPE_LABELS,
 } from "@/lib/contacts/labels";
+import { PIPELINE_STAGE_LABELS } from "@/lib/contacts/pipeline";
 
 function FormSection({
   title,
@@ -52,6 +54,8 @@ export function ContactForm() {
       phone: "",
       type: "prospect",
       status: "froid",
+      pipeline_stage: "premier_contact",
+      prospecting_consent: true,
       budget_min: undefined,
       budget_max: undefined,
       desired_city: "",
@@ -61,6 +65,7 @@ export function ContactForm() {
 
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = form;
@@ -190,6 +195,44 @@ export function ContactForm() {
             {errors.status ? (
               <p className="text-xs text-red-400">{errors.status.message}</p>
             ) : null}
+          </div>
+          <div className="flex flex-col gap-2 sm:col-span-2">
+            <label htmlFor="pipeline_stage" className={labelClass}>
+              Étape pipeline
+            </label>
+            <select
+              id="pipeline_stage"
+              className={inputClass}
+              {...register("pipeline_stage")}
+            >
+              {PIPELINE_STAGES.map((s) => (
+                <option key={s} value={s} className="bg-[#12121a]">
+                  {PIPELINE_STAGE_LABELS[s]}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="sm:col-span-2">
+            <Controller
+              name="prospecting_consent"
+              control={control}
+              render={({ field }) => (
+                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-white/[0.06] bg-[#0c0c10]/50 px-4 py-3">
+                  <input
+                    type="checkbox"
+                    className="mt-0.5 h-4 w-4 rounded border-white/20 bg-[#0c0c10] text-emerald-500"
+                    checked={field.value}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    ref={field.ref}
+                  />
+                  <span className="text-sm text-zinc-300">
+                    Le contact accepte la prospection commerciale (hors relances
+                    automatiques).
+                  </span>
+                </label>
+              )}
+            />
           </div>
         </div>
       </FormSection>

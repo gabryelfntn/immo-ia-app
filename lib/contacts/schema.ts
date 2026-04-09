@@ -10,9 +10,20 @@ export const CONTACT_TYPES = [
 
 export const CONTACT_STATUSES = ["froid", "tiede", "chaud", "client"] as const;
 
+export const PIPELINE_STAGES = [
+  "premier_contact",
+  "qualifie",
+  "visite",
+  "offre",
+  "signature",
+  "fidelisation",
+] as const;
+
 export const contactTypeEnum = z.enum(CONTACT_TYPES);
 
 export const contactStatusEnum = z.enum(CONTACT_STATUSES);
+
+export const pipelineStageEnum = z.enum(PIPELINE_STAGES);
 
 const emptyToUndefined = (val: unknown) =>
   val === "" || val === null || val === undefined ? undefined : val;
@@ -42,6 +53,8 @@ export const contactCreateSchema = z
       .max(10000)
       .optional()
       .transform((s) => (s?.trim() ? s.trim() : undefined)),
+    pipeline_stage: pipelineStageEnum.optional().default("premier_contact"),
+    prospecting_consent: z.boolean().optional().default(true),
   })
   .superRefine((data, ctx) => {
     if (
@@ -61,3 +74,4 @@ export type ContactCreateInput = z.infer<typeof contactCreateSchema>;
 
 export type ContactType = z.infer<typeof contactTypeEnum>;
 export type ContactStatus = z.infer<typeof contactStatusEnum>;
+export type PipelineStage = z.infer<typeof pipelineStageEnum>;

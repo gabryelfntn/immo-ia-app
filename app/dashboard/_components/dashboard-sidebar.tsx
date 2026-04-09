@@ -8,6 +8,7 @@ import {
   ChevronsRight,
   Home,
   LayoutDashboard,
+  ListTodo,
   LogOut,
   Sparkles,
   Users,
@@ -23,6 +24,7 @@ const nav = [
   { href: "/dashboard/contacts", label: "Contacts", icon: Users },
   { href: "/dashboard/relances", label: "Relances", icon: Bell },
   { href: "/dashboard/visites", label: "Visites", icon: Calendar },
+  { href: "/dashboard/taches", label: "Tâches", icon: ListTodo },
   { href: "/dashboard/annonces", label: "Annonces IA", icon: Sparkles },
 ] as const;
 

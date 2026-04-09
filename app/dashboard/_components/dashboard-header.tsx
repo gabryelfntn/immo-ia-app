@@ -19,6 +19,7 @@ const LABELS: Record<string, string> = {
   annonces: "Annonces IA",
   relances: "Relances",
   visites: "Visites",
+  taches: "Tâches",
   historique: "Historique",
   new: "Nouveau",
   annonce: "Annonce IA",

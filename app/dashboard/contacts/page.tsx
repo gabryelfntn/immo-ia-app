@@ -2,20 +2,32 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { BellOff, Mail, MapPin, Phone, Plus } from "lucide-react";
+import { computeLeadScore } from "@/lib/dashboard/lead-score";
+import {
+  parsePipelineStage,
+  pipelineStageBadgeClass,
+  PIPELINE_STAGE_LABELS,
+} from "@/lib/contacts/pipeline";
 import {
   CONTACT_STATUSES,
   CONTACT_TYPES,
+  PIPELINE_STAGES,
   contactStatusEnum,
   contactTypeEnum,
+  pipelineStageEnum,
 } from "@/lib/contacts/schema";
 import {
   CONTACT_STATUS_LABELS,
   CONTACT_TYPE_LABELS,
   contactStatusBadgeClass,
 } from "@/lib/contacts/labels";
-import type { ContactStatus, ContactType } from "@/lib/contacts/schema";
+import type {
+  ContactStatus,
+  ContactType,
+  PipelineStage,
+} from "@/lib/contacts/schema";
 
-type Search = { status?: string; type?: string };
+type Search = { status?: string; type?: string; pipeline?: string };
 
 function parseStatusFilter(raw: string | undefined): ContactStatus | undefined {
   if (!raw) return undefined;
@@ -26,6 +38,14 @@ function parseStatusFilter(raw: string | undefined): ContactStatus | undefined {
 function parseTypeFilter(raw: string | undefined): ContactType | undefined {
   if (!raw) return undefined;
   const r = contactTypeEnum.safeParse(raw);
+  return r.success ? r.data : undefined;
+}
+
+function parsePipelineFilter(
+  raw: string | undefined
+): PipelineStage | undefined {
+  if (!raw) return undefined;
+  const r = pipelineStageEnum.safeParse(raw);
   return r.success ? r.data : undefined;
 }
 
@@ -86,6 +106,7 @@ export default async function ContactsPage({ searchParams }: Props) {
   const sp = (await searchParams) ?? {};
   const statusFilter = parseStatusFilter(sp.status);
   const typeFilter = parseTypeFilter(sp.type);
+  const pipelineFilter = parsePipelineFilter(sp.pipeline);
 
   const supabase = await createClient();
   const {
@@ -124,6 +145,9 @@ export default async function ContactsPage({ searchParams }: Props) {
   }
   if (typeFilter) {
     query = query.eq("type", typeFilter);
+  }
+  if (pipelineFilter) {
+    query = query.eq("pipeline_stage", pipelineFilter);
   }
 
   const { data: contacts, error } = await query;
@@ -203,6 +227,19 @@ export default async function ContactsPage({ searchParams }: Props) {
               </option>
             ))}
           </select>
+          <select
+            id="filter-pipeline"
+            name="pipeline"
+            defaultValue={pipelineFilter ?? ""}
+            className="rounded-full border border-white/[0.08] bg-[#0c0c10] px-4 py-2 text-sm font-medium text-zinc-200 outline-none transition-all duration-300 focus:border-violet-500/40 focus:ring-2 focus:ring-violet-500/20"
+          >
+            <option value="">Toutes les étapes</option>
+            {PIPELINE_STAGES.map((s) => (
+              <option key={s} value={s} className="bg-[#12121a]">
+                {PIPELINE_STAGE_LABELS[s]}
+              </option>
+            ))}
+          </select>
           <button
             type="submit"
             className="rounded-full bg-amber-500/15 px-5 py-2 text-sm font-semibold text-amber-800 transition-all duration-300 hover:bg-amber-500/25"
@@ -210,7 +247,7 @@ export default async function ContactsPage({ searchParams }: Props) {
             Appliquer
           </button>
         </div>
-        {(statusFilter || typeFilter) && (
+        {(statusFilter || typeFilter || pipelineFilter) && (
           <Link
             href="/dashboard/contacts"
             className="text-sm font-medium text-zinc-500 transition-all duration-300 hover:text-amber-400"
@@ -226,7 +263,7 @@ export default async function ContactsPage({ searchParams }: Props) {
             Aucun contact pour l&apos;instant
           </p>
           <p className="mt-2 max-w-md text-sm text-zinc-500">
-            {statusFilter || typeFilter
+            {statusFilter || typeFilter || pipelineFilter
               ? "Aucun contact ne correspond aux filtres."
               : "Ajoutez votre premier contact pour suivre prospects et mandants."}
           </p>
@@ -246,6 +283,21 @@ export default async function ContactsPage({ searchParams }: Props) {
             const fn = c.first_name as string;
             const ln = c.last_name as string;
             const fullName = `${fn} ${ln}`;
+            const ext = c as {
+              pipeline_stage?: string | null;
+              last_contacted_at?: string | null;
+            };
+            const pipelineStage = parsePipelineStage(ext.pipeline_stage);
+            const leadScore = computeLeadScore({
+              status,
+              pipeline_stage: pipelineStage,
+              budget_min: c.budget_min != null ? Number(c.budget_min) : null,
+              budget_max: c.budget_max != null ? Number(c.budget_max) : null,
+              desired_city:
+                typeof c.desired_city === "string" ? c.desired_city : null,
+              last_contacted_at: ext.last_contacted_at ?? null,
+              created_at: c.created_at as string,
+            });
             const budgetLabel = formatBudgetRange(
               c.budget_min != null ? Number(c.budget_min) : null,
               c.budget_max != null ? Number(c.budget_max) : null
@@ -268,6 +320,17 @@ export default async function ContactsPage({ searchParams }: Props) {
                         {fullName}
                       </h2>
                       <PulsingContactBadge status={status} />
+                      <span
+                        className={`inline-flex shrink-0 items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold ${pipelineStageBadgeClass(pipelineStage)}`}
+                      >
+                        {PIPELINE_STAGE_LABELS[pipelineStage]}
+                      </span>
+                      <span
+                        className="inline-flex shrink-0 items-center rounded-full border border-violet-500/25 bg-violet-500/10 px-2.5 py-1 text-[11px] font-bold tabular-nums text-violet-200"
+                        title="Score de priorité"
+                      >
+                        {leadScore}
+                      </span>
                       {Boolean(
                         (c as { followup_opt_out?: boolean }).followup_opt_out
                       ) ? (
