@@ -6,11 +6,11 @@ import {
   ChevronsLeft,
   ChevronsRight,
   Menu,
-  Search,
   X,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { DashboardGlobalSearch } from "./dashboard-global-search";
 
 const LABELS: Record<string, string> = {
   dashboard: "Tableau de bord",
@@ -145,19 +145,7 @@ export function DashboardHeader({
         </div>
 
         <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:justify-end lg:max-w-xl">
-          <div className="relative hidden min-w-0 flex-1 sm:block">
-            <Search
-              className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400"
-              strokeWidth={1.65}
-            />
-            <input
-              type="search"
-              readOnly
-              placeholder="Rechercher…"
-              aria-label="Recherche (bientôt disponible)"
-              className="w-full cursor-default rounded-xl border border-stone-200/90 bg-[#f5f3ef] py-2.5 pl-10 pr-4 text-sm text-stone-800 shadow-inner shadow-stone-200/40 placeholder:text-stone-400 transition-colors duration-300 focus:border-stone-400 focus:outline-none focus:ring-2 focus:ring-stone-900/10"
-            />
-          </div>
+          <DashboardGlobalSearch />
           <div className="flex shrink-0 items-center justify-end gap-2">
             <button
               type="button"
