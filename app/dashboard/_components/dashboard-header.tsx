@@ -1,6 +1,14 @@
 "use client";
 
-import { Bell, ChevronRight, ChevronsLeft, ChevronsRight, Search } from "lucide-react";
+import {
+  Bell,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  Menu,
+  Search,
+  X,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -42,15 +50,20 @@ function initials(name: string): string {
 type Props = {
   agencyName: string | null;
   userName: string;
-  /** Rabattre / déplier la sidebar (optionnel, affiche un bouton sur grand écran) */
-  onMenuToggle?: () => void;
+  /** Ouvre / ferme le tiroir navigation (mobile) */
+  onMobileMenuToggle?: () => void;
+  mobileNavOpen?: boolean;
+  /** Rabattre / déplier la sidebar (desktop lg+) */
+  onDesktopSidebarToggle?: () => void;
   sidebarCollapsed?: boolean;
 };
 
 export function DashboardHeader({
   agencyName,
   userName,
-  onMenuToggle,
+  onMobileMenuToggle,
+  mobileNavOpen = false,
+  onDesktopSidebarToggle,
   sidebarCollapsed = false,
 }: Props) {
   const pathname = usePathname();
@@ -64,13 +77,32 @@ export function DashboardHeader({
   });
 
   return (
-    <header className="sticky top-0 z-30 border-b border-white/[0.06] bg-[#08080c]/75 px-4 py-3.5 backdrop-blur-xl sm:px-6 lg:px-10">
+    <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#08080c]/75 px-4 py-3.5 backdrop-blur-xl sm:px-6 lg:px-10">
       <div className="mx-auto flex max-w-[1440px] flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
         <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-          {onMenuToggle ? (
+          {onMobileMenuToggle ? (
             <button
               type="button"
-              onClick={onMenuToggle}
+              onClick={onMobileMenuToggle}
+              aria-expanded={mobileNavOpen}
+              aria-label={
+                mobileNavOpen
+                  ? "Fermer le menu de navigation"
+                  : "Ouvrir le menu de navigation"
+              }
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.03] text-zinc-400 transition-all duration-300 hover:border-violet-500/25 hover:bg-violet-500/10 hover:text-violet-200 lg:hidden"
+            >
+              {mobileNavOpen ? (
+                <X className="h-5 w-5" strokeWidth={1.65} />
+              ) : (
+                <Menu className="h-5 w-5" strokeWidth={1.65} />
+              )}
+            </button>
+          ) : null}
+          {onDesktopSidebarToggle ? (
+            <button
+              type="button"
+              onClick={onDesktopSidebarToggle}
               aria-expanded={!sidebarCollapsed}
               aria-label={
                 sidebarCollapsed

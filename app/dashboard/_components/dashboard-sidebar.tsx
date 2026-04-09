@@ -11,6 +11,7 @@ import {
   LogOut,
   Sparkles,
   Users,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -28,7 +29,12 @@ const nav = [
 type Props = {
   userName: string;
   agencyName: string | null;
-  collapsed: boolean;
+  /** Mode étroit (icônes) uniquement sur grand écran */
+  narrowDesktop: boolean;
+  /** Tiroir mobile ouvert */
+  mobileDrawerOpen: boolean;
+  /** Viewport ≥ lg — sinon le menu est un tiroir */
+  isDesktopLayout: boolean;
   onToggleSidebar: () => void;
 };
 
@@ -43,16 +49,21 @@ function initials(name: string): string {
 export function DashboardSidebar({
   userName,
   agencyName,
-  collapsed,
+  narrowDesktop,
+  mobileDrawerOpen,
+  isDesktopLayout,
   onToggleSidebar,
 }: Props) {
   const pathname = usePathname();
+  const collapsed = narrowDesktop && isDesktopLayout;
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-40 flex flex-col border-r border-white/[0.06] bg-app-sidebar/95 shadow-[4px_0_48px_-12px_rgba(0,0,0,0.65)] backdrop-blur-xl transition-[width] duration-300 ease-out motion-reduce:transition-none ${
-        collapsed ? "w-[76px]" : "w-[272px]"
-      }`}
+      className={`fixed inset-y-0 left-0 z-50 flex flex-col border-r border-white/[0.06] bg-app-sidebar/95 shadow-[4px_0_48px_-12px_rgba(0,0,0,0.65)] backdrop-blur-xl transition-[width,transform] duration-300 ease-out motion-reduce:transition-none ${
+        narrowDesktop ? "w-[272px] lg:w-[76px]" : "w-[272px]"
+      } ${
+        mobileDrawerOpen ? "max-lg:translate-x-0" : "max-lg:-translate-x-full"
+      } lg:translate-x-0`}
     >
       <div
         className={`flex shrink-0 items-center gap-2 border-b border-white/[0.06] py-5 ${
@@ -83,16 +94,24 @@ export function DashboardSidebar({
         <button
           type="button"
           onClick={onToggleSidebar}
-          aria-expanded={!collapsed}
+          aria-expanded={isDesktopLayout ? !collapsed : mobileDrawerOpen}
           aria-label={
-            collapsed ? "Développer le menu latéral" : "Réduire le menu latéral"
+            isDesktopLayout
+              ? collapsed
+                ? "Développer le menu latéral"
+                : "Réduire le menu latéral"
+              : "Fermer le menu de navigation"
           }
           className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.04] text-zinc-400 transition-colors duration-300 hover:border-violet-500/30 hover:bg-violet-500/10 hover:text-violet-200"
         >
-          {collapsed ? (
-            <ChevronsRight className="h-5 w-5" strokeWidth={1.65} />
+          {isDesktopLayout ? (
+            collapsed ? (
+              <ChevronsRight className="h-5 w-5" strokeWidth={1.65} />
+            ) : (
+              <ChevronsLeft className="h-5 w-5" strokeWidth={1.65} />
+            )
           ) : (
-            <ChevronsLeft className="h-5 w-5" strokeWidth={1.65} />
+            <X className="h-5 w-5" strokeWidth={1.65} />
           )}
         </button>
       </div>
