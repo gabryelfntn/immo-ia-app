@@ -23,8 +23,8 @@ export default async function NewVisitPage() {
   if (!profile?.agency_id) {
     return (
       <div>
-        <h1 className="text-3xl font-bold text-zinc-50">Nouvelle visite</h1>
-        <p className="mt-2 text-sm text-zinc-500">
+        <h1 className="text-3xl font-bold text-slate-900">Nouvelle visite</h1>
+        <p className="mt-2 text-sm text-slate-500">
           Aucune agence associée à votre compte.
         </p>
       </div>
@@ -63,7 +63,7 @@ export default async function NewVisitPage() {
     <div className="mx-auto max-w-6xl">
       <Link
         href="/dashboard/visites"
-        className="inline-flex items-center gap-2 text-sm font-medium text-zinc-500 transition-colors hover:text-amber-400"
+        className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-colors hover:text-amber-400"
       >
         <ArrowLeft className="h-4 w-4" />
         Visites
@@ -72,10 +72,10 @@ export default async function NewVisitPage() {
       <p className="mt-6 text-xs font-bold uppercase tracking-[0.2em] text-amber-500/90">
         Rapport IA
       </p>
-      <h1 className="mt-2 text-4xl font-bold tracking-tight text-zinc-50">
+      <h1 className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
         Nouvelle visite
       </h1>
-      <p className="mt-2 max-w-2xl text-zinc-500">
+      <p className="mt-2 max-w-2xl text-slate-500">
         Générez un compte-rendu professionnel à partir de vos notes, puis
         enregistrez-le pour votre agence.
       </p>

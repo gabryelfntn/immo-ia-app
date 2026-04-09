@@ -41,7 +41,7 @@ function interestPanelClass(interest: string): string {
     case "faible":
       return "border-rose-500/25 bg-rose-500/[0.06]";
     default:
-      return "border-white/[0.08] bg-[#0c0c10]/90";
+      return "border-slate-200/90 bg-slate-50/90";
   }
 }
 
@@ -161,9 +161,9 @@ export function VisitReportForm({ properties, contacts }: Props) {
   return (
     <div className="grid gap-10 lg:grid-cols-2">
       <div className="space-y-6">
-        <div className="rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury sm:p-8">
-          <h2 className="text-lg font-bold text-zinc-50">Détails de la visite</h2>
-          <p className="mt-1 text-sm text-zinc-500">
+        <div className="rounded-2xl border border-slate-200/90 bg-white p-6 card-luxury sm:p-8">
+          <h2 className="text-lg font-bold text-slate-900">Détails de la visite</h2>
+          <p className="mt-1 text-sm text-slate-500">
             Sélectionnez le bien et le contact, puis saisissez vos notes libres :
             l&apos;IA structurera le compte-rendu.
           </p>
@@ -172,7 +172,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
             <div>
               <label
                 htmlFor="visit-property"
-                className="mb-2 block text-xs font-bold uppercase tracking-wider text-zinc-500"
+                className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
               >
                 Bien visité
               </label>
@@ -180,11 +180,11 @@ export function VisitReportForm({ properties, contacts }: Props) {
                 id="visit-property"
                 value={propertyId}
                 onChange={(e) => setPropertyId(e.target.value)}
-                className="w-full rounded-xl border border-white/[0.08] bg-[#0c0c10] px-4 py-3 text-sm font-medium text-zinc-200 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
               >
                 <option value="">Choisir un bien…</option>
                 {properties.map((p) => (
-                  <option key={p.id} value={p.id} className="bg-[#12121a]">
+                  <option key={p.id} value={p.id} className="bg-white">
                     {p.label}
                   </option>
                 ))}
@@ -194,7 +194,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
             <div>
               <label
                 htmlFor="visit-contact"
-                className="mb-2 block text-xs font-bold uppercase tracking-wider text-zinc-500"
+                className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
               >
                 Contact
               </label>
@@ -202,11 +202,11 @@ export function VisitReportForm({ properties, contacts }: Props) {
                 id="visit-contact"
                 value={contactId}
                 onChange={(e) => setContactId(e.target.value)}
-                className="w-full rounded-xl border border-white/[0.08] bg-[#0c0c10] px-4 py-3 text-sm font-medium text-zinc-200 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
               >
                 <option value="">Choisir un contact…</option>
                 {contacts.map((c) => (
-                  <option key={c.id} value={c.id} className="bg-[#12121a]">
+                  <option key={c.id} value={c.id} className="bg-white">
                     {c.label}
                   </option>
                 ))}
@@ -216,7 +216,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
             <div>
               <label
                 htmlFor="visit-date"
-                className="mb-2 block text-xs font-bold uppercase tracking-wider text-zinc-500"
+                className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
               >
                 Date de visite
               </label>
@@ -225,14 +225,14 @@ export function VisitReportForm({ properties, contacts }: Props) {
                 type="date"
                 value={visitDate}
                 onChange={(e) => setVisitDate(e.target.value)}
-                className="w-full rounded-xl border border-white/[0.08] bg-[#0c0c10] px-4 py-3 text-sm font-medium text-zinc-200 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
 
             <div>
               <label
                 htmlFor="visit-notes"
-                className="mb-2 block text-xs font-bold uppercase tracking-wider text-zinc-500"
+                className="mb-2 block text-xs font-bold uppercase tracking-wider text-slate-500"
               >
                 Notes brutes
               </label>
@@ -242,7 +242,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
                 onChange={(e) => setVisitNotes(e.target.value)}
                 rows={8}
                 placeholder="Impressions du client, points forts/faibles du bien, objections, ambiance du quartier…"
-                className="w-full resize-y rounded-xl border border-white/[0.08] bg-[#0c0c10] px-4 py-3 text-sm leading-relaxed text-zinc-200 placeholder:text-zinc-600 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full resize-y rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-3 text-sm leading-relaxed text-slate-700 placeholder:text-slate-600 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
           </div>
@@ -284,7 +284,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
             </button>
           </div>
 
-          <p className="mt-4 text-xs text-zinc-600">
+          <p className="mt-4 text-xs text-slate-600">
             L&apos;enregistrement en base se fait au clic sur « Sauvegarder le
             rapport ». « Générer » prévisualise uniquement (aucune ligne créée).
           </p>
@@ -293,9 +293,9 @@ export function VisitReportForm({ properties, contacts }: Props) {
 
       <div className="min-h-[320px]">
         {!report ? (
-          <div className="flex h-full min-h-[320px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/[0.08] bg-white/[0.025] px-6 py-16 text-center">
+          <div className="flex h-full min-h-[320px] flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200/90 bg-white/[0.025] px-6 py-16 text-center">
             <Sparkles className="mb-4 h-10 w-10 text-indigo-500/40" />
-            <p className="text-sm font-medium text-zinc-500">
+            <p className="text-sm font-medium text-slate-500">
               Le rapport structuré apparaîtra ici après génération.
             </p>
           </div>
@@ -303,10 +303,10 @@ export function VisitReportForm({ properties, contacts }: Props) {
           <div
             className={`rounded-2xl border p-6 sm:p-8 ${interestPanelClass(report.clientInterest)}`}
           >
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-zinc-500">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">
               Aperçu
             </p>
-            <h3 className="mt-2 text-xl font-bold text-zinc-50">
+            <h3 className="mt-2 text-xl font-bold text-slate-900">
               {interestTitle(report.clientInterest)}
             </h3>
 
@@ -314,7 +314,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
               <h4 className="text-xs font-bold uppercase tracking-wider text-amber-500/90">
                 Synthèse
               </h4>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-300">
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
                 {report.summary}
               </p>
             </section>
@@ -324,7 +324,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
                 <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-400/90">
                   Points positifs
                 </h4>
-                <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-zinc-400">
+                <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-slate-500">
                   {report.positivePoints.map((line, i) => (
                     <li key={i}>{line}</li>
                   ))}
@@ -334,7 +334,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
                 <h4 className="text-xs font-bold uppercase tracking-wider text-rose-400/85">
                   Points négatifs
                 </h4>
-                <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-zinc-400">
+                <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-slate-500">
                   {report.negativePoints.map((line, i) => (
                     <li key={i}>{line}</li>
                   ))}
@@ -342,20 +342,20 @@ export function VisitReportForm({ properties, contacts }: Props) {
               </section>
             </div>
 
-            <section className="mt-8 rounded-xl border border-white/[0.06] bg-black/20 p-4">
+            <section className="mt-8 rounded-xl border border-slate-100 bg-black/20 p-4">
               <h4 className="text-xs font-bold uppercase tracking-wider text-violet-600">
                 Recommandation
               </h4>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-300">
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
                 {report.recommendation}
               </p>
             </section>
 
-            <section className="mt-4 rounded-xl border border-white/[0.06] bg-black/20 p-4">
+            <section className="mt-4 rounded-xl border border-slate-100 bg-black/20 p-4">
               <h4 className="text-xs font-bold uppercase tracking-wider text-violet-300/90">
                 Prochaine étape
               </h4>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-300">
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
                 {report.nextStep}
               </p>
             </section>
@@ -363,7 +363,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/dashboard/visites"
-                className="text-sm font-medium text-zinc-500 underline-offset-4 transition-colors hover:text-amber-400 hover:underline"
+                className="text-sm font-medium text-slate-500 underline-offset-4 transition-colors hover:text-amber-400 hover:underline"
               >
                 ← Retour aux visites
               </Link>

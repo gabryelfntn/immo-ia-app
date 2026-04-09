@@ -41,7 +41,7 @@ export function UpdateStatusControl({ propertyId, currentStatus }: Props) {
     <div className="flex flex-col gap-2">
       <label
         htmlFor="property-status"
-        className="text-xs font-semibold uppercase tracking-wider text-zinc-500"
+        className="text-xs font-semibold uppercase tracking-wider text-slate-500"
       >
         Modifier le statut
       </label>
@@ -50,10 +50,10 @@ export function UpdateStatusControl({ propertyId, currentStatus }: Props) {
         value={value}
         disabled={pending}
         onChange={(e) => onChange(e.target.value as PropertyStatus)}
-        className="max-w-xs rounded-xl border border-white/[0.08] bg-[#0c0c10] px-4 py-2.5 text-sm font-medium text-zinc-50 outline-none transition-all duration-300 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
+        className="max-w-xs rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition-all duration-300 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/30 disabled:opacity-50"
       >
         {PROPERTY_STATUSES.map((s) => (
-          <option key={s} value={s} className="bg-[#12121a]">
+          <option key={s} value={s} className="bg-white">
             {PROPERTY_STATUS_LABELS[s]}
           </option>
         ))}

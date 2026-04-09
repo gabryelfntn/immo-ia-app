@@ -29,18 +29,18 @@ export const PIPELINE_STAGE_LABELS: Record<PipelineStage, string> = {
 export function pipelineStageBadgeClass(stage: PipelineStage): string {
   switch (stage) {
     case "premier_contact":
-      return "bg-zinc-500/15 text-zinc-200 ring-1 ring-zinc-500/25";
+      return "bg-slate-100 text-slate-800 ring-1 ring-slate-200/90";
     case "qualifie":
-      return "bg-sky-500/15 text-sky-200/95 ring-1 ring-sky-400/25";
+      return "bg-sky-50 text-sky-900/90 ring-1 ring-sky-200/80";
     case "visite":
-      return "bg-violet-500/15 text-violet-200/95 ring-1 ring-violet-400/25";
+      return "bg-violet-50 text-violet-900/90 ring-1 ring-violet-200/80";
     case "offre":
-      return "bg-amber-500/15 text-amber-200/95 ring-1 ring-amber-400/25";
+      return "bg-amber-50 text-amber-900/90 ring-1 ring-amber-200/80";
     case "signature":
-      return "bg-emerald-500/15 text-emerald-200/95 ring-1 ring-emerald-400/28";
+      return "bg-emerald-50 text-emerald-900/90 ring-1 ring-emerald-200/80";
     case "fidelisation":
-      return "bg-fuchsia-500/15 text-fuchsia-200/95 ring-1 ring-fuchsia-400/25";
+      return "bg-fuchsia-50 text-fuchsia-900/90 ring-1 ring-fuchsia-200/80";
     default:
-      return "bg-white/[0.06] text-zinc-300 ring-1 ring-white/10";
+      return "bg-slate-100 text-slate-700 ring-1 ring-slate-200/90";
   }
 }

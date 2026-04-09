@@ -51,10 +51,8 @@ function initials(name: string): string {
 type Props = {
   agencyName: string | null;
   userName: string;
-  /** Ouvre / ferme le tiroir navigation (mobile) */
   onMobileMenuToggle?: () => void;
   mobileNavOpen?: boolean;
-  /** Rabattre / déplier la sidebar (desktop lg+) */
   onDesktopSidebarToggle?: () => void;
   sidebarCollapsed?: boolean;
 };
@@ -78,7 +76,7 @@ export function DashboardHeader({
   });
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#08080c]/75 px-4 py-3.5 backdrop-blur-xl sm:px-6 lg:px-10">
+    <header className="sticky top-0 z-40 border-b border-slate-200/90 bg-white/80 px-4 py-3.5 shadow-sm shadow-slate-200/40 backdrop-blur-xl sm:px-6 lg:px-10">
       <div className="mx-auto flex max-w-[1440px] flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
         <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
           {onMobileMenuToggle ? (
@@ -91,7 +89,7 @@ export function DashboardHeader({
                   ? "Fermer le menu de navigation"
                   : "Ouvrir le menu de navigation"
               }
-              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.03] text-zinc-400 transition-all duration-300 hover:border-violet-500/25 hover:bg-violet-500/10 hover:text-violet-200 lg:hidden"
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200/90 bg-white text-slate-600 shadow-sm transition-all duration-300 hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 lg:hidden"
             >
               {mobileNavOpen ? (
                 <X className="h-5 w-5" strokeWidth={1.65} />
@@ -110,7 +108,7 @@ export function DashboardHeader({
                   ? "Développer le menu latéral"
                   : "Réduire le menu latéral"
               }
-              className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.03] text-zinc-400 transition-all duration-300 hover:border-violet-500/25 hover:bg-violet-500/10 hover:text-violet-200 lg:inline-flex"
+              className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200/90 bg-white text-slate-600 shadow-sm transition-all duration-300 hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 lg:inline-flex"
             >
               {sidebarCollapsed ? (
                 <ChevronsRight className="h-5 w-5" strokeWidth={1.65} />
@@ -123,33 +121,33 @@ export function DashboardHeader({
             aria-label="Fil d'Ariane"
             className="flex min-w-0 flex-wrap items-center gap-1 text-sm"
           >
-          {crumbs.map((c, i) => (
-            <span key={c.href} className="flex items-center gap-1">
-              {i > 0 ? (
-                <ChevronRight
-                  className="h-3.5 w-3.5 shrink-0 text-zinc-600"
-                  aria-hidden
-                />
-              ) : null}
-              {c.isLast ? (
-                <span className="font-medium text-zinc-100">{c.label}</span>
-              ) : (
-                <Link
-                  href={c.href}
-                  className="font-medium text-zinc-500 transition-colors duration-300 hover:text-violet-300"
-                >
-                  {c.label}
-                </Link>
-              )}
-            </span>
-          ))}
+            {crumbs.map((c, i) => (
+              <span key={c.href} className="flex items-center gap-1">
+                {i > 0 ? (
+                  <ChevronRight
+                    className="h-3.5 w-3.5 shrink-0 text-slate-400"
+                    aria-hidden
+                  />
+                ) : null}
+                {c.isLast ? (
+                  <span className="font-medium text-slate-900">{c.label}</span>
+                ) : (
+                  <Link
+                    href={c.href}
+                    className="font-medium text-slate-500 transition-colors duration-300 hover:text-violet-600"
+                  >
+                    {c.label}
+                  </Link>
+                )}
+              </span>
+            ))}
           </nav>
         </div>
 
         <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:justify-end lg:max-w-xl">
           <div className="relative hidden min-w-0 flex-1 sm:block">
             <Search
-              className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-600"
+              className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
               strokeWidth={1.65}
             />
             <input
@@ -157,26 +155,26 @@ export function DashboardHeader({
               readOnly
               placeholder="Rechercher…"
               aria-label="Recherche (bientôt disponible)"
-              className="w-full cursor-default rounded-xl border border-white/[0.08] bg-[#0c0c12]/80 py-2.5 pl-10 pr-4 text-sm text-zinc-300 shadow-inner shadow-black/20 placeholder:text-zinc-600 transition-colors duration-300 focus:border-violet-500/30 focus:outline-none"
+              className="w-full cursor-default rounded-xl border border-slate-200/90 bg-slate-50/90 py-2.5 pl-10 pr-4 text-sm text-slate-800 shadow-inner shadow-slate-200/50 placeholder:text-slate-400 transition-colors duration-300 focus:border-violet-400/50 focus:outline-none focus:ring-2 focus:ring-violet-500/15"
             />
           </div>
           <div className="flex shrink-0 items-center justify-end gap-2">
             <button
               type="button"
               aria-label="Notifications"
-              className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-2.5 text-zinc-500 transition-all duration-300 hover:border-violet-500/25 hover:bg-violet-500/10 hover:text-violet-200"
+              className="rounded-xl border border-slate-200/90 bg-white p-2.5 text-slate-500 shadow-sm transition-all duration-300 hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700"
             >
               <Bell className="h-5 w-5" strokeWidth={1.65} />
             </button>
-            <div className="flex items-center gap-2.5 rounded-xl border border-white/[0.08] bg-white/[0.03] py-1 pl-1 pr-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-600 text-xs font-bold text-white shadow-md shadow-violet-900/40">
+            <div className="flex items-center gap-2.5 rounded-xl border border-slate-200/90 bg-white py-1 pl-1 pr-3 shadow-sm">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-600 text-xs font-bold text-white shadow-md shadow-violet-500/25">
                 {initials(userName)}
               </div>
               <div className="hidden min-w-0 sm:block">
-                <p className="truncate text-sm font-medium text-zinc-200">
+                <p className="truncate text-sm font-medium text-slate-800">
                   {shortName(userName)}
                 </p>
-                <p className="truncate text-xs text-zinc-600">
+                <p className="truncate text-xs text-slate-500">
                   {agencyName ?? "Agence"}
                 </p>
               </div>

@@ -38,8 +38,8 @@ export default async function RelancesPage({ searchParams }: Props) {
   if (!profile?.agency_id) {
     return (
       <div>
-        <h1 className="text-3xl font-bold text-zinc-50">Relances</h1>
-        <p className="mt-2 text-sm text-zinc-500">
+        <h1 className="text-3xl font-bold text-slate-900">Relances</h1>
+        <p className="mt-2 text-sm text-slate-500">
           Aucune agence associée à votre compte.
         </p>
       </div>
@@ -60,11 +60,11 @@ export default async function RelancesPage({ searchParams }: Props) {
   if (error) {
     return (
       <div className="mx-auto max-w-6xl">
-        <h1 className="text-3xl font-bold text-zinc-50">Relances</h1>
+        <h1 className="text-3xl font-bold text-slate-900">Relances</h1>
         <p className="mt-2 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
           {error.message}
         </p>
-        <p className="mt-2 text-xs text-zinc-500">
+        <p className="mt-2 text-xs text-slate-500">
           Si vous venez d’ajouter{" "}
           <code className="rounded bg-white/[0.06] px-1">last_contacted_at</code>,
           appliquez la migration{" "}

@@ -48,18 +48,18 @@ function LoginForm() {
         <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white shadow-lg shadow-violet-500/35">
           <Home className="h-8 w-8" strokeWidth={1.75} />
         </div>
-        <h1 className="text-3xl font-bold tracking-tight text-zinc-50">ImmoAI</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900">ImmoAI</h1>
         <p className="mt-2 text-sm font-semibold uppercase tracking-[0.2em] text-violet-400/90">
           Suite agence
         </p>
-        <p className="mt-6 text-sm text-zinc-400">
+        <p className="mt-6 text-sm text-slate-500">
           Connectez-vous à votre espace agence
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <div className="flex flex-col gap-2">
-          <label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+          <label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-slate-500">
             Email
           </label>
           <input
@@ -77,7 +77,7 @@ function LoginForm() {
         <div className="flex flex-col gap-2">
           <label
             htmlFor="password"
-            className="text-xs font-semibold uppercase tracking-wider text-zinc-500"
+            className="text-xs font-semibold uppercase tracking-wider text-slate-500"
           >
             Mot de passe
           </label>
@@ -110,7 +110,7 @@ function LoginForm() {
         </button>
       </form>
 
-      <p className="mt-8 text-center text-sm text-zinc-400">
+      <p className="mt-8 text-center text-sm text-slate-500">
         Pas encore de compte ?{" "}
         <Link
           href="/register"

@@ -31,11 +31,11 @@ export function statusBadgeClass(status: PropertyStatus): string {
     case "sous_compromis":
       return "bg-amber-500/12 text-amber-200/95 ring-1 ring-amber-400/25";
     case "vendu":
-      return "bg-white/[0.06] text-zinc-300 ring-1 ring-white/10";
+      return "bg-white/[0.06] text-slate-600 ring-1 ring-white/10";
     case "loue":
       return "bg-sky-500/12 text-sky-200/95 ring-1 ring-sky-400/28";
     default:
-      return "bg-white/[0.06] text-zinc-300 ring-1 ring-white/10";
+      return "bg-white/[0.06] text-slate-600 ring-1 ring-white/10";
   }
 }
 

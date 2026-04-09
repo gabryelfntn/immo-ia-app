@@ -44,7 +44,7 @@ export function UpdatePipelineStageControl({
     <div className="flex flex-col gap-2">
       <label
         htmlFor="pipeline-stage"
-        className="text-xs font-semibold uppercase tracking-wider text-zinc-500"
+        className="text-xs font-semibold uppercase tracking-wider text-slate-500"
       >
         Étape pipeline
       </label>
@@ -53,10 +53,10 @@ export function UpdatePipelineStageControl({
         value={value}
         disabled={pending}
         onChange={(e) => onChange(e.target.value as PipelineStage)}
-        className="max-w-xs rounded-xl border border-white/[0.08] bg-[#0c0c10] px-4 py-2.5 text-sm font-medium text-zinc-50 outline-none transition-all duration-300 focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/25 disabled:opacity-50"
+        className="max-w-xs rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-900 outline-none transition-all duration-300 focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/25 disabled:opacity-50"
       >
         {PIPELINE_STAGES.map((s) => (
-          <option key={s} value={s} className="bg-[#12121a]">
+          <option key={s} value={s} className="bg-white">
             {PIPELINE_STAGE_LABELS[s]}
           </option>
         ))}

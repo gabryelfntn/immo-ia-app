@@ -1,0 +1,17 @@
+---
+description: Après des modifications sur l’app, commit et push automatiques vers origin/main
+alwaysApply: true
+---
+
+# Déploiement Git automatique (immo-ia-app)
+
+À la **fin d’une modification** sur le code applicatif (fichiers sous `app/`, `lib/`, `supabase/`, `scripts/` utiles au produit, config de build type `vercel.json`, `package.json` quand ça impacte l’app), **sans attendre** que l’utilisateur le demande :
+
+1. Vérifier `git status`.
+2. **Stage** les fichiers concernés par le travail effectué (pas de fichiers hors sujet, pas de `.env`, pas de secrets).
+3. **Commit** avec un message concis au présent (ex. `feat(dashboard): …`, `fix: …`, `style: thème clair…`).
+4. **Push** vers `origin` sur la branche courante (souvent `main`).
+
+**Ne pas** commit/push si l’utilisateur a explicitement demandé de ne pas versionner, ou si le dépôt n’est pas prêt (conflits non résolus). Si `tsc` ou le build échoue de façon évidente après les changements, corriger d’abord puis commit.
+
+Cette habitude permet le **redeploy Vercel** dès que le code est poussé.

@@ -62,9 +62,9 @@ export function ContactTasksPanel({ contactId, tasks }: Props) {
   }
 
   return (
-    <div className="rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury">
-      <h2 className="text-lg font-bold text-zinc-50">Tâches & rappels</h2>
-      <p className="mt-1 text-sm text-zinc-500">
+    <div className="rounded-2xl border border-slate-200/90 bg-white p-6 card-luxury">
+      <h2 className="text-lg font-bold text-slate-900">Tâches & rappels</h2>
+      <p className="mt-1 text-sm text-slate-500">
         Actions à mener pour ce contact (visite, rappel téléphonique, envoi de
         dossier…).
       </p>
@@ -74,7 +74,7 @@ export function ContactTasksPanel({ contactId, tasks }: Props) {
           <div className="flex flex-col gap-1.5">
             <label
               htmlFor="task-title"
-              className="text-xs font-semibold uppercase tracking-wider text-zinc-500"
+              className="text-xs font-semibold uppercase tracking-wider text-slate-500"
             >
               Titre
             </label>
@@ -84,13 +84,13 @@ export function ContactTasksPanel({ contactId, tasks }: Props) {
               disabled={pending}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Ex. Relancer après visite"
-              className="rounded-xl border border-white/[0.08] bg-[#0c0c10] px-4 py-2.5 text-sm text-zinc-50 outline-none focus:border-violet-500/40"
+              className="rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none focus:border-violet-500/40"
             />
           </div>
           <div className="flex flex-col gap-1.5">
             <label
               htmlFor="task-due"
-              className="text-xs font-semibold uppercase tracking-wider text-zinc-500"
+              className="text-xs font-semibold uppercase tracking-wider text-slate-500"
             >
               Échéance
             </label>
@@ -100,7 +100,7 @@ export function ContactTasksPanel({ contactId, tasks }: Props) {
               value={dueLocal}
               disabled={pending}
               onChange={(e) => setDueLocal(e.target.value)}
-              className="rounded-xl border border-white/[0.08] bg-[#0c0c10] px-4 py-2.5 text-sm text-zinc-50 outline-none focus:border-violet-500/40"
+              className="rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none focus:border-violet-500/40"
             />
           </div>
         </div>
@@ -116,16 +116,16 @@ export function ContactTasksPanel({ contactId, tasks }: Props) {
 
       <ul className="mt-8 space-y-2">
         {openTasks.length === 0 ? (
-          <li className="text-sm text-zinc-500">Aucune tâche ouverte.</li>
+          <li className="text-sm text-slate-500">Aucune tâche ouverte.</li>
         ) : (
           openTasks.map((t) => (
             <li
               key={t.id}
-              className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3"
+              className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-100 bg-white/[0.03] px-4 py-3"
             >
               <div>
-                <p className="font-medium text-zinc-100">{t.title}</p>
-                <p className="mt-0.5 text-xs text-zinc-500">
+                <p className="font-medium text-slate-800">{t.title}</p>
+                <p className="mt-0.5 text-xs text-slate-500">
                   {new Intl.DateTimeFormat("fr-FR", {
                     dateStyle: "medium",
                     timeStyle: "short",
@@ -155,7 +155,7 @@ export function ContactTasksPanel({ contactId, tasks }: Props) {
                       router.refresh();
                     })
                   }
-                  className="rounded-lg border border-white/[0.08] p-1.5 text-zinc-500 transition-colors hover:border-rose-500/30 hover:text-rose-300 disabled:opacity-50"
+                  className="rounded-lg border border-slate-200/90 p-1.5 text-slate-500 transition-colors hover:border-rose-500/30 hover:text-rose-300 disabled:opacity-50"
                   aria-label="Supprimer la tâche"
                 >
                   <Trash2 className="h-4 w-4" />
@@ -167,11 +167,11 @@ export function ContactTasksPanel({ contactId, tasks }: Props) {
       </ul>
 
       {doneTasks.length > 0 ? (
-        <div className="mt-6 border-t border-white/[0.06] pt-4">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-zinc-600">
+        <div className="mt-6 border-t border-slate-100 pt-4">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-slate-600">
             Récemment terminées
           </p>
-          <ul className="mt-2 space-y-1 text-sm text-zinc-500">
+          <ul className="mt-2 space-y-1 text-sm text-slate-500">
             {doneTasks.slice(0, 5).map((t) => (
               <li key={t.id} className="line-through">
                 {t.title}

@@ -91,7 +91,7 @@ function avatarGradient(status: ContactStatus): string {
 function PulsingContactBadge({ status }: { status: ContactStatus }) {
   return (
     <span
-      className={`inline-flex shrink-0 items-center gap-2 rounded-full border border-white/[0.08] px-3 py-1 text-xs font-semibold backdrop-blur-md ${contactStatusBadgeClass(status)}`}
+      className={`inline-flex shrink-0 items-center gap-2 rounded-full border border-slate-200/90 px-3 py-1 text-xs font-semibold backdrop-blur-md ${contactStatusBadgeClass(status)}`}
     >
       <span
         className="h-1.5 w-1.5 shrink-0 rounded-full bg-current animate-pulse"
@@ -126,8 +126,8 @@ export default async function ContactsPage({ searchParams }: Props) {
   if (!profile?.agency_id) {
     return (
       <div>
-        <h1 className="text-3xl font-bold text-zinc-50">Contacts</h1>
-        <p className="mt-2 text-sm text-zinc-500">
+        <h1 className="text-3xl font-bold text-slate-900">Contacts</h1>
+        <p className="mt-2 text-sm text-slate-500">
           Aucune agence associée à votre compte.
         </p>
       </div>
@@ -155,11 +155,11 @@ export default async function ContactsPage({ searchParams }: Props) {
   if (error) {
     return (
       <div>
-        <h1 className="text-3xl font-bold text-zinc-50">Contacts</h1>
+        <h1 className="text-3xl font-bold text-slate-900">Contacts</h1>
         <p className="mt-2 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
           {error.message}
         </p>
-        <p className="mt-2 text-xs text-zinc-500">
+        <p className="mt-2 text-xs text-slate-500">
           Vérifiez que la table{" "}
           <code className="rounded bg-white/[0.06] px-1">contacts</code> existe dans
           Supabase (migration{" "}
@@ -179,10 +179,10 @@ export default async function ContactsPage({ searchParams }: Props) {
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-500/90">
             CRM
           </p>
-          <h1 className="mt-2 text-4xl font-bold tracking-tight text-zinc-50">
+          <h1 className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
             Contacts
           </h1>
-          <p className="mt-2 text-zinc-500">
+          <p className="mt-2 text-slate-500">
             {list.length} contact{list.length !== 1 ? "s" : ""} pour votre agence
           </p>
         </div>
@@ -200,16 +200,16 @@ export default async function ContactsPage({ searchParams }: Props) {
         method="get"
         className="mt-10 flex flex-wrap items-center gap-3"
       >
-        <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-2 backdrop-blur-sm">
+        <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200/90 bg-white/[0.03] p-2 backdrop-blur-sm">
           <select
             id="filter-contact-status"
             name="status"
             defaultValue={statusFilter ?? ""}
-            className="rounded-full border border-white/[0.08] bg-[#0c0c10] px-4 py-2 text-sm font-medium text-zinc-200 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+            className="rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
           >
             <option value="">Tous les statuts</option>
             {CONTACT_STATUSES.map((s) => (
-              <option key={s} value={s} className="bg-[#12121a]">
+              <option key={s} value={s} className="bg-white">
                 {CONTACT_STATUS_LABELS[s]}
               </option>
             ))}
@@ -218,11 +218,11 @@ export default async function ContactsPage({ searchParams }: Props) {
             id="filter-contact-type"
             name="type"
             defaultValue={typeFilter ?? ""}
-            className="rounded-full border border-white/[0.08] bg-[#0c0c10] px-4 py-2 text-sm font-medium text-zinc-200 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+            className="rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
           >
             <option value="">Tous les types</option>
             {CONTACT_TYPES.map((t) => (
-              <option key={t} value={t} className="bg-[#12121a]">
+              <option key={t} value={t} className="bg-white">
                 {CONTACT_TYPE_LABELS[t]}
               </option>
             ))}
@@ -231,11 +231,11 @@ export default async function ContactsPage({ searchParams }: Props) {
             id="filter-pipeline"
             name="pipeline"
             defaultValue={pipelineFilter ?? ""}
-            className="rounded-full border border-white/[0.08] bg-[#0c0c10] px-4 py-2 text-sm font-medium text-zinc-200 outline-none transition-all duration-300 focus:border-violet-500/40 focus:ring-2 focus:ring-violet-500/20"
+            className="rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-violet-500/40 focus:ring-2 focus:ring-violet-500/20"
           >
             <option value="">Toutes les étapes</option>
             {PIPELINE_STAGES.map((s) => (
-              <option key={s} value={s} className="bg-[#12121a]">
+              <option key={s} value={s} className="bg-white">
                 {PIPELINE_STAGE_LABELS[s]}
               </option>
             ))}
@@ -250,7 +250,7 @@ export default async function ContactsPage({ searchParams }: Props) {
         {(statusFilter || typeFilter || pipelineFilter) && (
           <Link
             href="/dashboard/contacts"
-            className="text-sm font-medium text-zinc-500 transition-all duration-300 hover:text-amber-400"
+            className="text-sm font-medium text-slate-500 transition-all duration-300 hover:text-amber-400"
           >
             Réinitialiser
           </Link>
@@ -258,11 +258,11 @@ export default async function ContactsPage({ searchParams }: Props) {
       </form>
 
       {list.length === 0 ? (
-        <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/[0.08] bg-white/[0.03] px-8 py-20 text-center">
-          <p className="text-xl font-semibold text-zinc-200">
+        <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200/90 bg-white/[0.03] px-8 py-20 text-center">
+          <p className="text-xl font-semibold text-slate-700">
             Aucun contact pour l&apos;instant
           </p>
-          <p className="mt-2 max-w-md text-sm text-zinc-500">
+          <p className="mt-2 max-w-md text-sm text-slate-500">
             {statusFilter || typeFilter || pipelineFilter
               ? "Aucun contact ne correspond aux filtres."
               : "Ajoutez votre premier contact pour suivre prospects et mandants."}
@@ -306,17 +306,17 @@ export default async function ContactsPage({ searchParams }: Props) {
               <li key={c.id as string}>
                 <Link
                   href={`/dashboard/contacts/${c.id}`}
-                  className="card-luxury group flex flex-col gap-5 rounded-2xl border border-white/[0.08] bg-[#12121a] p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-500/25 sm:flex-row sm:items-center sm:gap-6"
+                  className="card-luxury group flex flex-col gap-5 rounded-2xl border border-slate-200/90 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-500/25 sm:flex-row sm:items-center sm:gap-6"
                 >
                   <div
-                    className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-lg font-bold text-zinc-50 ring-2 ${avatarGradient(status)}`}
+                    className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-lg font-bold text-slate-900 ring-2 ${avatarGradient(status)}`}
                   >
                     {initials(fn, ln)}
                   </div>
 
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-3">
-                      <h2 className="text-lg font-bold text-zinc-50 transition-colors duration-300 group-hover:text-violet-300">
+                      <h2 className="text-lg font-bold text-slate-900 transition-colors duration-300 group-hover:text-violet-300">
                         {fullName}
                       </h2>
                       <PulsingContactBadge status={status} />
@@ -335,7 +335,7 @@ export default async function ContactsPage({ searchParams }: Props) {
                         (c as { followup_opt_out?: boolean }).followup_opt_out
                       ) ? (
                         <span
-                          className="inline-flex items-center gap-1.5 rounded-full border border-zinc-600/40 bg-zinc-500/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-zinc-400"
+                          className="inline-flex items-center gap-1.5 rounded-full border border-zinc-600/40 bg-zinc-500/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-slate-500"
                           title="Relances email automatiques désactivées pour ce contact"
                         >
                           <BellOff className="h-3.5 w-3.5" aria-hidden />
@@ -343,7 +343,7 @@ export default async function ContactsPage({ searchParams }: Props) {
                         </span>
                       ) : null}
                     </div>
-                    <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm text-zinc-400">
+                    <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500">
                       <span className="inline-flex items-center gap-2">
                         <Mail className="h-4 w-4 shrink-0 text-indigo-400/80" />
                         {c.email as string}
@@ -352,16 +352,16 @@ export default async function ContactsPage({ searchParams }: Props) {
                         <Phone className="h-4 w-4 shrink-0 text-amber-500/80" />
                         {c.phone as string}
                       </span>
-                      <span className="font-medium text-zinc-300">
+                      <span className="font-medium text-slate-600">
                         {CONTACT_TYPE_LABELS[ctype]}
                       </span>
                       {budgetLabel ? (
-                        <span className="tabular-nums text-zinc-500">
+                        <span className="tabular-nums text-slate-500">
                           {budgetLabel}
                         </span>
                       ) : null}
                       {typeof c.desired_city === "string" && c.desired_city ? (
-                        <span className="inline-flex items-center gap-1.5 text-zinc-500">
+                        <span className="inline-flex items-center gap-1.5 text-slate-500">
                           <MapPin className="h-4 w-4 text-violet-400/70" />
                           {c.desired_city}
                         </span>

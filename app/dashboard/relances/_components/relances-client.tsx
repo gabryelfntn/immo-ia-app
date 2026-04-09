@@ -51,9 +51,9 @@ function statusBadgeClass(status: string): string {
     case "tiede":
       return "bg-orange-500/15 text-orange-200 ring-1 ring-orange-400/30";
     case "froid":
-      return "bg-zinc-500/15 text-zinc-200 ring-1 ring-zinc-400/25";
+      return "bg-zinc-500/15 text-slate-700 ring-1 ring-zinc-400/25";
     default:
-      return "bg-zinc-500/15 text-zinc-300 ring-1 ring-zinc-400/20";
+      return "bg-zinc-500/15 text-slate-600 ring-1 ring-zinc-400/20";
   }
 }
 
@@ -131,10 +131,10 @@ export function RelancesClient({ contacts, filterDays }: Props) {
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-500/90">
             CRM
           </p>
-          <h1 className="mt-2 text-4xl font-bold tracking-tight text-zinc-50">
+          <h1 className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
             Relances
           </h1>
-          <p className="mt-2 text-zinc-500">
+          <p className="mt-2 text-slate-500">
             {list.length} contact{list.length !== 1 ? "s" : ""} inactif
             {list.length !== 1 ? "s" : ""} depuis ≥ {filterDays} jours
           </p>
@@ -148,11 +148,11 @@ export function RelancesClient({ contacts, filterDays }: Props) {
         method="get"
         className="mt-6 flex flex-wrap items-center gap-3"
       >
-        <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-2 backdrop-blur-sm">
+        <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200/90 bg-white/[0.03] p-2 backdrop-blur-sm">
           <select
             name="days"
             defaultValue={String(filterDays)}
-            className="rounded-full border border-white/[0.08] bg-[#0c0c10] px-4 py-2 text-sm font-medium text-zinc-200 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+            className="rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
           >
             <option value="7">Inactifs depuis 7 jours</option>
             <option value="14">Inactifs depuis 14 jours</option>
@@ -168,12 +168,12 @@ export function RelancesClient({ contacts, filterDays }: Props) {
       </form>
 
       {list.length === 0 ? (
-        <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/[0.08] bg-white/[0.03] px-8 py-20 text-center">
-          <Bell className="mb-4 h-12 w-12 text-zinc-600" />
-          <p className="text-xl font-semibold text-zinc-200">
+        <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200/90 bg-white/[0.03] px-8 py-20 text-center">
+          <Bell className="mb-4 h-12 w-12 text-slate-600" />
+          <p className="text-xl font-semibold text-slate-700">
             Aucun contact inactif
           </p>
-          <p className="mt-2 max-w-md text-sm text-zinc-500">
+          <p className="mt-2 max-w-md text-sm text-slate-500">
             Essayez un autre seuil (14 ou 30 jours) ou attendez de nouvelles
             entrées.
           </p>
@@ -186,14 +186,14 @@ export function RelancesClient({ contacts, filterDays }: Props) {
             return (
               <li key={c.id}>
                 <article
-                  className={`card-luxury rounded-2xl border border-white/[0.08] bg-[#12121a] p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-500/20 sm:p-6 ${inactivityGlow(
+                  className={`card-luxury rounded-2xl border border-slate-200/90 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-500/20 sm:p-6 ${inactivityGlow(
                     c.daysInactive
                   )}`}
                 >
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-3">
-                        <h2 className="text-lg font-bold text-zinc-50">
+                        <h2 className="text-lg font-bold text-slate-900">
                           {name}
                         </h2>
                         <span
@@ -203,7 +203,7 @@ export function RelancesClient({ contacts, filterDays }: Props) {
                         >
                           {c.status}
                         </span>
-                        <span className="inline-flex items-center gap-2 text-sm text-zinc-500">
+                        <span className="inline-flex items-center gap-2 text-sm text-slate-500">
                           <Clock className="h-4 w-4 text-indigo-400/80" />
                           {c.daysInactive} jour
                           {c.daysInactive !== 1 ? "s" : ""} sans contact
@@ -212,9 +212,9 @@ export function RelancesClient({ contacts, filterDays }: Props) {
                       <p className="mt-2 text-sm text-violet-700">
                         {c.email}
                       </p>
-                      <p className="mt-3 text-sm text-zinc-500">
+                      <p className="mt-3 text-sm text-slate-500">
                         Dernière activité :{" "}
-                        <span className="text-zinc-300">
+                        <span className="text-slate-600">
                           {formatDate(c.lastActivityISO)}
                         </span>
                       </p>

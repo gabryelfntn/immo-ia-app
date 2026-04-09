@@ -43,7 +43,7 @@ function cardGlowClass(score: number): string {
   if (score > 40) {
     return "border-amber-500/20 shadow-[0_0_28px_-14px_rgba(245,158,11,0.2)]";
   }
-  return "border-white/[0.08]";
+  return "border-slate-200/90";
 }
 
 export function ContactMatching({ contactId }: Props) {
@@ -85,8 +85,8 @@ export function ContactMatching({ contactId }: Props) {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-lg font-bold text-zinc-50">Biens compatibles</h2>
-          <p className="mt-1 text-sm text-zinc-500">
+          <h2 className="text-lg font-bold text-slate-900">Biens compatibles</h2>
+          <p className="mt-1 text-sm text-slate-500">
             L&apos;IA compare votre contact aux biens{" "}
             <span className="text-violet-600">disponibles</span> de
             l&apos;agence (budget, ville, type, transaction).
@@ -107,7 +107,7 @@ export function ContactMatching({ contactId }: Props) {
 
       {loading ? (
         <div
-          className="flex flex-col items-center justify-center rounded-2xl border border-white/[0.08] bg-[#0c0c10]/90 py-16"
+          className="flex flex-col items-center justify-center rounded-2xl border border-slate-200/90 bg-slate-50/90 py-16"
           aria-busy="true"
           aria-live="polite"
         >
@@ -115,7 +115,7 @@ export function ContactMatching({ contactId }: Props) {
             className="h-10 w-10 animate-spin rounded-full border-2 border-indigo-500/30 border-t-indigo-400"
             aria-hidden
           />
-          <p className="mt-4 text-sm font-medium text-zinc-400">
+          <p className="mt-4 text-sm font-medium text-slate-500">
             Claude analyse les biens et le profil du contact…
           </p>
         </div>
@@ -128,8 +128,8 @@ export function ContactMatching({ contactId }: Props) {
       ) : null}
 
       {searched && !loading && !error && matches?.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-white/[0.08] bg-[#0c0c10]/50 px-6 py-12 text-center">
-          <p className="text-sm font-medium text-zinc-400">
+        <div className="rounded-2xl border border-dashed border-slate-200/90 bg-slate-50/80 px-6 py-12 text-center">
+          <p className="text-sm font-medium text-slate-500">
             Aucun bien disponible ne correspond assez à ce profil, ou aucun bien
             n&apos;est en statut « Disponible » pour l&apos;instant.
           </p>
@@ -145,9 +145,9 @@ export function ContactMatching({ contactId }: Props) {
               <li key={m.propertyId}>
                 <Link
                   href={`/dashboard/biens/${p.id}`}
-                  className={`group card-luxury flex flex-col overflow-hidden rounded-2xl border bg-[#12121a] transition-all duration-300 hover:-translate-y-0.5 md:flex-row ${cardGlowClass(m.score)}`}
+                  className={`group card-luxury flex flex-col overflow-hidden rounded-2xl border bg-white transition-all duration-300 hover:-translate-y-0.5 md:flex-row ${cardGlowClass(m.score)}`}
                 >
-                  <div className="relative aspect-[16/10] w-full shrink-0 bg-gradient-to-br from-[#1a1a24] to-[#12121a] md:aspect-auto md:h-auto md:w-52 md:min-h-[200px]">
+                  <div className="relative aspect-[16/10] w-full shrink-0 bg-gradient-to-br from-slate-100 to-slate-200/90 md:aspect-auto md:h-auto md:w-52 md:min-h-[200px]">
                     {p.image_url ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -164,24 +164,24 @@ export function ContactMatching({ contactId }: Props) {
                   <div className="flex min-w-0 flex-1 flex-col justify-center p-5 sm:p-6">
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <h3 className="text-lg font-bold text-zinc-50 transition-colors group-hover:text-violet-300">
+                        <h3 className="text-lg font-bold text-slate-900 transition-colors group-hover:text-violet-300">
                           {p.title}
                         </h3>
                         <p className="mt-1 text-xl font-semibold tabular-nums text-amber-400/95">
                           {p.priceLabel}
                         </p>
-                        <p className="mt-2 text-sm text-zinc-500">
+                        <p className="mt-2 text-sm text-slate-500">
                           {p.surface} m² · {p.city}
                         </p>
                       </div>
                       <div
-                        className={`shrink-0 rounded-xl border border-white/[0.08] px-4 py-2 text-center ${
+                        className={`shrink-0 rounded-xl border border-slate-200/90 px-4 py-2 text-center ${
                           m.score > 70
                             ? "bg-emerald-500/10 shadow-[0_0_20px_-6px_rgba(52,211,153,0.5)]"
-                            : "bg-[#0c0c10]"
+                            : "bg-slate-50"
                         }`}
                       >
-                        <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
                           Score
                         </p>
                         <p className="text-2xl font-bold tabular-nums text-violet-600">
@@ -199,7 +199,7 @@ export function ContactMatching({ contactId }: Props) {
                       </div>
                     </div>
 
-                    <p className="mt-4 text-sm leading-relaxed text-zinc-400">
+                    <p className="mt-4 text-sm leading-relaxed text-slate-500">
                       {m.reason}
                     </p>
                   </div>

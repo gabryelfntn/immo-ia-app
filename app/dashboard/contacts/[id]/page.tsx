@@ -50,7 +50,7 @@ function formatBudgetRange(
 function PulsingContactBadge({ status }: { status: ContactStatus }) {
   return (
     <span
-      className={`inline-flex items-center gap-2 rounded-full border border-white/[0.08] px-3 py-1.5 text-xs font-semibold backdrop-blur-md ${contactStatusBadgeClass(status)}`}
+      className={`inline-flex items-center gap-2 rounded-full border border-slate-200/90 px-3 py-1.5 text-xs font-semibold backdrop-blur-md ${contactStatusBadgeClass(status)}`}
     >
       <span
         className="h-1.5 w-1.5 shrink-0 rounded-full bg-current animate-pulse"
@@ -82,7 +82,7 @@ export default async function ContactDetailPage({ params }: Props) {
   if (!profile?.agency_id) {
     return (
       <div>
-        <p className="text-sm text-zinc-500">Aucune agence associée.</p>
+        <p className="text-sm text-slate-500">Aucune agence associée.</p>
       </div>
     );
   }
@@ -147,19 +147,19 @@ export default async function ContactDetailPage({ params }: Props) {
     <div className="mx-auto max-w-3xl">
       <Link
         href="/dashboard/contacts"
-        className="text-sm font-medium text-zinc-400 transition-all duration-300 hover:text-violet-300"
+        className="text-sm font-medium text-slate-500 transition-all duration-300 hover:text-violet-300"
       >
         ← Retour aux contacts
       </Link>
 
-      <div className="mt-8 flex flex-col gap-6 rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury sm:flex-row sm:items-start sm:justify-between">
+      <div className="mt-8 flex flex-col gap-6 rounded-2xl border border-slate-200/90 bg-white p-6 card-luxury sm:flex-row sm:items-start sm:justify-between">
         <div>
           <PulsingContactBadge status={status} />
-          <h1 className="mt-4 text-3xl font-bold tracking-tight text-zinc-50">
+          <h1 className="mt-4 text-3xl font-bold tracking-tight text-slate-900">
             {fullName}
           </h1>
-          <p className="mt-3 text-sm text-zinc-400">{row.email as string}</p>
-          <p className="mt-1 text-sm text-zinc-400">{row.phone as string}</p>
+          <p className="mt-3 text-sm text-slate-500">{row.email as string}</p>
+          <p className="mt-1 text-sm text-slate-500">{row.phone as string}</p>
         </div>
         <div className="flex shrink-0 flex-col gap-4 sm:items-end">
           <div className="rounded-xl border border-violet-500/20 bg-violet-500/10 px-5 py-4 text-right">
@@ -173,44 +173,44 @@ export default async function ContactDetailPage({ params }: Props) {
               Chaleur, étape pipeline, données et récence.
             </p>
           </div>
-          <div className="rounded-xl border border-white/[0.06] bg-[#0c0c10]/90 p-4">
+          <div className="rounded-xl border border-slate-100 bg-slate-50/90 p-4">
             <UpdateContactStatusControl contactId={id} currentStatus={status} />
           </div>
         </div>
       </div>
 
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <dl className="rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury">
-          <dt className="text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-500">
+        <dl className="rounded-2xl border border-slate-200/90 bg-white p-6 card-luxury">
+          <dt className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500">
             Type
           </dt>
-          <dd className="mt-2 font-medium text-zinc-50">
+          <dd className="mt-2 font-medium text-slate-900">
             {CONTACT_TYPE_LABELS[ctype]}
           </dd>
-          <dt className="mt-6 text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-500">
+          <dt className="mt-6 text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500">
             Statut
           </dt>
-          <dd className="mt-2 font-medium text-zinc-50">
+          <dd className="mt-2 font-medium text-slate-900">
             {CONTACT_STATUS_LABELS[status]}
           </dd>
         </dl>
-        <dl className="rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury">
-          <dt className="text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-500">
+        <dl className="rounded-2xl border border-slate-200/90 bg-white p-6 card-luxury">
+          <dt className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500">
             Budget
           </dt>
-          <dd className="mt-2 font-medium text-zinc-50">
+          <dd className="mt-2 font-medium text-slate-900">
             {budgetLabel ?? "—"}
           </dd>
-          <dt className="mt-6 text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-500">
+          <dt className="mt-6 text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500">
             Ville recherchée
           </dt>
-          <dd className="mt-2 font-medium text-zinc-50">
+          <dd className="mt-2 font-medium text-slate-900">
             {typeof row.desired_city === "string" && row.desired_city.trim()
               ? row.desired_city
               : "—"}
           </dd>
         </dl>
-        <div className="rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury">
+        <div className="rounded-2xl border border-slate-200/90 bg-white p-6 card-luxury">
           <UpdatePipelineStageControl
             contactId={id}
             currentStage={pipelineStage}
@@ -218,17 +218,17 @@ export default async function ContactDetailPage({ params }: Props) {
         </div>
       </div>
 
-      <dl className="mt-6 rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury">
-        <dt className="text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-500">
+      <dl className="mt-6 rounded-2xl border border-slate-200/90 bg-white p-6 card-luxury">
+        <dt className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500">
           Dernière relance email envoyée
         </dt>
-        <dd className="mt-2 font-medium text-zinc-50">
+        <dd className="mt-2 font-medium text-slate-900">
           {formatDateTimeFr(ext.last_followup_sent_at)}
         </dd>
-        <dt className="mt-6 text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-500">
+        <dt className="mt-6 text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500">
           Dernier contact enregistré (CRM)
         </dt>
-        <dd className="mt-2 font-medium text-zinc-50">
+        <dd className="mt-2 font-medium text-slate-900">
           {formatDateTimeFr(ext.last_contacted_at)}
         </dd>
       </dl>
@@ -245,11 +245,11 @@ export default async function ContactDetailPage({ params }: Props) {
         <ContactTasksPanel contactId={id} tasks={contactTasks} />
       </section>
 
-      <section className="mt-8 rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 sm:p-8 card-luxury">
+      <section className="mt-8 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 card-luxury">
         <ContactMatching contactId={id} />
       </section>
 
-      <section className="mt-6 rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury">
+      <section className="mt-6 rounded-2xl border border-slate-200/90 bg-white p-6 card-luxury">
         <ContactNotesForm contactId={id} initialNotes={notesText} />
       </section>
     </div>

@@ -29,12 +29,12 @@ function FormSection({
   children: ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-white/[0.08] bg-[#0c0c10]/50 p-6">
+    <section className="rounded-2xl border border-slate-200/90 bg-slate-50/80 p-6">
       <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-amber-500/90">
         {title}
       </h2>
       {subtitle ? (
-        <p className="mt-1 text-sm text-zinc-600">{subtitle}</p>
+        <p className="mt-1 text-sm text-slate-600">{subtitle}</p>
       ) : null}
       <div className="mt-6 space-y-5">{children}</div>
     </section>
@@ -82,9 +82,9 @@ export function ContactForm() {
   }
 
   const inputClass =
-    "w-full rounded-xl border border-white/[0.08] bg-[#0c0c10] px-4 py-3 text-sm text-zinc-50 outline-none transition-all duration-300 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20";
+    "w-full rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-300 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20";
   const labelClass =
-    "text-xs font-semibold uppercase tracking-wider text-zinc-500";
+    "text-xs font-semibold uppercase tracking-wider text-slate-500";
 
   const numberSetValueAs = (v: unknown) =>
     v === "" || v === null || v === undefined ? undefined : Number(v);
@@ -92,7 +92,7 @@ export function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mt-10 flex flex-col gap-8 rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 sm:p-10"
+      className="mt-10 flex flex-col gap-8 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-10"
     >
       <FormSection title="Identité">
         <div className="grid gap-5 sm:grid-cols-2">
@@ -172,7 +172,7 @@ export function ContactForm() {
             </label>
             <select id="type" className={inputClass} {...register("type")}>
               {CONTACT_TYPES.map((t) => (
-                <option key={t} value={t} className="bg-[#12121a]">
+                <option key={t} value={t} className="bg-white">
                   {CONTACT_TYPE_LABELS[t]}
                 </option>
               ))}
@@ -187,7 +187,7 @@ export function ContactForm() {
             </label>
             <select id="status" className={inputClass} {...register("status")}>
               {CONTACT_STATUSES.map((s) => (
-                <option key={s} value={s} className="bg-[#12121a]">
+                <option key={s} value={s} className="bg-white">
                   {CONTACT_STATUS_LABELS[s]}
                 </option>
               ))}
@@ -206,7 +206,7 @@ export function ContactForm() {
               {...register("pipeline_stage")}
             >
               {PIPELINE_STAGES.map((s) => (
-                <option key={s} value={s} className="bg-[#12121a]">
+                <option key={s} value={s} className="bg-white">
                   {PIPELINE_STAGE_LABELS[s]}
                 </option>
               ))}
@@ -217,16 +217,16 @@ export function ContactForm() {
               name="prospecting_consent"
               control={control}
               render={({ field }) => (
-                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-white/[0.06] bg-[#0c0c10]/50 px-4 py-3">
+                <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-100 bg-slate-50/80 px-4 py-3">
                   <input
                     type="checkbox"
-                    className="mt-0.5 h-4 w-4 rounded border-white/20 bg-[#0c0c10] text-emerald-500"
+                    className="mt-0.5 h-4 w-4 rounded border-white/20 bg-slate-50 text-emerald-500"
                     checked={field.value}
                     onChange={field.onChange}
                     onBlur={field.onBlur}
                     ref={field.ref}
                   />
-                  <span className="text-sm text-zinc-300">
+                  <span className="text-sm text-slate-600">
                     Le contact accepte la prospection commerciale (hors relances
                     automatiques).
                   </span>
@@ -245,7 +245,7 @@ export function ContactForm() {
           <div className="flex flex-col gap-2">
             <label htmlFor="budget_min" className={labelClass}>
               Budget min. (€){" "}
-              <span className="font-normal normal-case text-zinc-600">
+              <span className="font-normal normal-case text-slate-600">
                 optionnel
               </span>
             </label>
@@ -264,7 +264,7 @@ export function ContactForm() {
           <div className="flex flex-col gap-2">
             <label htmlFor="budget_max" className={labelClass}>
               Budget max. (€){" "}
-              <span className="font-normal normal-case text-zinc-600">
+              <span className="font-normal normal-case text-slate-600">
                 optionnel
               </span>
             </label>
@@ -284,7 +284,7 @@ export function ContactForm() {
         <div className="flex flex-col gap-2">
           <label htmlFor="desired_city" className={labelClass}>
             Ville recherchée{" "}
-            <span className="font-normal normal-case text-zinc-600">
+            <span className="font-normal normal-case text-slate-600">
               optionnel
             </span>
           </label>
@@ -306,7 +306,7 @@ export function ContactForm() {
         <div className="flex flex-col gap-2">
           <label htmlFor="notes" className={labelClass}>
             Notes{" "}
-            <span className="font-normal normal-case text-zinc-600">
+            <span className="font-normal normal-case text-slate-600">
               optionnel
             </span>
           </label>
@@ -342,7 +342,7 @@ export function ContactForm() {
           type="button"
           disabled={isSubmitting}
           onClick={() => router.push("/dashboard/contacts")}
-          className="w-full rounded-xl border border-white/[0.08] px-4 py-4 text-sm font-semibold text-zinc-300 transition-all duration-300 hover:border-white/12 hover:bg-[#0c0c10] sm:w-auto sm:px-8"
+          className="w-full rounded-xl border border-slate-200/90 px-4 py-4 text-sm font-semibold text-slate-600 transition-all duration-300 hover:border-white/12 hover:bg-slate-50 sm:w-auto sm:px-8"
         >
           Annuler
         </button>

@@ -23,8 +23,8 @@ export default async function TachesPage() {
   if (!profile?.agency_id) {
     return (
       <div>
-        <h1 className="text-3xl font-bold text-zinc-50">Tâches</h1>
-        <p className="mt-2 text-sm text-zinc-500">
+        <h1 className="text-3xl font-bold text-slate-900">Tâches</h1>
+        <p className="mt-2 text-sm text-slate-500">
           Aucune agence associée à votre compte.
         </p>
       </div>
@@ -42,11 +42,11 @@ export default async function TachesPage() {
   if (error) {
     return (
       <div className="mx-auto max-w-3xl">
-        <h1 className="text-3xl font-bold text-zinc-50">Tâches</h1>
+        <h1 className="text-3xl font-bold text-slate-900">Tâches</h1>
         <p className="mt-4 rounded-xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
           {error.message}
         </p>
-        <p className="mt-2 text-xs text-zinc-500">
+        <p className="mt-2 text-xs text-slate-500">
           Appliquez la migration{" "}
           <code className="rounded bg-white/[0.06] px-1">
             20260409300000_pipeline_tasks_consent
@@ -89,17 +89,17 @@ export default async function TachesPage() {
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-violet-500/90">
             Organisation
           </p>
-          <h1 className="mt-2 flex items-center gap-3 text-4xl font-bold tracking-tight text-zinc-50">
+          <h1 className="mt-2 flex items-center gap-3 text-4xl font-bold tracking-tight text-slate-900">
             <ListTodo className="h-9 w-9 text-violet-400" />
             Tâches
           </h1>
-          <p className="mt-2 text-zinc-500">
+          <p className="mt-2 text-slate-500">
             Rappels et actions pour votre agence.
           </p>
         </div>
         <Link
           href="/dashboard"
-          className="text-sm font-medium text-zinc-400 hover:text-violet-300"
+          className="text-sm font-medium text-slate-500 hover:text-violet-300"
         >
           ← Tableau de bord
         </Link>

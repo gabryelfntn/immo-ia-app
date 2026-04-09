@@ -105,21 +105,21 @@ export function FollowupModal(props: Props) {
       aria-modal="true"
       aria-label="Email de relance"
     >
-      <div className="w-full max-w-3xl overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white via-gray-50 to-slate-100 shadow-[0_0_80px_-30px_rgba(99,102,241,0.35)]">
-        <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-5">
+      <div className="w-full max-w-3xl overflow-hidden rounded-2xl border border-slate-200/90 bg-gradient-to-b from-white via-gray-50 to-slate-100 shadow-[0_0_80px_-30px_rgba(99,102,241,0.35)]">
+        <div className="flex items-center justify-between border-b border-slate-100 px-6 py-5">
           <div className="min-w-0">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-500/90">
               Relance IA
             </p>
-            <p className="mt-1 truncate text-sm font-semibold text-zinc-200">
+            <p className="mt-1 truncate text-sm font-semibold text-slate-700">
               {contactName} ·{" "}
-              <span className="font-medium text-zinc-500">{contactEmail}</span>
+              <span className="font-medium text-slate-500">{contactEmail}</span>
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl border border-white/[0.08] bg-[#0c0c10] p-2 text-zinc-400 transition-colors hover:border-white/12 hover:text-zinc-200"
+            className="rounded-xl border border-slate-200/90 bg-slate-50 p-2 text-slate-500 transition-colors hover:border-white/12 hover:text-slate-700"
             aria-label="Fermer"
           >
             <X className="h-5 w-5" />
@@ -128,12 +128,12 @@ export function FollowupModal(props: Props) {
 
         <div className="px-6 py-6 sm:px-8">
           {loading ? (
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-white/[0.08] bg-black/20 py-16">
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-slate-200/90 bg-black/20 py-16">
               <span
                 className="h-10 w-10 animate-spin rounded-full border-2 border-indigo-500/30 border-t-indigo-400"
                 aria-hidden
               />
-              <p className="mt-4 text-sm font-medium text-zinc-400">
+              <p className="mt-4 text-sm font-medium text-slate-500">
                 Claude rédige votre email de relance…
               </p>
             </div>
@@ -142,21 +142,21 @@ export function FollowupModal(props: Props) {
               {error}
             </p>
           ) : !email ? (
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/[0.08] bg-white/[0.02] px-6 py-14 text-center">
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200/90 bg-white/[0.02] px-6 py-14 text-center">
               <Sparkles className="mb-4 h-10 w-10 text-indigo-500/40" />
-              <p className="text-sm font-medium text-zinc-500">
+              <p className="text-sm font-medium text-slate-500">
                 Aucun email généré pour l’instant.
               </p>
             </div>
           ) : (
             <div className="space-y-6">
-              <div className="rounded-2xl border border-white/[0.08] bg-black/20 p-5">
+              <div className="rounded-2xl border border-slate-200/90 bg-black/20 p-5">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                    <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
                       Sujet
                     </p>
-                    <p className="mt-2 text-sm font-semibold text-zinc-50">
+                    <p className="mt-2 text-sm font-semibold text-slate-900">
                       {email.subject}
                     </p>
                   </div>
@@ -167,29 +167,29 @@ export function FollowupModal(props: Props) {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-white/[0.08] bg-black/20 p-5">
-                <p className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+              <div className="rounded-2xl border border-slate-200/90 bg-black/20 p-5">
+                <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
                   Corps de l’email
                 </p>
-                <div className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-zinc-300">
+                <div className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-slate-600">
                   {email.body}
                 </div>
               </div>
 
               {suggestedProperties.length > 0 ? (
-                <div className="rounded-2xl border border-white/[0.08] bg-black/20 p-5">
-                  <p className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                <div className="rounded-2xl border border-slate-200/90 bg-black/20 p-5">
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
                     Biens suggérés (contexte)
                   </p>
-                  <ul className="mt-3 space-y-2 text-sm text-zinc-400">
+                  <ul className="mt-3 space-y-2 text-sm text-slate-500">
                     {suggestedProperties.map((p) => (
                       <li key={p.id} className="flex flex-wrap gap-x-2">
-                        <span className="font-semibold text-zinc-200">
+                        <span className="font-semibold text-slate-700">
                           {p.title}
                         </span>
-                        <span className="text-zinc-600">·</span>
+                        <span className="text-slate-600">·</span>
                         <span>{p.city}</span>
-                        <span className="text-zinc-600">·</span>
+                        <span className="text-slate-600">·</span>
                         <span>
                           {p.surface} m² · {p.transaction}
                         </span>
@@ -202,12 +202,12 @@ export function FollowupModal(props: Props) {
           )}
         </div>
 
-        <div className="flex flex-col gap-3 border-t border-white/[0.06] px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+        <div className="flex flex-col gap-3 border-t border-slate-100 px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <button
             type="button"
             onClick={onCopy}
             disabled={!email || loading}
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-[#0c0c10] px-5 py-3 text-sm font-semibold text-zinc-200 transition-all hover:border-white/12 hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-40"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200/90 bg-slate-50 px-5 py-3 text-sm font-semibold text-slate-700 transition-all hover:border-white/12 hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-40"
           >
             {copied ? (
               <Check className="h-4 w-4 text-emerald-300" />

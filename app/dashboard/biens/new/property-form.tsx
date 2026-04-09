@@ -39,12 +39,12 @@ function FormSection({
   children: ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-white/[0.08] bg-[#0c0c10]/50 p-6">
+    <section className="rounded-2xl border border-slate-200/90 bg-slate-50/80 p-6">
       <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-400/90">
         {title}
       </h2>
       {subtitle ? (
-        <p className="mt-1 text-sm text-zinc-600">{subtitle}</p>
+        <p className="mt-1 text-sm text-slate-600">{subtitle}</p>
       ) : null}
       <div className="mt-6 space-y-5">{children}</div>
     </section>
@@ -185,14 +185,14 @@ export function PropertyForm() {
   }
 
   const inputClass =
-    "w-full rounded-xl border border-white/[0.08] bg-[#0c0c10] px-4 py-3 text-sm text-zinc-50 outline-none transition-all duration-300 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20";
+    "w-full rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-300 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20";
   const labelClass =
-    "text-xs font-semibold uppercase tracking-wider text-zinc-500";
+    "text-xs font-semibold uppercase tracking-wider text-slate-500";
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mt-10 flex flex-col gap-8 rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 sm:p-10"
+      className="mt-10 flex flex-col gap-8 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-10"
     >
       <FormSection
         title="Informations principales"
@@ -205,7 +205,7 @@ export function PropertyForm() {
             </label>
             <select id="type" className={inputClass} {...register("type")}>
               {PROPERTY_TYPES.map((t) => (
-                <option key={t} value={t} className="bg-[#12121a]">
+                <option key={t} value={t} className="bg-white">
                   {PROPERTY_TYPE_LABELS[t]}
                 </option>
               ))}
@@ -223,10 +223,10 @@ export function PropertyForm() {
               className={inputClass}
               {...register("transaction")}
             >
-              <option value="vente" className="bg-[#12121a]">
+              <option value="vente" className="bg-white">
                 {TRANSACTION_LABELS.vente}
               </option>
-              <option value="location" className="bg-[#12121a]">
+              <option value="location" className="bg-white">
                 {TRANSACTION_LABELS.location}
               </option>
             </select>
@@ -397,14 +397,14 @@ export function PropertyForm() {
           className={`flex min-h-[10rem] cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed px-4 py-10 text-center text-sm transition-all duration-300 ${
             isDragActive
               ? "border-indigo-500 bg-indigo-500/10"
-              : "border-white/[0.08] bg-[#0c0c10]/90 hover:border-indigo-500/40"
+              : "border-slate-200/90 bg-slate-50/90 hover:border-indigo-500/40"
           }`}
         >
           <input {...getInputProps()} />
           {isDragActive ? (
             <span className="text-violet-700">Déposez les fichiers ici…</span>
           ) : (
-            <span className="text-zinc-500">
+            <span className="text-slate-500">
               Glissez-déposez des images ou cliquez pour parcourir
             </span>
           )}
@@ -415,7 +415,7 @@ export function PropertyForm() {
             {stagedPhotos.map((p, index) => (
               <li
                 key={p.id}
-                className="relative h-24 w-24 overflow-hidden rounded-xl border border-white/[0.08] bg-[#0c0c10]"
+                className="relative h-24 w-24 overflow-hidden rounded-xl border border-slate-200/90 bg-slate-50"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -466,7 +466,7 @@ export function PropertyForm() {
           type="button"
           disabled={isSubmitting}
           onClick={() => router.push("/dashboard/biens")}
-          className="w-full rounded-xl border border-white/[0.08] px-4 py-4 text-sm font-semibold text-zinc-300 transition-all duration-300 hover:border-white/12 hover:bg-[#0c0c10] sm:w-auto sm:px-8"
+          className="w-full rounded-xl border border-slate-200/90 px-4 py-4 text-sm font-semibold text-slate-600 transition-all duration-300 hover:border-white/12 hover:bg-slate-50 sm:w-auto sm:px-8"
         >
           Annuler
         </button>

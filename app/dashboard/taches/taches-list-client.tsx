@@ -32,21 +32,21 @@ export function TachesListClient({ tasks, contactNames }: Props) {
   const sodMs = sod.getTime();
 
   function rowAccent(iso: string, completed: boolean): string {
-    if (completed) return "border-white/[0.06] bg-white/[0.02]";
+    if (completed) return "border-slate-100 bg-white/[0.02]";
     const t = new Date(iso).getTime();
     if (t < sodMs) return "border-rose-500/25 bg-rose-500/5";
     if (t < now + 86_400_000) return "border-amber-500/25 bg-amber-500/5";
-    return "border-white/[0.06] bg-white/[0.03]";
+    return "border-slate-100 bg-white/[0.03]";
   }
 
   return (
     <div className="mt-10 space-y-10">
       <section>
-        <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-zinc-500">
+        <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-slate-500">
           À faire ({open.length})
         </h2>
         {open.length === 0 ? (
-          <p className="mt-4 rounded-2xl border border-dashed border-white/[0.08] px-6 py-12 text-center text-sm text-zinc-500">
+          <p className="mt-4 rounded-2xl border border-dashed border-slate-200/90 px-6 py-12 text-center text-sm text-slate-500">
             Aucune tâche ouverte. Créez-en depuis une fiche contact.
           </p>
         ) : (
@@ -57,8 +57,8 @@ export function TachesListClient({ tasks, contactNames }: Props) {
                 className={`flex flex-wrap items-center justify-between gap-4 rounded-2xl border px-5 py-4 ${rowAccent(t.due_at, false)}`}
               >
                 <div className="min-w-0 flex-1">
-                  <p className="font-semibold text-zinc-100">{t.title}</p>
-                  <p className="mt-1 text-xs text-zinc-500">
+                  <p className="font-semibold text-slate-800">{t.title}</p>
+                  <p className="mt-1 text-xs text-slate-500">
                     {new Intl.DateTimeFormat("fr-FR", {
                       dateStyle: "medium",
                       timeStyle: "short",
@@ -97,7 +97,7 @@ export function TachesListClient({ tasks, contactNames }: Props) {
                         router.refresh();
                       })
                     }
-                    className="rounded-xl border border-white/[0.08] p-2 text-zinc-500 hover:border-rose-500/30 hover:text-rose-300 disabled:opacity-50"
+                    className="rounded-xl border border-slate-200/90 p-2 text-slate-500 hover:border-rose-500/30 hover:text-rose-300 disabled:opacity-50"
                     aria-label="Supprimer"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -111,7 +111,7 @@ export function TachesListClient({ tasks, contactNames }: Props) {
 
       {done.length > 0 ? (
         <section>
-          <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-zinc-600">
+          <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-slate-600">
             Terminées (récentes)
           </h2>
           <ul className="mt-4 space-y-2">
@@ -126,7 +126,7 @@ export function TachesListClient({ tasks, contactNames }: Props) {
               .map((t) => (
                 <li
                   key={t.id}
-                  className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/[0.04] px-4 py-2 text-sm text-zinc-500 line-through"
+                  className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/[0.04] px-4 py-2 text-sm text-slate-500 line-through"
                 >
                   <span>{t.title}</span>
                   <span className="text-xs">

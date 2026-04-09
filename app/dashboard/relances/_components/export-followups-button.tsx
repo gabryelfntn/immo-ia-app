@@ -36,7 +36,7 @@ export function ExportFollowupsButton() {
       type="button"
       onClick={onClick}
       disabled={busy}
-      className="inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-[#0c0c10] px-4 py-2 text-sm font-semibold text-zinc-200 transition-colors hover:border-emerald-400/35 hover:bg-emerald-500/12 hover:text-emerald-200 disabled:opacity-50"
+      className="inline-flex items-center gap-2 rounded-xl border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:border-emerald-400/35 hover:bg-emerald-500/12 hover:text-emerald-200 disabled:opacity-50"
     >
       <Download className="h-4 w-4 text-emerald-400" />
       {busy ? "Export…" : "Exporter CSV"}

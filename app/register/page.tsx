@@ -76,11 +76,11 @@ export default function RegisterPage() {
           <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white shadow-lg shadow-violet-500/35">
             <Home className="h-8 w-8" strokeWidth={1.75} />
           </div>
-          <h1 className="text-3xl font-bold tracking-tight text-zinc-50">ImmoAI</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">ImmoAI</h1>
           <p className="mt-2 text-sm font-semibold uppercase tracking-[0.2em] text-violet-400/90">
             Créer votre agence
           </p>
-          <p className="mt-6 text-sm text-zinc-400">
+          <p className="mt-6 text-sm text-slate-500">
             Compte administrateur et espace agence
           </p>
         </div>
@@ -89,7 +89,7 @@ export default function RegisterPage() {
           <div className="flex flex-col gap-2">
             <label
               htmlFor="agency"
-              className="text-xs font-semibold uppercase tracking-wider text-zinc-500"
+              className="text-xs font-semibold uppercase tracking-wider text-slate-500"
             >
               Nom de l&apos;agence
             </label>
@@ -106,7 +106,7 @@ export default function RegisterPage() {
           <div className="flex flex-col gap-2">
             <label
               htmlFor="fullName"
-              className="text-xs font-semibold uppercase tracking-wider text-zinc-500"
+              className="text-xs font-semibold uppercase tracking-wider text-slate-500"
             >
               Nom complet
             </label>
@@ -124,7 +124,7 @@ export default function RegisterPage() {
           <div className="flex flex-col gap-2">
             <label
               htmlFor="email"
-              className="text-xs font-semibold uppercase tracking-wider text-zinc-500"
+              className="text-xs font-semibold uppercase tracking-wider text-slate-500"
             >
               Email
             </label>
@@ -142,7 +142,7 @@ export default function RegisterPage() {
           <div className="flex flex-col gap-2">
             <label
               htmlFor="password"
-              className="text-xs font-semibold uppercase tracking-wider text-zinc-500"
+              className="text-xs font-semibold uppercase tracking-wider text-slate-500"
             >
               Mot de passe
             </label>
@@ -157,7 +157,7 @@ export default function RegisterPage() {
               onChange={(e) => setPassword(e.target.value)}
               className={inputClass}
             />
-            <p className="text-xs text-zinc-500">Au moins 8 caractères</p>
+            <p className="text-xs text-slate-500">Au moins 8 caractères</p>
           </div>
 
           {error ? (
@@ -182,7 +182,7 @@ export default function RegisterPage() {
           </button>
         </form>
 
-        <p className="mt-8 text-center text-sm text-zinc-400">
+        <p className="mt-8 text-center text-sm text-slate-500">
           Déjà inscrit ?{" "}
           <Link
             href="/login"

@@ -39,11 +39,11 @@ import { PIPELINE_STAGE_LABELS } from "@/lib/contacts/pipeline";
 import type { ContactStatus } from "@/lib/contacts/schema";
 
 const CHART_TOOLTIP = {
-  backgroundColor: "#16161f",
-  border: "1px solid rgba(255,255,255,0.1)",
+  backgroundColor: "#ffffff",
+  border: "1px solid rgba(15,23,42,0.1)",
   borderRadius: "12px",
-  color: "#f4f4f5",
-  boxShadow: "0 12px 40px -12px rgba(0,0,0,0.55)",
+  color: "#0f172a",
+  boxShadow: "0 12px 40px -12px rgba(15,23,42,0.12)",
 };
 
 function AnimatedNumber({
@@ -87,7 +87,7 @@ function AnimatedNumber({
 function MomBadge({ pct }: { pct: number | null }) {
   if (pct === null) {
     return (
-      <span className="text-xs font-medium text-zinc-600">— vs M-1</span>
+      <span className="text-xs font-medium text-slate-600">— vs M-1</span>
     );
   }
   const positive = pct >= 0;
@@ -98,7 +98,7 @@ function MomBadge({ pct }: { pct: number | null }) {
       }`}
     >
       {positive ? "+" : ""}
-      {pct}% <span className="font-normal text-zinc-500">vs mois dernier</span>
+      {pct}% <span className="font-normal text-slate-500">vs mois dernier</span>
     </span>
   );
 }
@@ -188,10 +188,10 @@ export function DashboardClient({ data, todayLabel }: Props) {
 
   return (
     <div className="space-y-10">
-      <header className="flex flex-col gap-4 border-b border-white/[0.06] pb-8 lg:flex-row lg:items-end lg:justify-between">
+      <header className="flex flex-col gap-4 border-b border-slate-100 pb-8 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="text-sm font-medium text-zinc-500">{todayLabel}</p>
-          <h1 className="mt-2 text-4xl font-bold tracking-tight text-zinc-50 sm:text-5xl">
+          <p className="text-sm font-medium text-slate-500">{todayLabel}</p>
+          <h1 className="mt-2 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
             {data.userFirstName
               ? `Bonjour, ${data.userFirstName}`
               : `Bienvenue`}
@@ -199,7 +199,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
           <p className="mt-2 text-lg font-medium text-violet-400/95">
             {data.agencyName}
           </p>
-          <p className="mt-3 max-w-2xl text-zinc-600">
+          <p className="mt-3 max-w-2xl text-slate-600">
             Tableau de bord en temps réel : portefeuille, pipeline commercial,
             tâches et performance des annonces IA.
           </p>
@@ -208,21 +208,21 @@ export function DashboardClient({ data, todayLabel }: Props) {
 
       <section className="grid gap-6 lg:grid-cols-3">
         <div className="card-luxury p-6 lg:col-span-2">
-          <h2 className="flex items-center gap-2 text-lg font-bold text-zinc-50">
+          <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">
             <GitBranch className="h-5 w-5 text-violet-400" />
             Pipeline commercial
           </h2>
-          <p className="mt-1 text-sm text-zinc-600">
+          <p className="mt-1 text-sm text-slate-600">
             Répartition des contacts par étape (mandat / vente).
           </p>
           <ul className="mt-5 space-y-3">
             {data.pipelineFunnel.map((row) => (
               <li key={row.stage}>
                 <div className="mb-1 flex justify-between text-xs">
-                  <span className="font-medium text-zinc-300">{row.label}</span>
-                  <span className="tabular-nums text-zinc-500">{row.count}</span>
+                  <span className="font-medium text-slate-600">{row.label}</span>
+                  <span className="tabular-nums text-slate-500">{row.count}</span>
                 </div>
-                <div className="h-2 overflow-hidden rounded-full bg-white/[0.06]">
+                <div className="h-2 overflow-hidden rounded-full bg-slate-100">
                   <div
                     className="h-full rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all duration-500"
                     style={{
@@ -236,36 +236,36 @@ export function DashboardClient({ data, todayLabel }: Props) {
         </div>
 
         <div className="card-luxury flex flex-col p-6">
-          <h2 className="flex items-center gap-2 text-lg font-bold text-zinc-50">
+          <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">
             <ListTodo className="h-5 w-5 text-amber-400" />
             Tâches
           </h2>
-          <p className="mt-1 text-sm text-zinc-600">
+          <p className="mt-1 text-sm text-slate-600">
             Rappels et suivis à traiter.
           </p>
           <dl className="mt-4 flex flex-1 flex-col gap-3 text-sm">
-            <div className="flex justify-between rounded-xl border border-white/[0.06] bg-white/[0.03] px-3 py-2">
-              <dt className="text-zinc-500">Ouvertes</dt>
-              <dd className="font-bold tabular-nums text-zinc-100">
+            <div className="flex justify-between rounded-xl border border-slate-100 bg-slate-50/90 px-3 py-2">
+              <dt className="text-slate-500">Ouvertes</dt>
+              <dd className="font-bold tabular-nums text-slate-800">
                 {data.tasksSummary.openCount}
               </dd>
             </div>
             <div className="flex justify-between rounded-xl border border-rose-500/20 bg-rose-500/10 px-3 py-2">
-              <dt className="text-rose-200/90">En retard</dt>
-              <dd className="font-bold tabular-nums text-rose-100">
+              <dt className="text-rose-800/90">En retard</dt>
+              <dd className="font-bold tabular-nums text-rose-900">
                 {data.tasksSummary.overdue}
               </dd>
             </div>
             <div className="flex justify-between rounded-xl border border-amber-500/20 bg-amber-500/10 px-3 py-2">
-              <dt className="text-amber-200/90">Aujourd&apos;hui</dt>
-              <dd className="font-bold tabular-nums text-amber-100">
+              <dt className="text-amber-800/90">Aujourd&apos;hui</dt>
+              <dd className="font-bold tabular-nums text-amber-950">
                 {data.tasksSummary.dueToday}
               </dd>
             </div>
           </dl>
           <Link
             href="/dashboard/taches"
-            className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] py-2.5 text-sm font-semibold text-zinc-200 transition-colors hover:border-violet-500/35 hover:bg-violet-500/10"
+            className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200/90 bg-white py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:border-violet-400/50 hover:bg-violet-50 hover:text-violet-800"
           >
             Voir les tâches
           </Link>
@@ -273,52 +273,52 @@ export function DashboardClient({ data, todayLabel }: Props) {
       </section>
 
       <section className="card-luxury overflow-hidden">
-        <div className="border-b border-white/[0.06] px-6 py-5">
-          <h2 className="flex items-center gap-2 text-lg font-bold text-zinc-50">
+        <div className="border-b border-slate-100 px-6 py-5">
+          <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">
             <Target className="h-5 w-5 text-fuchsia-400" />
             Priorités commerciales
           </h2>
-          <p className="mt-1 text-sm text-zinc-600">
+          <p className="mt-1 text-sm text-slate-600">
             Contacts classés par score de priorité (chaleur, étape, données,
             récence).
           </p>
         </div>
         <div className="overflow-x-auto p-6">
           {data.topLeads.length === 0 ? (
-            <p className="text-sm text-zinc-500">Aucun contact à afficher.</p>
+            <p className="text-sm text-slate-500">Aucun contact à afficher.</p>
           ) : (
             <table className="w-full min-w-[480px] text-left text-sm">
               <thead>
-                <tr className="text-xs uppercase tracking-wider text-zinc-500">
+                <tr className="text-xs uppercase tracking-wider text-slate-500">
                   <th className="pb-3 pr-4 font-semibold">Contact</th>
                   <th className="pb-3 pr-4 font-semibold">Score</th>
                   <th className="pb-3 pr-4 font-semibold">Étape</th>
                   <th className="pb-3 font-semibold">Statut</th>
                 </tr>
               </thead>
-              <tbody className="text-zinc-300">
+              <tbody className="text-slate-600">
                 {data.topLeads.map((row) => (
                   <tr
                     key={row.id}
-                    className="border-t border-white/[0.06] transition-colors hover:bg-white/[0.04]"
+                    className="border-t border-slate-100 transition-colors hover:bg-slate-50/80"
                   >
                     <td className="py-3 pr-4">
                       <Link
                         href={`/dashboard/contacts/${row.id}`}
-                        className="font-medium text-zinc-50 hover:text-violet-300"
+                        className="font-medium text-slate-900 hover:text-violet-600"
                       >
                         {row.name}
                       </Link>
                     </td>
                     <td className="py-3 pr-4">
-                      <span className="inline-flex min-w-[2.5rem] items-center justify-center rounded-lg border border-violet-500/25 bg-violet-500/10 px-2 py-0.5 text-xs font-bold tabular-nums text-violet-200">
+                      <span className="inline-flex min-w-[2.5rem] items-center justify-center rounded-lg border border-violet-300/80 bg-violet-50 px-2 py-0.5 text-xs font-bold tabular-nums text-violet-800">
                         {row.score}
                       </span>
                     </td>
-                    <td className="py-3 pr-4 text-zinc-400">
+                    <td className="py-3 pr-4 text-slate-500">
                       {PIPELINE_STAGE_LABELS[row.pipeline_stage]}
                     </td>
-                    <td className="py-3 text-zinc-400">
+                    <td className="py-3 text-slate-500">
                       {CONTACT_STATUS_LABELS[row.status]}
                     </td>
                   </tr>
@@ -330,13 +330,13 @@ export function DashboardClient({ data, todayLabel }: Props) {
       </section>
 
       <section className="card-luxury overflow-hidden">
-        <div className="flex flex-col gap-4 border-b border-white/[0.06] px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-4 border-b border-slate-100 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="flex items-center gap-2 text-lg font-bold text-zinc-50">
+            <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">
               <Bell className="h-5 w-5 text-violet-500" />
               Relances automatiques
             </h2>
-            <p className="mt-1 text-sm text-zinc-600">
+            <p className="mt-1 text-sm text-slate-600">
               Contacts inactifs (14+ j., hors opt-out), envois ce mois et
               désinscriptions relances.
             </p>
@@ -344,14 +344,14 @@ export function DashboardClient({ data, todayLabel }: Props) {
           <div className="flex flex-wrap gap-2">
             <Link
               href="/dashboard/relances"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-sm font-semibold text-zinc-200 transition-colors hover:border-violet-500/35 hover:bg-violet-500/10 hover:text-white"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-200/90 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:border-violet-400/50 hover:bg-violet-50 hover:text-violet-800"
             >
               <Bell className="h-4 w-4 text-violet-500" />
               À relancer
             </Link>
             <Link
               href="/dashboard/relances/historique"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-sm font-semibold text-zinc-200 transition-colors hover:border-fuchsia-500/35 hover:bg-fuchsia-500/10 hover:text-white"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-200/90 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:border-fuchsia-400/50 hover:bg-fuchsia-50 hover:text-fuchsia-800"
             >
               <Calendar className="h-4 w-4 text-fuchsia-500" />
               Historique
@@ -385,15 +385,15 @@ export function DashboardClient({ data, todayLabel }: Props) {
           ).map((cell) => (
             <div
               key={cell.label}
-              className="rounded-xl border border-white/[0.06] bg-white/[0.04] px-4 py-4"
+              className="rounded-xl border border-slate-100 bg-slate-50/80 px-4 py-4"
             >
-              <p className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
                 {cell.label}
               </p>
-              <p className="mt-2 text-3xl font-bold tabular-nums text-zinc-50">
+              <p className="mt-2 text-3xl font-bold tabular-nums text-slate-900">
                 <AnimatedNumber value={cell.value} />
               </p>
-              <p className="mt-1 text-xs text-zinc-600">{cell.hint}</p>
+              <p className="mt-1 text-xs text-slate-600">{cell.hint}</p>
             </div>
           ))}
         </div>
@@ -414,18 +414,18 @@ export function DashboardClient({ data, todayLabel }: Props) {
                 >
                   <Icon className="h-5 w-5" strokeWidth={1.75} />
                 </div>
-                <p className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
                   {m.label}
                 </p>
-                <p className="mt-1 text-[11px] text-zinc-600">
+                <p className="mt-1 text-[11px] text-slate-600">
                   {m.key === "tauxConversion"
                     ? `${metrics.clientsCount} client(s) sur ${metrics.totalContacts} contacts`
                     : m.sub}
                 </p>
-                <p className="mt-3 text-3xl font-bold tabular-nums tracking-tight text-zinc-50">
+                <p className="mt-3 text-3xl font-bold tabular-nums tracking-tight text-slate-900">
                   <AnimatedNumber value={raw} decimals={m.decimals} />
                   {m.suffix ? (
-                    <span className="text-2xl font-bold text-zinc-500">
+                    <span className="text-2xl font-bold text-slate-500">
                       {m.suffix}
                     </span>
                   ) : null}
@@ -448,22 +448,22 @@ export function DashboardClient({ data, todayLabel }: Props) {
           <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-violet-400">
             Biens ajoutés
           </h2>
-          <p className="mt-1 text-xs text-zinc-500">6 derniers mois</p>
+          <p className="mt-1 text-xs text-slate-500">6 derniers mois</p>
           <div className="mt-4 h-[280px] w-full min-w-0">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={chartBiensParMois}
                 margin={{ top: 8, right: 8, left: -8, bottom: 0 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                 <XAxis
                   dataKey="label"
-                  tick={{ fill: "#a1a1aa", fontSize: 11 }}
-                  axisLine={{ stroke: "#3f3f46" }}
+                  tick={{ fill: "#64748b", fontSize: 11 }}
+                  axisLine={{ stroke: "#cbd5e1" }}
                   tickLine={false}
                 />
                 <YAxis
-                  tick={{ fill: "#a1a1aa", fontSize: 11 }}
+                  tick={{ fill: "#64748b", fontSize: 11 }}
                   axisLine={false}
                   tickLine={false}
                   allowDecimals={false}
@@ -484,10 +484,10 @@ export function DashboardClient({ data, todayLabel }: Props) {
           <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-fuchsia-400">
             Contacts par statut
           </h2>
-          <p className="mt-1 text-xs text-zinc-500">Répartition CRM</p>
+          <p className="mt-1 text-xs text-slate-500">Répartition CRM</p>
           <div className="mt-4 h-[280px] w-full min-w-0">
             {donutTotal === 0 ? (
-              <div className="flex h-full items-center justify-center text-sm text-zinc-500">
+              <div className="flex h-full items-center justify-center text-sm text-slate-500">
                 Aucun contact à afficher
               </div>
             ) : (
@@ -509,9 +509,9 @@ export function DashboardClient({ data, todayLabel }: Props) {
                   </Pie>
                   <Tooltip contentStyle={CHART_TOOLTIP} />
                   <Legend
-                    wrapperStyle={{ fontSize: 12, color: "#a1a1aa" }}
+                    wrapperStyle={{ fontSize: 12, color: "#64748b" }}
                     formatter={(value) => (
-                      <span style={{ color: "#d4d4d8" }}>{value}</span>
+                      <span style={{ color: "#334155" }}>{value}</span>
                     )}
                   />
                 </PieChart>
@@ -525,7 +525,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
         <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-violet-400">
           Flux portefeuille
         </h2>
-        <p className="mt-1 text-xs text-zinc-500">
+        <p className="mt-1 text-xs text-slate-500">
           Nouveaux biens disponibles vs ventes & locations finalisées (par mois)
         </p>
         <div className="mt-4 h-[300px] w-full min-w-0">
@@ -534,24 +534,24 @@ export function DashboardClient({ data, todayLabel }: Props) {
               data={chartFlux}
               margin={{ top: 8, right: 8, left: -8, bottom: 0 }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
               <XAxis
                 dataKey="label"
-                tick={{ fill: "#a1a1aa", fontSize: 11 }}
-                axisLine={{ stroke: "#3f3f46" }}
+                tick={{ fill: "#64748b", fontSize: 11 }}
+                axisLine={{ stroke: "#cbd5e1" }}
                 tickLine={false}
               />
               <YAxis
-                tick={{ fill: "#a1a1aa", fontSize: 11 }}
+                tick={{ fill: "#64748b", fontSize: 11 }}
                 axisLine={false}
                 tickLine={false}
                 allowDecimals={false}
               />
               <Tooltip contentStyle={CHART_TOOLTIP} />
               <Legend
-                wrapperStyle={{ fontSize: 12, color: "#a1a1aa" }}
+                wrapperStyle={{ fontSize: 12, color: "#64748b" }}
                 formatter={(value) => (
-                  <span style={{ color: "#d4d4d8" }}>{value}</span>
+                  <span style={{ color: "#334155" }}>{value}</span>
                 )}
               />
               <Line
@@ -578,36 +578,36 @@ export function DashboardClient({ data, todayLabel }: Props) {
       </div>
 
       <section className="card-luxury overflow-hidden">
-        <div className="border-b border-white/[0.06] px-6 py-5">
-          <h2 className="flex items-center gap-2 text-lg font-bold text-zinc-50">
+        <div className="border-b border-slate-100 px-6 py-5">
+          <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">
             <UserCircle className="h-5 w-5 text-violet-500" />
             Activité récente
           </h2>
-          <p className="mt-1 text-sm text-zinc-600">
+          <p className="mt-1 text-sm text-slate-600">
             Derniers biens et contacts ajoutés
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2">
-          <div className="border-b border-white/[0.06] p-6 lg:border-b-0 lg:border-r lg:border-white/[0.06]">
+          <div className="border-b border-slate-100 p-6 lg:border-b-0 lg:border-r lg:border-slate-100">
             <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-violet-400">
               Biens
             </h3>
             <div className="mt-4 overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="text-xs uppercase tracking-wider text-zinc-500">
+                  <tr className="text-xs uppercase tracking-wider text-slate-500">
                     <th className="pb-3 pr-4 font-semibold">Bien</th>
                     <th className="pb-3 pr-4 font-semibold">Statut</th>
                     <th className="pb-3 font-semibold">Date</th>
                   </tr>
                 </thead>
-                <tbody className="text-zinc-300">
+                <tbody className="text-slate-600">
                   {data.recentProperties.length === 0 ? (
                     <tr>
                       <td
                         colSpan={3}
-                        className="py-6 text-center text-zinc-500"
+                        className="py-6 text-center text-slate-500"
                       >
                         Aucun bien
                       </td>
@@ -616,21 +616,21 @@ export function DashboardClient({ data, todayLabel }: Props) {
                     data.recentProperties.map((p) => (
                       <tr
                         key={p.id}
-                        className="border-t border-white/[0.06] transition-colors hover:bg-white/[0.04]"
+                        className="border-t border-slate-100 transition-colors hover:bg-slate-50/80"
                       >
                         <td className="py-3 pr-4">
                           <Link
                             href={`/dashboard/biens/${p.id}`}
-                            className="font-medium text-zinc-50 hover:text-violet-300"
+                            className="font-medium text-slate-900 hover:text-violet-600"
                           >
                             <span className="line-clamp-1">{p.title}</span>
-                            <span className="mt-0.5 block text-xs font-normal text-zinc-500">
+                            <span className="mt-0.5 block text-xs font-normal text-slate-500">
                               {p.city}
                             </span>
                           </Link>
                         </td>
                         <td className="py-3 pr-4">
-                          <span className="inline-flex rounded-full border border-white/[0.08] bg-white/[0.04] px-2 py-0.5 text-xs font-medium text-zinc-300">
+                          <span className="inline-flex rounded-full border border-slate-200/90 bg-white/[0.04] px-2 py-0.5 text-xs font-medium text-slate-600">
                             {
                               PROPERTY_STATUS_LABELS[
                                 p.status as PropertyStatus
@@ -638,7 +638,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
                             }
                           </span>
                         </td>
-                        <td className="whitespace-nowrap py-3 text-xs text-zinc-500">
+                        <td className="whitespace-nowrap py-3 text-xs text-slate-500">
                           {new Intl.DateTimeFormat("fr-FR", {
                             dateStyle: "medium",
                           }).format(new Date(p.created_at))}
@@ -658,18 +658,18 @@ export function DashboardClient({ data, todayLabel }: Props) {
             <div className="mt-4 overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="text-xs uppercase tracking-wider text-zinc-500">
+                  <tr className="text-xs uppercase tracking-wider text-slate-500">
                     <th className="pb-3 pr-4 font-semibold">Contact</th>
                     <th className="pb-3 pr-4 font-semibold">Statut</th>
                     <th className="pb-3 font-semibold">Date</th>
                   </tr>
                 </thead>
-                <tbody className="text-zinc-300">
+                <tbody className="text-slate-600">
                   {data.recentContacts.length === 0 ? (
                     <tr>
                       <td
                         colSpan={3}
-                        className="py-6 text-center text-zinc-500"
+                        className="py-6 text-center text-slate-500"
                       >
                         Aucun contact
                       </td>
@@ -678,18 +678,18 @@ export function DashboardClient({ data, todayLabel }: Props) {
                     data.recentContacts.map((c) => (
                       <tr
                         key={c.id}
-                        className="border-t border-white/[0.06] transition-colors hover:bg-white/[0.04]"
+                        className="border-t border-slate-100 transition-colors hover:bg-slate-50/80"
                       >
                         <td className="py-3 pr-4">
                           <Link
                             href={`/dashboard/contacts/${c.id}`}
-                            className="font-medium text-zinc-50 hover:text-fuchsia-300"
+                            className="font-medium text-slate-900 hover:text-fuchsia-300"
                           >
                             {c.name}
                           </Link>
                         </td>
                         <td className="py-3 pr-4">
-                          <span className="inline-flex rounded-full border border-white/[0.08] bg-white/[0.04] px-2 py-0.5 text-xs font-medium text-zinc-300">
+                          <span className="inline-flex rounded-full border border-slate-200/90 bg-white/[0.04] px-2 py-0.5 text-xs font-medium text-slate-600">
                             {
                               CONTACT_STATUS_LABELS[
                                 c.status as ContactStatus
@@ -697,7 +697,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
                             }
                           </span>
                         </td>
-                        <td className="whitespace-nowrap py-3 text-xs text-zinc-500">
+                        <td className="whitespace-nowrap py-3 text-xs text-slate-500">
                           {new Intl.DateTimeFormat("fr-FR", {
                             dateStyle: "medium",
                           }).format(new Date(c.created_at))}

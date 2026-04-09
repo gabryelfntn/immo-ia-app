@@ -1,26 +1,27 @@
 @import "tailwindcss";
 
+/* Thème clair « pro » : surfaces nettes, accents violet / fuchsia pour l’effet wow */
 :root {
-  --app-shell: #06060a;
-  --app-shell-mid: #0a0a10;
-  --app-surface: #12121a;
-  --app-surface-elevated: #16161f;
-  --app-input: #0c0c12;
-  --app-sidebar: #09090f;
-  --app-ink: #fafafa;
-  --app-muted: #a1a1aa;
-  --app-border: rgba(255, 255, 255, 0.07);
-  --accent-violet: #8b5cf6;
-  --accent-pink: #e879f9;
-  --foreground: #f4f4f5;
+  --app-shell: #f1f4f9;
+  --app-shell-mid: #e8ecf4;
+  --app-surface: #ffffff;
+  --app-surface-elevated: #fafbfc;
+  --app-input: #f8fafc;
+  --app-sidebar: #ffffff;
+  --app-ink: #0f172a;
+  --app-muted: #64748b;
+  --app-border: rgba(15, 23, 42, 0.08);
+  --accent-violet: #7c3aed;
+  --accent-pink: #d946ef;
+  --foreground: #0f172a;
 }
 
 @theme inline {
-  --color-app-shell: #06060a;
-  --color-app-surface: #12121a;
-  --color-app-sidebar: #09090f;
-  --color-app-ink: #fafafa;
-  --color-app-border: rgba(255, 255, 255, 0.08);
+  --color-app-shell: #f1f4f9;
+  --color-app-surface: #ffffff;
+  --color-app-sidebar: #ffffff;
+  --color-app-ink: #0f172a;
+  --color-app-border: rgba(15, 23, 42, 0.08);
   --font-sans: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
@@ -32,23 +33,23 @@ html {
 body {
   background-color: var(--app-shell);
   background-image:
-    radial-gradient(ellipse 120% 80% at 50% -40%, rgba(91, 33, 182, 0.18), transparent 55%),
-    radial-gradient(ellipse 70% 50% at 100% 0%, rgba(192, 38, 211, 0.08), transparent 45%),
-    radial-gradient(ellipse 60% 40% at 0% 100%, rgba(99, 102, 241, 0.06), transparent 50%);
+    radial-gradient(ellipse 100% 80% at 50% -30%, rgba(124, 58, 237, 0.09), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 100% 0%, rgba(217, 70, 239, 0.06), transparent 48%),
+    radial-gradient(ellipse 55% 45% at 0% 100%, rgba(99, 102, 241, 0.05), transparent 50%);
   background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
 }
 
-/* Landing & auth — grille discrète sur fond profond */
+/* Landing & auth — grille légère sur fond clair */
 .auth-grid-pattern {
-  background-color: #06060a;
+  background-color: #f8fafc;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px),
-    radial-gradient(ellipse 100% 60% at 50% -30%, rgba(139, 92, 246, 0.16), transparent 55%),
-    radial-gradient(ellipse 55% 45% at 100% 100%, rgba(236, 72, 153, 0.09), transparent 50%);
-  background-size: 48px 48px, 48px 48px, 100% 100%, 100% 100%;
+    linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    radial-gradient(ellipse 100% 60% at 50% -25%, rgba(124, 58, 237, 0.12), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 100% 100%, rgba(217, 70, 239, 0.08), transparent 50%);
+  background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%;
 }
 
 @keyframes luxury-shimmer {
@@ -65,16 +66,16 @@ body {
   overflow: hidden;
   background: linear-gradient(
     105deg,
-    #6d28d9 0%,
-    #7c3aed 35%,
-    #8b5cf6 50%,
+    #5b21b6 0%,
+    #6d28d9 28%,
+    #7c3aed 52%,
     #c026d3 100%
   );
   background-size: 200% auto;
   box-shadow:
-    0 0 0 1px rgba(139, 92, 246, 0.35),
-    0 4px 20px -4px rgba(124, 58, 237, 0.55),
-    0 12px 40px -12px rgba(192, 38, 211, 0.2);
+    0 0 0 1px rgba(124, 58, 237, 0.25),
+    0 4px 16px -2px rgba(124, 58, 237, 0.35),
+    0 12px 36px -10px rgba(192, 38, 211, 0.22);
   transition: box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
     transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -82,8 +83,8 @@ body {
 .btn-luxury-primary:hover:not(:disabled) {
   box-shadow:
     0 0 0 1px rgba(167, 139, 250, 0.45),
-    0 8px 28px -4px rgba(124, 58, 237, 0.6),
-    0 16px 48px -12px rgba(192, 38, 211, 0.25);
+    0 8px 28px -4px rgba(124, 58, 237, 0.45),
+    0 18px 44px -12px rgba(192, 38, 211, 0.28);
   transform: translateY(-1px);
 }
 
@@ -98,7 +99,7 @@ body {
   background: linear-gradient(
     110deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.14) 45%,
+    rgba(255, 255, 255, 0.22) 45%,
     transparent 55%
   );
   background-size: 200% 100%;
@@ -111,63 +112,67 @@ body {
   transform: none;
 }
 
-/* Panneaux — verre sombre, bordure fine */
+/* Cartes — blanc, ombre douce, hover « premium » */
 .card-luxury {
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(15, 23, 42, 0.08);
   background: linear-gradient(
-    155deg,
-    rgba(22, 22, 30, 0.92) 0%,
-    rgba(15, 15, 20, 0.88) 100%
+    165deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(248, 250, 252, 0.96) 100%
   );
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: 1.25rem;
   transition: border-color 0.35s cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
     transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 32px -12px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 8px 28px -8px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
 }
 
 .card-luxury:hover {
-  border-color: rgba(139, 92, 246, 0.22);
-  box-shadow: 0 12px 48px -16px rgba(91, 33, 182, 0.2),
-    0 4px 32px -12px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+  border-color: rgba(124, 58, 237, 0.22);
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 12px 40px -12px rgba(124, 58, 237, 0.12),
+    0 20px 50px -20px rgba(15, 23, 42, 0.06),
+    inset 0 1px 0 0 rgba(255, 255, 255, 1);
 }
 
-/* Champs (thème sombre) */
+/* Champs */
 .input-app {
   width: 100%;
   border-radius: 0.875rem;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  background-color: rgba(10, 10, 16, 0.85);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background-color: #f8fafc;
   padding: 0.75rem 1rem;
   font-size: 0.875rem;
   line-height: 1.25rem;
-  color: #f4f4f5;
+  color: #0f172a;
   outline: none;
   transition: border-color 0.25s ease, box-shadow 0.25s ease,
     background-color 0.25s ease;
 }
 
 .input-app::placeholder {
-  color: #71717a;
+  color: #94a3b8;
 }
 
 .input-app:focus {
-  border-color: rgba(139, 92, 246, 0.45);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
-  background-color: rgba(12, 12, 18, 0.95);
+  border-color: rgba(124, 58, 237, 0.45);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+  background-color: #ffffff;
 }
 
 /* Filtres / barres d’outils */
 .filter-bar-surface {
   border-radius: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  background: rgba(18, 18, 26, 0.65);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.95);
 }
 
 .nav-icon-glow {
@@ -175,15 +180,15 @@ body {
 }
 
 .group:hover .nav-icon-glow {
-  filter: drop-shadow(0 0 6px rgba(167, 139, 250, 0.5));
-  color: #c4b5fd;
+  filter: drop-shadow(0 0 5px rgba(124, 58, 237, 0.35));
+  color: #7c3aed;
 }
 
-/* Zone contenu dashboard : léger fade */
+/* Zone contenu dashboard */
 .dashboard-main-fade {
   background: radial-gradient(
-    ellipse 80% 50% at 50% 0%,
-    rgba(139, 92, 246, 0.04),
-    transparent 60%
+    ellipse 85% 55% at 50% 0%,
+    rgba(124, 58, 237, 0.06),
+    transparent 58%
   );
 }
