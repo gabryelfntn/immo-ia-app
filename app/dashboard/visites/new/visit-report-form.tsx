@@ -41,7 +41,7 @@ function interestPanelClass(interest: string): string {
     case "faible":
       return "border-rose-500/25 bg-rose-500/[0.06]";
     default:
-      return "border-white/[0.08] bg-[#0a0a0f]/80";
+      return "border-gray-200 bg-gray-50/80";
   }
 }
 
@@ -161,8 +161,8 @@ export function VisitReportForm({ properties, contacts }: Props) {
   return (
     <div className="grid gap-10 lg:grid-cols-2">
       <div className="space-y-6">
-        <div className="rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury sm:p-8">
-          <h2 className="text-lg font-bold text-white">Détails de la visite</h2>
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 card-luxury sm:p-8">
+          <h2 className="text-lg font-bold text-gray-900">Détails de la visite</h2>
           <p className="mt-1 text-sm text-zinc-500">
             Sélectionnez le bien et le contact, puis saisissez vos notes libres :
             l&apos;IA structurera le compte-rendu.
@@ -180,11 +180,11 @@ export function VisitReportForm({ properties, contacts }: Props) {
                 id="visit-property"
                 value={propertyId}
                 onChange={(e) => setPropertyId(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-[#0a0a0f] px-4 py-3 text-sm font-medium text-zinc-200 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium text-gray-800 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
               >
                 <option value="">Choisir un bien…</option>
                 {properties.map((p) => (
-                  <option key={p.id} value={p.id} className="bg-[#12121a]">
+                  <option key={p.id} value={p.id} className="bg-white">
                     {p.label}
                   </option>
                 ))}
@@ -202,11 +202,11 @@ export function VisitReportForm({ properties, contacts }: Props) {
                 id="visit-contact"
                 value={contactId}
                 onChange={(e) => setContactId(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-[#0a0a0f] px-4 py-3 text-sm font-medium text-zinc-200 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium text-gray-800 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
               >
                 <option value="">Choisir un contact…</option>
                 {contacts.map((c) => (
-                  <option key={c.id} value={c.id} className="bg-[#12121a]">
+                  <option key={c.id} value={c.id} className="bg-white">
                     {c.label}
                   </option>
                 ))}
@@ -225,7 +225,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
                 type="date"
                 value={visitDate}
                 onChange={(e) => setVisitDate(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-[#0a0a0f] px-4 py-3 text-sm font-medium text-zinc-200 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm font-medium text-gray-800 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
 
@@ -242,7 +242,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
                 onChange={(e) => setVisitNotes(e.target.value)}
                 rows={8}
                 placeholder="Impressions du client, points forts/faibles du bien, objections, ambiance du quartier…"
-                className="w-full resize-y rounded-xl border border-white/10 bg-[#0a0a0f] px-4 py-3 text-sm leading-relaxed text-zinc-200 placeholder:text-zinc-600 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+                className="w-full resize-y rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm leading-relaxed text-gray-800 placeholder:text-zinc-600 outline-none transition-all focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
           </div>
@@ -293,7 +293,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
 
       <div className="min-h-[320px]">
         {!report ? (
-          <div className="flex h-full min-h-[320px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-[#12121a]/40 px-6 py-16 text-center">
+          <div className="flex h-full min-h-[320px] flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-white/40 px-6 py-16 text-center">
             <Sparkles className="mb-4 h-10 w-10 text-indigo-500/40" />
             <p className="text-sm font-medium text-zinc-500">
               Le rapport structuré apparaîtra ici après génération.
@@ -306,7 +306,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-zinc-500">
               Aperçu
             </p>
-            <h3 className="mt-2 text-xl font-bold text-white">
+            <h3 className="mt-2 text-xl font-bold text-gray-900">
               {interestTitle(report.clientInterest)}
             </h3>
 
@@ -314,7 +314,7 @@ export function VisitReportForm({ properties, contacts }: Props) {
               <h4 className="text-xs font-bold uppercase tracking-wider text-amber-500/90">
                 Synthèse
               </h4>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-300">
+              <p className="mt-2 text-sm leading-relaxed text-gray-700">
                 {report.summary}
               </p>
             </section>
@@ -342,20 +342,20 @@ export function VisitReportForm({ properties, contacts }: Props) {
               </section>
             </div>
 
-            <section className="mt-8 rounded-xl border border-white/[0.06] bg-black/20 p-4">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-300/90">
+            <section className="mt-8 rounded-xl border border-gray-100 bg-black/20 p-4">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-violet-600">
                 Recommandation
               </h4>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-300">
+              <p className="mt-2 text-sm leading-relaxed text-gray-700">
                 {report.recommendation}
               </p>
             </section>
 
-            <section className="mt-4 rounded-xl border border-white/[0.06] bg-black/20 p-4">
+            <section className="mt-4 rounded-xl border border-gray-100 bg-black/20 p-4">
               <h4 className="text-xs font-bold uppercase tracking-wider text-violet-300/90">
                 Prochaine étape
               </h4>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-300">
+              <p className="mt-2 text-sm leading-relaxed text-gray-700">
                 {report.nextStep}
               </p>
             </section>

@@ -27,15 +27,15 @@ export const TRANSACTION_LABELS: Record<PropertyTransaction, string> = {
 export function statusBadgeClass(status: PropertyStatus): string {
   switch (status) {
     case "disponible":
-      return "bg-emerald-500/15 text-emerald-200 ring-1 ring-emerald-400/25";
+      return "bg-emerald-50 text-emerald-900 ring-1 ring-emerald-200/80";
     case "sous_compromis":
-      return "bg-amber-500/15 text-amber-200 ring-1 ring-amber-400/30";
+      return "bg-amber-50 text-amber-900 ring-1 ring-amber-200/80";
     case "vendu":
-      return "bg-zinc-500/15 text-zinc-200 ring-1 ring-zinc-400/20";
+      return "bg-zinc-100 text-zinc-800 ring-1 ring-zinc-200";
     case "loue":
-      return "bg-sky-500/15 text-sky-200 ring-1 ring-sky-400/25";
+      return "bg-sky-50 text-sky-900 ring-1 ring-sky-200/80";
     default:
-      return "bg-zinc-500/15 text-zinc-300 ring-1 ring-zinc-400/20";
+      return "bg-zinc-100 text-zinc-700 ring-1 ring-zinc-200";
   }
 }
 

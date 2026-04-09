@@ -38,7 +38,7 @@ export default async function RelancesPage({ searchParams }: Props) {
   if (!profile?.agency_id) {
     return (
       <div>
-        <h1 className="text-3xl font-bold text-white">Relances</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Relances</h1>
         <p className="mt-2 text-sm text-zinc-500">
           Aucune agence associée à votre compte.
         </p>
@@ -60,7 +60,7 @@ export default async function RelancesPage({ searchParams }: Props) {
   if (error) {
     return (
       <div className="mx-auto max-w-6xl">
-        <h1 className="text-3xl font-bold text-white">Relances</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Relances</h1>
         <p className="mt-2 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
           {error.message}
         </p>

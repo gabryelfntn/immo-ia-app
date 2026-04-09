@@ -6,13 +6,13 @@ type Props = {
 
 export function RelancesSubnav({ current }: Props) {
   return (
-    <nav className="mt-6 flex flex-wrap gap-2 rounded-2xl border border-white/[0.08] bg-[#12121a]/80 p-2 backdrop-blur-sm">
+    <nav className="mt-6 flex flex-wrap gap-2 rounded-2xl border border-gray-200 bg-white/80 p-2 backdrop-blur-sm">
       <Link
         href="/dashboard/relances"
         className={`rounded-xl px-4 py-2 text-sm font-semibold transition-all ${
           current === "liste"
-            ? "border border-indigo-500/35 bg-indigo-500/15 text-indigo-200"
-            : "text-zinc-400 hover:bg-white/[0.04] hover:text-zinc-200"
+            ? "border border-indigo-500/35 bg-indigo-500/15 text-violet-700"
+            : "text-zinc-400 hover:bg-gray-50 hover:text-gray-800"
         }`}
       >
         Contacts à relancer
@@ -21,8 +21,8 @@ export function RelancesSubnav({ current }: Props) {
         href="/dashboard/relances/historique"
         className={`rounded-xl px-4 py-2 text-sm font-semibold transition-all ${
           current === "historique"
-            ? "border border-indigo-500/35 bg-indigo-500/15 text-indigo-200"
-            : "text-zinc-400 hover:bg-white/[0.04] hover:text-zinc-200"
+            ? "border border-indigo-500/35 bg-indigo-500/15 text-violet-700"
+            : "text-zinc-400 hover:bg-gray-50 hover:text-gray-800"
         }`}
       >
         Historique des relances

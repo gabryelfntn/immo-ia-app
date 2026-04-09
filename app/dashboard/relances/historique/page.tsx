@@ -57,7 +57,7 @@ export default async function RelancesHistoriquePage() {
   if (!profile?.agency_id) {
     return (
       <div>
-        <h1 className="text-3xl font-bold text-white">Historique</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Historique</h1>
         <p className="mt-2 text-sm text-zinc-500">
           Aucune agence associée à votre compte.
         </p>
@@ -124,7 +124,7 @@ export default async function RelancesHistoriquePage() {
   if (error) {
     return (
       <div className="mx-auto max-w-6xl">
-        <h1 className="text-3xl font-bold text-white">Historique des relances</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Historique des relances</h1>
         <p className="mt-2 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
           {error.message}
         </p>
@@ -150,7 +150,7 @@ export default async function RelancesHistoriquePage() {
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-500/90">
             CRM
           </p>
-          <h1 className="mt-2 text-4xl font-bold tracking-tight text-white">
+          <h1 className="mt-2 text-4xl font-bold tracking-tight text-gray-900">
             Historique des relances
           </h1>
           <p className="mt-2 text-zinc-500">
@@ -163,35 +163,35 @@ export default async function RelancesHistoriquePage() {
       </div>
 
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-xl border border-white/[0.08] bg-[#12121a] px-4 py-3">
+        <div className="rounded-xl border border-gray-200 bg-white px-4 py-3">
           <p className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
             Envoyés (total)
           </p>
-          <p className="mt-1 text-2xl font-bold tabular-nums text-white">
+          <p className="mt-1 text-2xl font-bold tabular-nums text-gray-900">
             {sentTotal}
           </p>
         </div>
-        <div className="rounded-xl border border-white/[0.08] bg-[#12121a] px-4 py-3">
+        <div className="rounded-xl border border-gray-200 bg-white px-4 py-3">
           <p className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
             Échecs (total)
           </p>
-          <p className="mt-1 text-2xl font-bold tabular-nums text-rose-200">
+          <p className="mt-1 text-2xl font-bold tabular-nums text-rose-600">
             {failedTotal}
           </p>
         </div>
-        <div className="rounded-xl border border-white/[0.08] bg-[#12121a] px-4 py-3">
+        <div className="rounded-xl border border-gray-200 bg-white px-4 py-3">
           <p className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
             Envoyés ce mois
           </p>
-          <p className="mt-1 text-2xl font-bold tabular-nums text-emerald-200">
+          <p className="mt-1 text-2xl font-bold tabular-nums text-emerald-600">
             {sentMonth}
           </p>
         </div>
-        <div className="rounded-xl border border-white/[0.08] bg-[#12121a] px-4 py-3">
+        <div className="rounded-xl border border-gray-200 bg-white px-4 py-3">
           <p className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
             Échecs ce mois
           </p>
-          <p className="mt-1 text-2xl font-bold tabular-nums text-rose-200">
+          <p className="mt-1 text-2xl font-bold tabular-nums text-rose-600">
             {failedMonth}
           </p>
         </div>
@@ -200,9 +200,9 @@ export default async function RelancesHistoriquePage() {
       <RelancesSubnav current="historique" />
 
       {list.length === 0 ? (
-        <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-[#12121a]/50 px-8 py-20 text-center">
+        <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-white/50 px-8 py-20 text-center">
           <History className="mb-4 h-12 w-12 text-zinc-600" />
-          <p className="text-xl font-semibold text-zinc-200">
+          <p className="text-xl font-semibold text-gray-800">
             Aucun envoi enregistré
           </p>
           <p className="mt-2 max-w-md text-sm text-zinc-500">
@@ -219,7 +219,7 @@ export default async function RelancesHistoriquePage() {
             const email = c?.email ?? "—";
             return (
               <li key={r.id}>
-                <article className="card-luxury rounded-2xl border border-white/[0.08] bg-[#12121a] p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-500/20 sm:p-6">
+                <article className="card-luxury rounded-2xl border border-gray-200 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-500/20 sm:p-6">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-3">
@@ -229,7 +229,7 @@ export default async function RelancesHistoriquePage() {
                           {r.status === "sent" ? "Envoyé" : "Échec"}
                         </span>
                         <span className="inline-flex items-center gap-2 text-sm text-zinc-500">
-                          <Mail className="h-4 w-4 text-indigo-400/80" />
+                          <Mail className="h-4 w-4 text-violet-500" />
                           {formatDateTime(r.created_at)}
                         </span>
                         {r.tone ? (
@@ -238,10 +238,10 @@ export default async function RelancesHistoriquePage() {
                           </span>
                         ) : null}
                       </div>
-                      <h2 className="mt-3 text-lg font-bold text-white">
+                      <h2 className="mt-3 text-lg font-bold text-gray-900">
                         {r.subject}
                       </h2>
-                      <p className="mt-2 text-sm text-indigo-200/90">
+                      <p className="mt-2 text-sm text-violet-700">
                         <Link
                           href={`/dashboard/contacts/${r.contact_id}`}
                           className="transition-colors hover:text-amber-300"
@@ -261,7 +261,7 @@ export default async function RelancesHistoriquePage() {
                           <summary className="cursor-pointer text-sm font-semibold text-amber-500/90 transition-colors hover:text-amber-400">
                             Voir le corps de l&apos;email
                           </summary>
-                          <div className="mt-3 whitespace-pre-wrap rounded-xl border border-white/[0.06] bg-black/25 p-4 text-sm leading-relaxed text-zinc-400">
+                          <div className="mt-3 whitespace-pre-wrap rounded-xl border border-gray-100 bg-black/25 p-4 text-sm leading-relaxed text-zinc-400">
                             {r.body}
                           </div>
                         </details>

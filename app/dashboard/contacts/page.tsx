@@ -71,7 +71,7 @@ function avatarGradient(status: ContactStatus): string {
 function PulsingContactBadge({ status }: { status: ContactStatus }) {
   return (
     <span
-      className={`inline-flex shrink-0 items-center gap-2 rounded-full border border-white/10 px-3 py-1 text-xs font-semibold backdrop-blur-md ${contactStatusBadgeClass(status)}`}
+      className={`inline-flex shrink-0 items-center gap-2 rounded-full border border-gray-200 px-3 py-1 text-xs font-semibold backdrop-blur-md ${contactStatusBadgeClass(status)}`}
     >
       <span
         className="h-1.5 w-1.5 shrink-0 rounded-full bg-current animate-pulse"
@@ -105,7 +105,7 @@ export default async function ContactsPage({ searchParams }: Props) {
   if (!profile?.agency_id) {
     return (
       <div>
-        <h1 className="text-3xl font-bold text-white">Contacts</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Contacts</h1>
         <p className="mt-2 text-sm text-zinc-500">
           Aucune agence associée à votre compte.
         </p>
@@ -131,7 +131,7 @@ export default async function ContactsPage({ searchParams }: Props) {
   if (error) {
     return (
       <div>
-        <h1 className="text-3xl font-bold text-white">Contacts</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Contacts</h1>
         <p className="mt-2 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
           {error.message}
         </p>
@@ -155,7 +155,7 @@ export default async function ContactsPage({ searchParams }: Props) {
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-500/90">
             CRM
           </p>
-          <h1 className="mt-2 text-4xl font-bold tracking-tight text-white">
+          <h1 className="mt-2 text-4xl font-bold tracking-tight text-gray-900">
             Contacts
           </h1>
           <p className="mt-2 text-zinc-500">
@@ -176,16 +176,16 @@ export default async function ContactsPage({ searchParams }: Props) {
         method="get"
         className="mt-10 flex flex-wrap items-center gap-3"
       >
-        <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/[0.08] bg-[#12121a]/80 p-2 backdrop-blur-sm">
+        <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-gray-200 bg-white/80 p-2 backdrop-blur-sm">
           <select
             id="filter-contact-status"
             name="status"
             defaultValue={statusFilter ?? ""}
-            className="rounded-full border border-white/10 bg-[#0a0a0f] px-4 py-2 text-sm font-medium text-zinc-200 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+            className="rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-800 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
           >
             <option value="">Tous les statuts</option>
             {CONTACT_STATUSES.map((s) => (
-              <option key={s} value={s} className="bg-[#12121a]">
+              <option key={s} value={s} className="bg-white">
                 {CONTACT_STATUS_LABELS[s]}
               </option>
             ))}
@@ -194,18 +194,18 @@ export default async function ContactsPage({ searchParams }: Props) {
             id="filter-contact-type"
             name="type"
             defaultValue={typeFilter ?? ""}
-            className="rounded-full border border-white/10 bg-[#0a0a0f] px-4 py-2 text-sm font-medium text-zinc-200 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+            className="rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-800 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
           >
             <option value="">Tous les types</option>
             {CONTACT_TYPES.map((t) => (
-              <option key={t} value={t} className="bg-[#12121a]">
+              <option key={t} value={t} className="bg-white">
                 {CONTACT_TYPE_LABELS[t]}
               </option>
             ))}
           </select>
           <button
             type="submit"
-            className="rounded-full bg-amber-500/15 px-5 py-2 text-sm font-semibold text-amber-200 transition-all duration-300 hover:bg-amber-500/25"
+            className="rounded-full bg-amber-500/15 px-5 py-2 text-sm font-semibold text-amber-800 transition-all duration-300 hover:bg-amber-500/25"
           >
             Appliquer
           </button>
@@ -221,8 +221,8 @@ export default async function ContactsPage({ searchParams }: Props) {
       </form>
 
       {list.length === 0 ? (
-        <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-[#12121a]/50 px-8 py-20 text-center">
-          <p className="text-xl font-semibold text-zinc-200">
+        <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-white/50 px-8 py-20 text-center">
+          <p className="text-xl font-semibold text-gray-800">
             Aucun contact pour l&apos;instant
           </p>
           <p className="mt-2 max-w-md text-sm text-zinc-500">
@@ -254,17 +254,17 @@ export default async function ContactsPage({ searchParams }: Props) {
               <li key={c.id as string}>
                 <Link
                   href={`/dashboard/contacts/${c.id}`}
-                  className="card-luxury group flex flex-col gap-5 rounded-2xl border border-white/[0.08] bg-[#12121a] p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-500/25 sm:flex-row sm:items-center sm:gap-6"
+                  className="card-luxury group flex flex-col gap-5 rounded-2xl border border-gray-200 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-500/25 sm:flex-row sm:items-center sm:gap-6"
                 >
                   <div
-                    className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-lg font-bold text-white ring-2 ${avatarGradient(status)}`}
+                    className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-lg font-bold text-gray-900 ring-2 ${avatarGradient(status)}`}
                   >
                     {initials(fn, ln)}
                   </div>
 
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-3">
-                      <h2 className="text-lg font-bold text-white transition-colors duration-300 group-hover:text-indigo-200">
+                      <h2 className="text-lg font-bold text-gray-900 transition-colors duration-300 group-hover:text-violet-700">
                         {fullName}
                       </h2>
                       <PulsingContactBadge status={status} />
@@ -289,7 +289,7 @@ export default async function ContactsPage({ searchParams }: Props) {
                         <Phone className="h-4 w-4 shrink-0 text-amber-500/80" />
                         {c.phone as string}
                       </span>
-                      <span className="font-medium text-zinc-300">
+                      <span className="font-medium text-gray-700">
                         {CONTACT_TYPE_LABELS[ctype]}
                       </span>
                       {budgetLabel ? (

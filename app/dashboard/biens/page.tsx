@@ -36,7 +36,7 @@ type Props = { searchParams?: Promise<Search> };
 function PulsingPropertyBadge({ status }: { status: PropertyStatus }) {
   return (
     <span
-      className={`inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1 text-xs font-semibold backdrop-blur-md ${statusBadgeClass(status)}`}
+      className={`inline-flex items-center gap-2 rounded-full border border-gray-200 px-3 py-1 text-xs font-semibold backdrop-blur-md ${statusBadgeClass(status)}`}
     >
       <span
         className="h-1.5 w-1.5 shrink-0 rounded-full bg-current animate-pulse"
@@ -70,7 +70,7 @@ export default async function BiensPage({ searchParams }: Props) {
   if (!profile?.agency_id) {
     return (
       <div>
-        <h1 className="text-3xl font-bold text-white">Biens</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Biens</h1>
         <p className="mt-2 text-sm text-zinc-500">
           Aucune agence associée à votre compte.
         </p>
@@ -96,7 +96,7 @@ export default async function BiensPage({ searchParams }: Props) {
   if (error) {
     return (
       <div>
-        <h1 className="text-3xl font-bold text-white">Biens</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Biens</h1>
         <p className="mt-2 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
           {error.message}
         </p>
@@ -118,7 +118,7 @@ export default async function BiensPage({ searchParams }: Props) {
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-400/90">
             Portefeuille
           </p>
-          <h1 className="mt-2 text-4xl font-bold tracking-tight text-white">
+          <h1 className="mt-2 text-4xl font-bold tracking-tight text-gray-900">
             Biens
           </h1>
           <p className="mt-2 text-zinc-500">
@@ -139,7 +139,7 @@ export default async function BiensPage({ searchParams }: Props) {
         method="get"
         className="mt-10 flex flex-wrap items-center gap-3"
       >
-        <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/[0.08] bg-[#12121a]/80 p-2 backdrop-blur-sm">
+        <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-gray-200 bg-white/80 p-2 backdrop-blur-sm">
           <span className="hidden px-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 sm:inline">
             Filtres
           </span>
@@ -147,11 +147,11 @@ export default async function BiensPage({ searchParams }: Props) {
             id="filter-status"
             name="status"
             defaultValue={statusFilter ?? ""}
-            className="rounded-full border border-white/10 bg-[#0a0a0f] px-4 py-2 text-sm font-medium text-zinc-200 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+            className="rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-800 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
           >
             <option value="">Tous les statuts</option>
             {PROPERTY_STATUSES.map((s) => (
-              <option key={s} value={s} className="bg-[#12121a]">
+              <option key={s} value={s} className="bg-white">
                 {PROPERTY_STATUS_LABELS[s]}
               </option>
             ))}
@@ -160,18 +160,18 @@ export default async function BiensPage({ searchParams }: Props) {
             id="filter-type"
             name="type"
             defaultValue={typeFilter ?? ""}
-            className="rounded-full border border-white/10 bg-[#0a0a0f] px-4 py-2 text-sm font-medium text-zinc-200 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
+            className="rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-800 outline-none transition-all duration-300 focus:border-indigo-500/40 focus:ring-2 focus:ring-indigo-500/20"
           >
             <option value="">Tous les types</option>
             {PROPERTY_TYPES.map((t) => (
-              <option key={t} value={t} className="bg-[#12121a]">
+              <option key={t} value={t} className="bg-white">
                 {PROPERTY_TYPE_LABELS[t]}
               </option>
             ))}
           </select>
           <button
             type="submit"
-            className="rounded-full bg-indigo-500/20 px-5 py-2 text-sm font-semibold text-indigo-200 transition-all duration-300 hover:bg-indigo-500/30"
+            className="rounded-full bg-indigo-500/20 px-5 py-2 text-sm font-semibold text-violet-700 transition-all duration-300 hover:bg-indigo-500/30"
           >
             Appliquer
           </button>
@@ -187,8 +187,8 @@ export default async function BiensPage({ searchParams }: Props) {
       </form>
 
       {list.length === 0 ? (
-        <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-[#12121a]/50 px-8 py-20 text-center">
-          <p className="text-xl font-semibold text-zinc-200">
+        <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-white/50 px-8 py-20 text-center">
+          <p className="text-xl font-semibold text-gray-800">
             Aucun bien pour l&apos;instant
           </p>
           <p className="mt-2 max-w-md text-sm text-zinc-500">
@@ -212,9 +212,9 @@ export default async function BiensPage({ searchParams }: Props) {
               <li key={p.id}>
                 <Link
                   href={`/dashboard/biens/${p.id}`}
-                  className="card-luxury group block overflow-hidden rounded-2xl border border-white/[0.08] bg-[#12121a] shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-500/10"
+                  className="card-luxury group block overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-500/10"
                 >
-                  <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-[#1a1a24] to-[#0a0a0f]">
+                  <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
                     {typeof p.image_url === "string" && p.image_url ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -228,7 +228,7 @@ export default async function BiensPage({ searchParams }: Props) {
                       </div>
                     )}
                     <div
-                      className="absolute inset-0 bg-gradient-to-t from-[#0A0A0F] via-[#0A0A0F]/40 to-transparent"
+                      className="absolute inset-0 bg-gradient-to-t from-slate-900/75 via-slate-900/25 to-transparent"
                       aria-hidden
                     />
                     <div className="absolute left-4 top-4 z-10">
@@ -241,7 +241,7 @@ export default async function BiensPage({ searchParams }: Props) {
                     </div>
                   </div>
                   <div className="p-5">
-                    <p className="line-clamp-2 text-lg font-semibold text-white transition-colors duration-300 group-hover:text-indigo-200">
+                    <p className="line-clamp-2 text-lg font-semibold text-gray-900 transition-colors duration-300 group-hover:text-violet-700">
                       {p.title}
                     </p>
                     <div className="mt-4 flex flex-wrap gap-4 text-sm text-zinc-500">

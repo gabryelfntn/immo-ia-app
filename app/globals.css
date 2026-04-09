@@ -1,18 +1,27 @@
 @import "tailwindcss";
 
 :root {
-  --app-bg: #0a0a0f;
-  --accent-violet: #6366f1;
-  --accent-indigo: #4f46e5;
-  --accent-amber: #f59e0b;
-  --foreground: #f4f4f5;
+  --app-shell: #f8f9fb;
+  --app-surface: #ffffff;
+  /* Sidebar type Maillix — violet nuit */
+  --app-sidebar: #1e1b2e;
+  --app-sidebar-border: rgba(255, 255, 255, 0.06);
+  --app-ink: #111827;
+  --app-muted: #6b7280;
+  --app-border: #e5e7eb;
+  --accent-violet: #7c3aed;
+  --accent-violet-soft: #8b5cf6;
+  --accent-pink: #ec4899;
+  --foreground: #111827;
 }
 
 @theme inline {
-  --color-app-bg: #0a0a0f;
-  --color-app-surface: #12121a;
-  --color-app-elevated: #1a1a24;
-  --font-sans: var(--font-geist-sans);
+  --color-app-shell: #f8f9fb;
+  --color-app-surface: #ffffff;
+  --color-app-sidebar: #1e1b2e;
+  --color-app-ink: #111827;
+  --color-app-border: #e5e7eb;
+  --font-sans: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
@@ -21,23 +30,30 @@ html {
 }
 
 body {
-  background-color: var(--app-bg);
+  background-color: var(--app-shell);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
 }
 
-/* Motif grille géométrique (auth) */
+/* Auth & landing — grille légère sur fond clair */
 .auth-grid-pattern {
-  background-color: #0a0a0f;
+  background-color: #f8f9fb;
   background-image:
-    linear-gradient(rgba(99, 102, 241, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(99, 102, 241, 0.06) 1px, transparent 1px),
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.18), transparent),
-    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(245, 158, 11, 0.08), transparent);
-  background-size: 48px 48px, 48px 48px, 100% 100%, 100% 100%;
+    linear-gradient(rgba(124, 58, 237, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 58, 237, 0.04) 1px, transparent 1px),
+    radial-gradient(
+      ellipse 80% 50% at 50% -15%,
+      rgba(124, 58, 237, 0.09),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 50% 40% at 100% 100%,
+      rgba(236, 72, 153, 0.07),
+      transparent
+    );
+  background-size: 56px 56px, 56px 56px, 100% 100%, 100% 100%;
 }
 
-/* Shimmer bouton principal */
 @keyframes luxury-shimmer {
   0% {
     background-position: 200% center;
@@ -52,24 +68,24 @@ body {
   overflow: hidden;
   background: linear-gradient(
     105deg,
-    #6366f1 0%,
-    #4f46e5 40%,
-    #6366f1 50%,
-    #7c3aed 100%
+    #7c3aed 0%,
+    #8b5cf6 40%,
+    #a855f7 55%,
+    #ec4899 100%
   );
   background-size: 200% auto;
   box-shadow:
-    0 0 0 1px rgba(99, 102, 241, 0.4),
-    0 4px 24px -4px rgba(99, 102, 241, 0.55),
-    0 0 40px -10px rgba(99, 102, 241, 0.35);
+    0 0 0 1px rgba(124, 58, 237, 0.2),
+    0 6px 24px -6px rgba(124, 58, 237, 0.45),
+    0 12px 36px -12px rgba(236, 72, 153, 0.18);
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .btn-luxury-primary:hover:not(:disabled) {
   box-shadow:
-    0 0 0 1px rgba(99, 102, 241, 0.6),
-    0 8px 32px -4px rgba(99, 102, 241, 0.65),
-    0 0 48px -8px rgba(245, 158, 11, 0.15);
+    0 0 0 1px rgba(124, 58, 237, 0.35),
+    0 10px 32px -6px rgba(124, 58, 237, 0.5),
+    0 16px 44px -10px rgba(236, 72, 153, 0.22);
   transform: translateY(-1px);
 }
 
@@ -80,7 +96,7 @@ body {
   background: linear-gradient(
     110deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.12) 45%,
+    rgba(255, 255, 255, 0.2) 45%,
     transparent 55%
   );
   background-size: 200% 100%;
@@ -93,25 +109,58 @@ body {
   transform: none;
 }
 
-/* Carte hover glow border */
+/* Cartes zone principale — ombre douce type SaaS */
 .card-luxury {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  border: 1px solid var(--app-border);
+  background: var(--app-surface);
+  border-radius: 1.5rem;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease,
+    transform 0.25s ease;
+  box-shadow: 0 4px 28px -10px rgba(15, 23, 42, 0.08);
 }
 
 .card-luxury:hover {
-  border-color: rgba(99, 102, 241, 0.35);
-  box-shadow:
-    0 0 0 1px rgba(99, 102, 241, 0.12),
-    0 20px 40px -24px rgba(0, 0, 0, 0.6);
+  border-color: rgba(124, 58, 237, 0.2);
+  box-shadow: 0 16px 48px -16px rgba(124, 58, 237, 0.12);
 }
 
-/* Sidebar nav icon glow */
+/* Champs formulaires (dashboard clair) */
+.input-app {
+  width: 100%;
+  border-radius: 0.875rem;
+  border: 1px solid var(--app-border);
+  background-color: #f9fafb;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--app-ink);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-app::placeholder {
+  color: #9ca3af;
+}
+
+.input-app:focus {
+  border-color: rgba(124, 58, 237, 0.45);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+}
+
+/* Barre de filtres / pilules */
+.filter-bar-surface {
+  border-radius: 1rem;
+  border: 1px solid var(--app-border);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 16px -8px rgba(15, 23, 42, 0.06);
+}
+
+/* Icônes nav sidebar (sur fond sombre) */
 .nav-icon-glow {
-  transition: filter 0.3s ease, color 0.3s ease;
+  transition: filter 0.25s ease, color 0.25s ease;
 }
 
 .group:hover .nav-icon-glow {
-  filter: drop-shadow(0 0 6px rgba(99, 102, 241, 0.75));
-  color: #a5b4fc;
+  filter: drop-shadow(0 0 6px rgba(167, 139, 250, 0.55));
+  color: #c4b5fd;
 }

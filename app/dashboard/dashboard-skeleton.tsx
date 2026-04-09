@@ -11,7 +11,7 @@ export function DashboardSkeleton() {
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
-            className="rounded-2xl border border-white/[0.06] bg-[#12121a]/80 p-5 shadow-[0_0_40px_-20px_rgba(99,102,241,0.35)]"
+            className="rounded-2xl border border-gray-100 bg-white/80 p-5 shadow-[0_0_40px_-20px_rgba(99,102,241,0.35)]"
           >
             <div className="h-10 w-10 rounded-xl bg-white/10" />
             <div className="mt-4 h-3 w-24 rounded bg-white/10" />
@@ -22,13 +22,13 @@ export function DashboardSkeleton() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="h-[300px] rounded-2xl border border-white/[0.06] bg-[#12121a]/80" />
-        <div className="h-[300px] rounded-2xl border border-white/[0.06] bg-[#12121a]/80" />
+        <div className="h-[300px] rounded-2xl border border-gray-100 bg-white/80" />
+        <div className="h-[300px] rounded-2xl border border-gray-100 bg-white/80" />
       </div>
 
-      <div className="h-[320px] rounded-2xl border border-white/[0.06] bg-[#12121a]/80" />
+      <div className="h-[320px] rounded-2xl border border-gray-100 bg-white/80" />
 
-      <div className="h-64 rounded-2xl border border-white/[0.06] bg-[#12121a]/80" />
+      <div className="h-64 rounded-2xl border border-gray-100 bg-white/80" />
     </div>
   );
 }

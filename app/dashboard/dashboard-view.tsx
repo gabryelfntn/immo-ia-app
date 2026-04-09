@@ -22,7 +22,7 @@ export async function DashboardView() {
   if (!profile?.agency_id) {
     return (
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white">
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900">
           Tableau de bord
         </h1>
         <p className="mt-2 text-zinc-500">
@@ -40,7 +40,7 @@ export async function DashboardView() {
 
   if (!payload) {
     return (
-      <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-6 py-4 text-red-200">
+      <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-6 py-4 text-red-700">
         Impossible de charger les statistiques. Vérifiez vos tables Supabase.
       </div>
     );

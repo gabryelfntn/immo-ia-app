@@ -35,10 +35,11 @@ import { CONTACT_STATUS_LABELS } from "@/lib/contacts/labels";
 import type { ContactStatus } from "@/lib/contacts/schema";
 
 const CHART_TOOLTIP = {
-  backgroundColor: "#12121a",
-  border: "1px solid rgba(255,255,255,0.1)",
+  backgroundColor: "#ffffff",
+  border: "1px solid #e5e7eb",
   borderRadius: "12px",
-  color: "#e4e4e7",
+  color: "#1b1b1b",
+  boxShadow: "0 8px 30px -8px rgba(15, 23, 42, 0.12)",
 };
 
 function AnimatedNumber({
@@ -89,7 +90,7 @@ function MomBadge({ pct }: { pct: number | null }) {
   return (
     <span
       className={`text-xs font-semibold ${
-        positive ? "text-emerald-400" : "text-rose-400"
+        positive ? "text-emerald-600" : "text-rose-600"
       }`}
     >
       {positive ? "+" : ""}
@@ -179,30 +180,32 @@ export function DashboardClient({ data, todayLabel }: Props) {
 
   return (
     <div className="space-y-10">
-      <header className="flex flex-col gap-4 border-b border-white/[0.06] pb-8 lg:flex-row lg:items-end lg:justify-between">
+      <header className="flex flex-col gap-4 border-b border-gray-100 pb-8 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-sm font-medium text-zinc-500">{todayLabel}</p>
-          <h1 className="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+          <h1 className="mt-2 text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl">
             {data.userFirstName
               ? `Bonjour, ${data.userFirstName}`
               : `Bienvenue`}
           </h1>
-          <p className="mt-2 text-lg text-indigo-200/90">{data.agencyName}</p>
-          <p className="mt-3 max-w-2xl text-zinc-400">
+          <p className="mt-2 text-lg font-medium text-violet-600">
+            {data.agencyName}
+          </p>
+          <p className="mt-3 max-w-2xl text-zinc-600">
             Tableau de bord en temps réel : portefeuille, pipeline commercial et
             performance des annonces IA.
           </p>
         </div>
       </header>
 
-      <section className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#12121a] shadow-[0_0_40px_-20px_rgba(245,158,11,0.18)]">
-        <div className="flex flex-col gap-4 border-b border-white/[0.06] px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+      <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_4px_28px_-12px_rgba(139,92,246,0.12)]">
+        <div className="flex flex-col gap-4 border-b border-gray-100 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="flex items-center gap-2 text-lg font-bold text-white">
-              <Bell className="h-5 w-5 text-amber-500" />
+            <h2 className="flex items-center gap-2 text-lg font-bold text-zinc-900">
+              <Bell className="h-5 w-5 text-violet-500" />
               Relances automatiques
             </h2>
-            <p className="mt-1 text-sm text-zinc-500">
+            <p className="mt-1 text-sm text-zinc-600">
               Contacts inactifs (14+ j., hors opt-out), envois ce mois et
               désinscriptions relances.
             </p>
@@ -210,16 +213,16 @@ export function DashboardClient({ data, todayLabel }: Props) {
           <div className="flex flex-wrap gap-2">
             <Link
               href="/dashboard/relances"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] bg-white/[0.04] px-4 py-2 text-sm font-semibold text-zinc-200 transition-colors hover:border-amber-500/30 hover:bg-amber-500/10 hover:text-white"
+              className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-zinc-700 shadow-sm transition-colors hover:border-violet-300 hover:bg-violet-50 hover:text-violet-800"
             >
-              <Bell className="h-4 w-4 text-amber-500" />
+              <Bell className="h-4 w-4 text-violet-500" />
               À relancer
             </Link>
             <Link
               href="/dashboard/relances/historique"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] bg-white/[0.04] px-4 py-2 text-sm font-semibold text-zinc-200 transition-colors hover:border-indigo-500/30 hover:bg-indigo-500/10 hover:text-white"
+              className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-zinc-700 shadow-sm transition-colors hover:border-fuchsia-300 hover:bg-fuchsia-50 hover:text-fuchsia-900"
             >
-              <Calendar className="h-4 w-4 text-indigo-400" />
+              <Calendar className="h-4 w-4 text-fuchsia-500" />
               Historique
             </Link>
           </div>
@@ -251,12 +254,12 @@ export function DashboardClient({ data, todayLabel }: Props) {
           ).map((cell) => (
             <div
               key={cell.label}
-              className="rounded-xl border border-white/[0.06] bg-[#0a0a0f]/60 px-4 py-4"
+              className="rounded-xl border border-gray-100 bg-slate-50/90 px-4 py-4"
             >
               <p className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
                 {cell.label}
               </p>
-              <p className="mt-2 text-3xl font-bold tabular-nums text-white">
+              <p className="mt-2 text-3xl font-bold tabular-nums text-zinc-900">
                 <AnimatedNumber value={cell.value} />
               </p>
               <p className="mt-1 text-xs text-zinc-600">{cell.hint}</p>
@@ -273,7 +276,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
           return (
             <li key={m.key}>
               <div
-                className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#12121a] p-5 shadow-[0_0_48px_-20px_rgba(99,102,241,0.45)] transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-500/25 hover:shadow-[0_0_56px_-16px_rgba(99,102,241,0.55)]"
+                className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-5 shadow-[0_4px_28px_-12px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-0.5 hover:border-violet-200 hover:shadow-[0_12px_40px_-16px_rgba(139,92,246,0.15)]"
               >
                 <div
                   className={`mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${m.accent} text-white shadow-lg`}
@@ -288,10 +291,10 @@ export function DashboardClient({ data, todayLabel }: Props) {
                     ? `${metrics.clientsCount} client(s) sur ${metrics.totalContacts} contacts`
                     : m.sub}
                 </p>
-                <p className="mt-3 text-3xl font-bold tabular-nums tracking-tight text-white">
+                <p className="mt-3 text-3xl font-bold tabular-nums tracking-tight text-zinc-900">
                   <AnimatedNumber value={raw} decimals={m.decimals} />
                   {m.suffix ? (
-                    <span className="text-2xl font-bold text-zinc-300">
+                    <span className="text-2xl font-bold text-zinc-500">
                       {m.suffix}
                     </span>
                   ) : null}
@@ -310,8 +313,8 @@ export function DashboardClient({ data, todayLabel }: Props) {
       </ul>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 shadow-[0_0_40px_-24px_rgba(245,158,11,0.25)]">
-          <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-indigo-400/90">
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-[0_4px_28px_-12px_rgba(15,23,42,0.06)]">
+          <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-violet-600">
             Biens ajoutés
           </h2>
           <p className="mt-1 text-xs text-zinc-500">6 derniers mois</p>
@@ -321,15 +324,15 @@ export function DashboardClient({ data, todayLabel }: Props) {
                 data={chartBiensParMois}
                 margin={{ top: 8, right: 8, left: -8, bottom: 0 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis
                   dataKey="label"
-                  tick={{ fill: "#a1a1aa", fontSize: 11 }}
-                  axisLine={{ stroke: "#3f3f46" }}
+                  tick={{ fill: "#6b7280", fontSize: 11 }}
+                  axisLine={{ stroke: "#e5e7eb" }}
                   tickLine={false}
                 />
                 <YAxis
-                  tick={{ fill: "#a1a1aa", fontSize: 11 }}
+                  tick={{ fill: "#6b7280", fontSize: 11 }}
                   axisLine={false}
                   tickLine={false}
                   allowDecimals={false}
@@ -338,7 +341,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
                 <Bar
                   dataKey="biens"
                   name="Biens"
-                  fill="#6366f1"
+                  fill="#8b5cf6"
                   radius={[6, 6, 0, 0]}
                 />
               </BarChart>
@@ -346,8 +349,8 @@ export function DashboardClient({ data, todayLabel }: Props) {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 shadow-[0_0_40px_-24px_rgba(99,102,241,0.3)]">
-          <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-amber-500/90">
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-[0_4px_28px_-12px_rgba(15,23,42,0.06)]">
+          <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-fuchsia-600">
             Contacts par statut
           </h2>
           <p className="mt-1 text-xs text-zinc-500">Répartition CRM</p>
@@ -375,9 +378,9 @@ export function DashboardClient({ data, todayLabel }: Props) {
                   </Pie>
                   <Tooltip contentStyle={CHART_TOOLTIP} />
                   <Legend
-                    wrapperStyle={{ fontSize: 12, color: "#a1a1aa" }}
+                    wrapperStyle={{ fontSize: 12, color: "#6b7280" }}
                     formatter={(value) => (
-                      <span className="text-zinc-400">{value}</span>
+                      <span style={{ color: "#4b5563" }}>{value}</span>
                     )}
                   />
                 </PieChart>
@@ -387,8 +390,8 @@ export function DashboardClient({ data, todayLabel }: Props) {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 shadow-[0_0_48px_-24px_rgba(99,102,241,0.35)]">
-        <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-violet-400/90">
+      <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-[0_4px_28px_-12px_rgba(15,23,42,0.06)]">
+        <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-violet-600">
           Flux portefeuille
         </h2>
         <p className="mt-1 text-xs text-zinc-500">
@@ -400,33 +403,33 @@ export function DashboardClient({ data, todayLabel }: Props) {
               data={chartFlux}
               margin={{ top: 8, right: 8, left: -8, bottom: 0 }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis
                 dataKey="label"
-                tick={{ fill: "#a1a1aa", fontSize: 11 }}
-                axisLine={{ stroke: "#3f3f46" }}
+                tick={{ fill: "#6b7280", fontSize: 11 }}
+                axisLine={{ stroke: "#e5e7eb" }}
                 tickLine={false}
               />
               <YAxis
-                tick={{ fill: "#a1a1aa", fontSize: 11 }}
+                tick={{ fill: "#6b7280", fontSize: 11 }}
                 axisLine={false}
                 tickLine={false}
                 allowDecimals={false}
               />
               <Tooltip contentStyle={CHART_TOOLTIP} />
               <Legend
-                wrapperStyle={{ fontSize: 12 }}
+                wrapperStyle={{ fontSize: 12, color: "#6b7280" }}
                 formatter={(value) => (
-                  <span className="text-zinc-400">{value}</span>
+                  <span style={{ color: "#4b5563" }}>{value}</span>
                 )}
               />
               <Line
                 type="monotone"
                 dataKey="disponibles"
                 name="Nouveaux disponibles"
-                stroke="#6366f1"
+                stroke="#8b5cf6"
                 strokeWidth={2.5}
-                dot={{ fill: "#6366f1", r: 3 }}
+                dot={{ fill: "#8b5cf6", r: 3 }}
                 activeDot={{ r: 5 }}
               />
               <Line
@@ -443,20 +446,20 @@ export function DashboardClient({ data, todayLabel }: Props) {
         </div>
       </div>
 
-      <section className="overflow-hidden rounded-2xl border border-white/[0.08] bg-[#12121a] shadow-[0_0_40px_-20px_rgba(245,158,11,0.2)]">
-        <div className="border-b border-white/[0.06] px-6 py-5">
-          <h2 className="flex items-center gap-2 text-lg font-bold text-white">
-            <UserCircle className="h-5 w-5 text-amber-500" />
+      <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_4px_28px_-12px_rgba(15,23,42,0.06)]">
+        <div className="border-b border-gray-100 px-6 py-5">
+          <h2 className="flex items-center gap-2 text-lg font-bold text-zinc-900">
+            <UserCircle className="h-5 w-5 text-violet-500" />
             Activité récente
           </h2>
-          <p className="mt-1 text-sm text-zinc-500">
+          <p className="mt-1 text-sm text-zinc-600">
             Derniers biens et contacts ajoutés
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2">
-          <div className="border-b border-white/[0.06] p-6 lg:border-b-0 lg:border-r">
-            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-400/90">
+          <div className="border-b border-gray-100 p-6 lg:border-b-0 lg:border-r lg:border-gray-100">
+            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-violet-600">
               Biens
             </h3>
             <div className="mt-4 overflow-x-auto">
@@ -468,7 +471,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
                     <th className="pb-3 font-semibold">Date</th>
                   </tr>
                 </thead>
-                <tbody className="text-zinc-300">
+                <tbody className="text-zinc-700">
                   {data.recentProperties.length === 0 ? (
                     <tr>
                       <td
@@ -482,12 +485,12 @@ export function DashboardClient({ data, todayLabel }: Props) {
                     data.recentProperties.map((p) => (
                       <tr
                         key={p.id}
-                        className="border-t border-white/[0.04] transition-colors hover:bg-white/[0.02]"
+                        className="border-t border-gray-100 transition-colors hover:bg-slate-50/80"
                       >
                         <td className="py-3 pr-4">
                           <Link
                             href={`/dashboard/biens/${p.id}`}
-                            className="font-medium text-white hover:text-indigo-300"
+                            className="font-medium text-zinc-900 hover:text-violet-600"
                           >
                             <span className="line-clamp-1">{p.title}</span>
                             <span className="mt-0.5 block text-xs font-normal text-zinc-500">
@@ -496,7 +499,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
                           </Link>
                         </td>
                         <td className="py-3 pr-4">
-                          <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-xs font-medium text-zinc-300">
+                          <span className="inline-flex rounded-full border border-gray-200 bg-slate-50 px-2 py-0.5 text-xs font-medium text-zinc-700">
                             {
                               PROPERTY_STATUS_LABELS[
                                 p.status as PropertyStatus
@@ -518,7 +521,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
           </div>
 
           <div className="p-6">
-            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-amber-500/90">
+            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-fuchsia-600">
               Contacts
             </h3>
             <div className="mt-4 overflow-x-auto">
@@ -530,7 +533,7 @@ export function DashboardClient({ data, todayLabel }: Props) {
                     <th className="pb-3 font-semibold">Date</th>
                   </tr>
                 </thead>
-                <tbody className="text-zinc-300">
+                <tbody className="text-zinc-700">
                   {data.recentContacts.length === 0 ? (
                     <tr>
                       <td
@@ -544,18 +547,18 @@ export function DashboardClient({ data, todayLabel }: Props) {
                     data.recentContacts.map((c) => (
                       <tr
                         key={c.id}
-                        className="border-t border-white/[0.04] transition-colors hover:bg-white/[0.02]"
+                        className="border-t border-gray-100 transition-colors hover:bg-slate-50/80"
                       >
                         <td className="py-3 pr-4">
                           <Link
                             href={`/dashboard/contacts/${c.id}`}
-                            className="font-medium text-white hover:text-amber-200/90"
+                            className="font-medium text-zinc-900 hover:text-fuchsia-600"
                           >
                             {c.name}
                           </Link>
                         </td>
                         <td className="py-3 pr-4">
-                          <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-xs font-medium text-zinc-300">
+                          <span className="inline-flex rounded-full border border-gray-200 bg-slate-50 px-2 py-0.5 text-xs font-medium text-zinc-700">
                             {
                               CONTACT_STATUS_LABELS[
                                 c.status as ContactStatus

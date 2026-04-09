@@ -45,7 +45,7 @@ function formatBudgetRange(
 function PulsingContactBadge({ status }: { status: ContactStatus }) {
   return (
     <span
-      className={`inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 text-xs font-semibold backdrop-blur-md ${contactStatusBadgeClass(status)}`}
+      className={`inline-flex items-center gap-2 rounded-full border border-gray-200 px-3 py-1.5 text-xs font-semibold backdrop-blur-md ${contactStatusBadgeClass(status)}`}
     >
       <span
         className="h-1.5 w-1.5 shrink-0 rounded-full bg-current animate-pulse"
@@ -114,51 +114,51 @@ export default async function ContactDetailPage({ params }: Props) {
     <div className="mx-auto max-w-3xl">
       <Link
         href="/dashboard/contacts"
-        className="text-sm font-medium text-zinc-400 transition-all duration-300 hover:text-indigo-300"
+        className="text-sm font-medium text-zinc-400 transition-all duration-300 hover:text-violet-600"
       >
         ← Retour aux contacts
       </Link>
 
-      <div className="mt-8 flex flex-col gap-6 rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury sm:flex-row sm:items-start sm:justify-between">
+      <div className="mt-8 flex flex-col gap-6 rounded-2xl border border-gray-200 bg-white p-6 card-luxury sm:flex-row sm:items-start sm:justify-between">
         <div>
           <PulsingContactBadge status={status} />
-          <h1 className="mt-4 text-3xl font-bold tracking-tight text-white">
+          <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900">
             {fullName}
           </h1>
           <p className="mt-3 text-sm text-zinc-400">{row.email as string}</p>
           <p className="mt-1 text-sm text-zinc-400">{row.phone as string}</p>
         </div>
-        <div className="shrink-0 rounded-xl border border-white/[0.06] bg-[#0a0a0f]/80 p-4">
+        <div className="shrink-0 rounded-xl border border-gray-100 bg-gray-50/80 p-4">
           <UpdateContactStatusControl contactId={id} currentStatus={status} />
         </div>
       </div>
 
       <div className="mt-8 grid gap-6 sm:grid-cols-2">
-        <dl className="rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury">
+        <dl className="rounded-2xl border border-gray-200 bg-white p-6 card-luxury">
           <dt className="text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-500">
             Type
           </dt>
-          <dd className="mt-2 font-medium text-zinc-100">
+          <dd className="mt-2 font-medium text-gray-900">
             {CONTACT_TYPE_LABELS[ctype]}
           </dd>
           <dt className="mt-6 text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-500">
             Statut
           </dt>
-          <dd className="mt-2 font-medium text-zinc-100">
+          <dd className="mt-2 font-medium text-gray-900">
             {CONTACT_STATUS_LABELS[status]}
           </dd>
         </dl>
-        <dl className="rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury">
+        <dl className="rounded-2xl border border-gray-200 bg-white p-6 card-luxury">
           <dt className="text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-500">
             Budget
           </dt>
-          <dd className="mt-2 font-medium text-zinc-100">
+          <dd className="mt-2 font-medium text-gray-900">
             {budgetLabel ?? "—"}
           </dd>
           <dt className="mt-6 text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-500">
             Ville recherchée
           </dt>
-          <dd className="mt-2 font-medium text-zinc-100">
+          <dd className="mt-2 font-medium text-gray-900">
             {typeof row.desired_city === "string" && row.desired_city.trim()
               ? row.desired_city
               : "—"}
@@ -166,17 +166,17 @@ export default async function ContactDetailPage({ params }: Props) {
         </dl>
       </div>
 
-      <dl className="mt-6 rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury">
+      <dl className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 card-luxury">
         <dt className="text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-500">
           Dernière relance email envoyée
         </dt>
-        <dd className="mt-2 font-medium text-zinc-100">
+        <dd className="mt-2 font-medium text-gray-900">
           {formatDateTimeFr(ext.last_followup_sent_at)}
         </dd>
         <dt className="mt-6 text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-500">
           Dernier contact enregistré (CRM)
         </dt>
-        <dd className="mt-2 font-medium text-zinc-100">
+        <dd className="mt-2 font-medium text-gray-900">
           {formatDateTimeFr(ext.last_contacted_at)}
         </dd>
       </dl>
@@ -185,11 +185,11 @@ export default async function ContactDetailPage({ params }: Props) {
         <FollowupOptOutToggle contactId={id} initialOptOut={followupOptOut} />
       </div>
 
-      <section className="mt-8 rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 sm:p-8 card-luxury">
+      <section className="mt-8 rounded-2xl border border-gray-200 bg-white p-6 sm:p-8 card-luxury">
         <ContactMatching contactId={id} />
       </section>
 
-      <section className="mt-6 rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury">
+      <section className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 card-luxury">
         <ContactNotesForm contactId={id} initialNotes={notesText} />
       </section>
     </div>

@@ -24,11 +24,11 @@ function DetailRow({
   children: ReactNode;
 }) {
   return (
-    <div className="border-b border-white/[0.06] py-4 last:border-0">
+    <div className="border-b border-gray-100 py-4 last:border-0">
       <dt className="text-[11px] font-semibold uppercase tracking-[0.15em] text-zinc-500">
         {label}
       </dt>
-      <dd className="mt-1.5 text-sm font-medium text-zinc-100">{children}</dd>
+      <dd className="mt-1.5 text-sm font-medium text-gray-900">{children}</dd>
     </div>
   );
 }
@@ -40,7 +40,7 @@ function PulsingStatusBadge({
 }) {
   return (
     <span
-      className={`inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 text-xs font-semibold shadow-lg backdrop-blur-md ${statusBadgeClass(status)}`}
+      className={`inline-flex items-center gap-2 rounded-full border border-gray-200 px-3 py-1.5 text-xs font-semibold shadow-lg backdrop-blur-md ${statusBadgeClass(status)}`}
     >
       <span
         className="h-1.5 w-1.5 shrink-0 rounded-full bg-current opacity-90 animate-pulse"
@@ -119,7 +119,7 @@ export default async function PropertyDetailPage({ params }: Props) {
     <div className="mx-auto max-w-6xl">
       <Link
         href="/dashboard/biens"
-        className="inline-flex items-center gap-2 text-sm font-medium text-zinc-400 transition-all duration-300 hover:text-indigo-300"
+        className="inline-flex items-center gap-2 text-sm font-medium text-zinc-400 transition-all duration-300 hover:text-violet-600"
       >
         <span aria-hidden>←</span> Retour aux biens
       </Link>
@@ -136,7 +136,7 @@ export default async function PropertyDetailPage({ params }: Props) {
         />
       </div>
 
-      <div className="mt-8 flex flex-col gap-4 rounded-2xl border border-white/[0.08] bg-[#12121a]/80 p-5 backdrop-blur-sm sm:flex-row sm:items-end sm:justify-between">
+      <div className="mt-8 flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white/80 p-5 backdrop-blur-sm sm:flex-row sm:items-end sm:justify-between">
         <UpdateStatusControl propertyId={id} currentStatus={status} />
         <Link
           href={`/dashboard/biens/${id}/annonce`}
@@ -148,8 +148,8 @@ export default async function PropertyDetailPage({ params }: Props) {
       </div>
 
       <div className="mt-10 grid gap-6 lg:grid-cols-2">
-        <section className="rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury">
-          <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-300/90">
+        <section className="rounded-2xl border border-gray-200 bg-white p-6 card-luxury">
+          <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-violet-600">
             Caractéristiques
           </h2>
           <dl className="mt-4">
@@ -171,28 +171,28 @@ export default async function PropertyDetailPage({ params }: Props) {
           </dl>
         </section>
 
-        <section className="rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury">
+        <section className="rounded-2xl border border-gray-200 bg-white p-6 card-luxury">
           <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-amber-500/90">
             Adresse complète
           </h2>
           <address className="mt-6 not-italic">
-            <p className="text-lg font-semibold text-white">
+            <p className="text-lg font-semibold text-gray-900">
               {row.address as string}
             </p>
-            <p className="mt-2 text-zinc-400">
+            <p className="mt-2 text-gray-600">
               {(row.zip_code as string) + " " + (row.city as string)}
             </p>
           </address>
         </section>
       </div>
 
-      <section className="mt-6 rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury">
+      <section className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 card-luxury">
         <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-zinc-500">
           Description
         </h2>
         <div className="mt-5">
           {(row.description as string | null)?.trim() ? (
-            <p className="whitespace-pre-wrap text-sm leading-relaxed text-zinc-300">
+            <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700">
               {row.description as string}
             </p>
           ) : (

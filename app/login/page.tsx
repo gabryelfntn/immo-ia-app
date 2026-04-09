@@ -40,27 +40,26 @@ function LoginForm() {
     router.push(next);
   }
 
-  const inputClass =
-    "w-full rounded-xl border border-white/10 bg-[#0a0a0f]/80 px-4 py-3 text-sm text-zinc-100 outline-none transition-all duration-300 placeholder:text-zinc-600 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/25";
+  const inputClass = "input-app";
 
   return (
-    <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-white/[0.05] p-8 shadow-2xl shadow-black/50 backdrop-blur-xl">
+    <div className="relative w-full max-w-md rounded-3xl border border-gray-200/90 bg-white p-8 shadow-[0_24px_64px_-28px_rgba(15,23,42,0.18)]">
       <div className="mb-8 text-center">
-        <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-lg shadow-indigo-500/40">
+        <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white shadow-lg shadow-violet-500/35">
           <Home className="h-8 w-8" strokeWidth={1.75} />
         </div>
-        <h1 className="text-3xl font-bold tracking-tight text-white">ImmoAI</h1>
-        <p className="mt-2 text-sm font-medium uppercase tracking-[0.25em] text-indigo-300/80">
-          Luxury Suite
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900">ImmoAI</h1>
+        <p className="mt-2 text-sm font-semibold uppercase tracking-[0.2em] text-violet-600">
+          Suite agence
         </p>
-        <p className="mt-6 text-sm text-zinc-400">
+        <p className="mt-6 text-sm text-gray-600">
           Connectez-vous à votre espace agence
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <div className="flex flex-col gap-2">
-          <label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+          <label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-gray-500">
             Email
           </label>
           <input
@@ -78,7 +77,7 @@ function LoginForm() {
         <div className="flex flex-col gap-2">
           <label
             htmlFor="password"
-            className="text-xs font-semibold uppercase tracking-wider text-zinc-500"
+            className="text-xs font-semibold uppercase tracking-wider text-gray-500"
           >
             Mot de passe
           </label>
@@ -95,7 +94,7 @@ function LoginForm() {
         </div>
 
         {error ? (
-          <p className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+          <p className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
             {error}
           </p>
         ) : null}
@@ -103,7 +102,7 @@ function LoginForm() {
         <button
           type="submit"
           disabled={loading}
-          className="btn-luxury-primary relative mt-2 w-full rounded-xl py-3.5 text-sm font-semibold text-white transition-all duration-300 disabled:cursor-not-allowed"
+          className="btn-luxury-primary relative mt-2 w-full rounded-2xl py-3.5 text-sm font-semibold text-white transition-all duration-300 disabled:cursor-not-allowed"
         >
           <span className="relative z-10">
             {loading ? "Connexion…" : "Se connecter"}
@@ -111,11 +110,11 @@ function LoginForm() {
         </button>
       </form>
 
-      <p className="mt-8 text-center text-sm text-zinc-500">
+      <p className="mt-8 text-center text-sm text-gray-600">
         Pas encore de compte ?{" "}
         <Link
           href="/register"
-          className="font-semibold text-indigo-400 transition-all duration-300 hover:text-amber-400"
+          className="font-semibold text-violet-600 transition-colors hover:text-fuchsia-600"
         >
           Créer un compte
         </Link>
@@ -126,8 +125,8 @@ function LoginForm() {
 
 function LoginFallback() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#0A0A0F]">
-      <div className="h-12 w-12 animate-pulse rounded-2xl bg-white/10" />
+    <div className="auth-grid-pattern flex min-h-screen items-center justify-center">
+      <div className="h-12 w-12 animate-pulse rounded-2xl bg-violet-200/60" />
     </div>
   );
 }

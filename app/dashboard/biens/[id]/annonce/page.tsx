@@ -79,11 +79,11 @@ export default async function AnnonceIAPage({ params }: Props) {
       <div className="mx-auto max-w-4xl">
         <Link
           href={`/dashboard/biens/${id}`}
-          className="text-sm font-medium text-zinc-400 transition-all duration-300 hover:text-indigo-300"
+          className="text-sm font-medium text-zinc-400 transition-all duration-300 hover:text-violet-600"
         >
           ← Retour au bien
         </Link>
-        <h1 className="mt-6 text-3xl font-bold tracking-tight text-white">
+        <h1 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
           Générer une annonce IA
         </h1>
         <p className="mt-4 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
@@ -108,14 +108,14 @@ export default async function AnnonceIAPage({ params }: Props) {
     <div className="mx-auto max-w-6xl">
       <Link
         href={`/dashboard/biens/${id}`}
-        className="text-sm font-medium text-zinc-400 transition-all duration-300 hover:text-indigo-300"
+        className="text-sm font-medium text-zinc-400 transition-all duration-300 hover:text-violet-600"
       >
         ← Retour au bien
       </Link>
       <p className="mt-4 text-xs font-bold uppercase tracking-[0.2em] text-violet-400/90">
         Intelligence créative
       </p>
-      <h1 className="mt-2 text-4xl font-bold tracking-tight text-white">
+      <h1 className="mt-2 text-4xl font-bold tracking-tight text-gray-900">
         Générer une annonce IA
       </h1>
       <p className="mt-3 text-zinc-500">
