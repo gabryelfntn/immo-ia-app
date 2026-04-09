@@ -9,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "lucide-react": "^0.468.0",
     "@hookform/resolvers": "^3.9.1",
     "@supabase/ssr": "^0.10.0",
     "@supabase/supabase-js": "^2.102.1",
@@ -19,6 +18,7 @@
     "react-dom": "19.2.4",
     "react-dropzone": "^14.3.5",
     "react-hook-form": "^7.54.2",
+    "recharts": "^2.15.4",
     "zod": "^3.24.1"
   },
   "devDependencies": {

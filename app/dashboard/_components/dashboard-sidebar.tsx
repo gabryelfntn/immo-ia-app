@@ -2,6 +2,8 @@
 
 import {
   Building2,
+  Bell,
+  Calendar,
   Home,
   LayoutDashboard,
   LogOut,
@@ -16,6 +18,8 @@ const nav = [
   { href: "/dashboard", label: "Tableau de bord", icon: LayoutDashboard },
   { href: "/dashboard/biens", label: "Biens", icon: Building2 },
   { href: "/dashboard/contacts", label: "Contacts", icon: Users },
+  { href: "/dashboard/relances", label: "Relances", icon: Bell },
+  { href: "/dashboard/visites", label: "Visites", icon: Calendar },
   { href: "/dashboard/annonces", label: "Annonces IA", icon: Sparkles },
 ] as const;
 

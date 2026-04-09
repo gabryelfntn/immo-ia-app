@@ -7,6 +7,8 @@ import {
   contactStatusBadgeClass,
 } from "@/lib/contacts/labels";
 import type { ContactStatus, ContactType } from "@/lib/contacts/schema";
+import { FollowupOptOutToggle } from "./followup-opt-out-toggle";
+import { ContactMatching } from "./matching";
 import { ContactNotesForm } from "./contact-notes-form";
 import { UpdateContactStatusControl } from "./update-contact-status";
 
@@ -88,6 +90,9 @@ export default async function ContactDetailPage({ params }: Props) {
   );
   const notesText =
     typeof row.notes === "string" && row.notes ? row.notes : "";
+  const followupOptOut = Boolean(
+    (row as { followup_opt_out?: boolean }).followup_opt_out
+  );
 
   return (
     <div className="mx-auto max-w-3xl">
@@ -144,6 +149,14 @@ export default async function ContactDetailPage({ params }: Props) {
           </dd>
         </dl>
       </div>
+
+      <div className="mt-6">
+        <FollowupOptOutToggle contactId={id} initialOptOut={followupOptOut} />
+      </div>
+
+      <section className="mt-8 rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 sm:p-8 card-luxury">
+        <ContactMatching contactId={id} />
+      </section>
 
       <section className="mt-6 rounded-2xl border border-white/[0.08] bg-[#12121a] p-6 card-luxury">
         <ContactNotesForm contactId={id} initialNotes={notesText} />

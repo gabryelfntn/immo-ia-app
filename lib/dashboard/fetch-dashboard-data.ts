@@ -1,0 +1,289 @@
+import type { SupabaseClient } from "@supabase/supabase-js";
+import {
+  currentMonthRangeISO,
+  isInLocalMonth,
+  lastNMonthBuckets,
+  previousMonthRangeISO,
+} from "./time";
+
+export type DashboardPayload = {
+  userFirstName: string | null;
+  agencyName: string;
+  metrics: {
+    biensActifs: number;
+    vendusLouesCeMois: number;
+    prospectsChauds: number;
+    totalContacts: number;
+    annoncesIA: number;
+    tauxConversion: number;
+    clientsCount: number;
+    momPct: {
+      biensActifs: number | null;
+      vendusLoues: number | null;
+      prospectsChauds: number | null;
+      totalContacts: number | null;
+      annoncesIA: number | null;
+      tauxConversion: number | null;
+    };
+  };
+  chartBiensParMois: { label: string; biens: number }[];
+  chartContactsStatut: { name: string; value: number; fill: string }[];
+  chartFlux: { label: string; disponibles: number; vendusLoues: number }[];
+  recentProperties: {
+    id: string;
+    title: string;
+    city: string;
+    status: string;
+    created_at: string;
+  }[];
+  recentContacts: {
+    id: string;
+    name: string;
+    status: string;
+    created_at: string;
+  }[];
+};
+
+const STATUS_COLORS: Record<string, string> = {
+  Froid: "#71717a",
+  Tiède: "#f59e0b",
+  Chaud: "#ef4444",
+  Client: "#34d399",
+};
+
+function pctChange(current: number, previous: number): number | null {
+  if (previous === 0) {
+    if (current === 0) return null;
+    return 100;
+  }
+  return Math.round(((current - previous) / previous) * 1000) / 10;
+}
+
+function isInRange(iso: string, startISO: string, endISO: string): boolean {
+  const t = new Date(iso).getTime();
+  return t >= new Date(startISO).getTime() && t <= new Date(endISO).getTime();
+}
+
+export async function fetchDashboardData(
+  supabase: SupabaseClient,
+  agencyId: string,
+  userId: string
+): Promise<DashboardPayload | null> {
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("full_name")
+    .eq("id", userId)
+    .maybeSingle();
+
+  const { data: agency } = await supabase
+    .from("agencies")
+    .select("name")
+    .eq("id", agencyId)
+    .maybeSingle();
+
+  const userFirstName =
+    typeof profile?.full_name === "string" && profile.full_name.trim()
+      ? profile.full_name.trim().split(/\s+/)[0] ?? null
+      : null;
+
+  const agencyName = agency?.name ?? "Votre agence";
+
+  const [
+    { data: properties, error: propErr },
+    { data: contacts, error: contErr },
+    { data: listings, error: listErr },
+  ] = await Promise.all([
+    supabase
+      .from("properties")
+      .select("id, title, city, status, created_at, updated_at")
+      .eq("agency_id", agencyId),
+    supabase
+      .from("contacts")
+      .select("id, first_name, last_name, status, created_at")
+      .eq("agency_id", agencyId),
+    supabase
+      .from("generated_listings")
+      .select("created_at")
+      .eq("agency_id", agencyId),
+  ]);
+
+  if (propErr || contErr) {
+    return null;
+  }
+
+  const props = properties ?? [];
+  const conts = contacts ?? [];
+  const gens = listErr ? [] : (listings ?? []);
+
+  const now = new Date();
+  const cy = now.getFullYear();
+  const cm = now.getMonth();
+
+  const cur = currentMonthRangeISO();
+  const prev = previousMonthRangeISO();
+
+  const biensActifs = props.filter((p) => p.status === "disponible").length;
+
+  const vendusLouesCeMois = props.filter(
+    (p) =>
+      (p.status === "vendu" || p.status === "loue") &&
+      p.updated_at &&
+      isInRange(p.updated_at as string, cur.start, cur.end)
+  ).length;
+
+  const vendusLouesMoisPrec = props.filter(
+    (p) =>
+      (p.status === "vendu" || p.status === "loue") &&
+      p.updated_at &&
+      isInRange(p.updated_at as string, prev.start, prev.end)
+  ).length;
+
+  const prospectsChauds = conts.filter((c) => c.status === "chaud").length;
+
+  const chaudCreesCeMois = conts.filter(
+    (c) =>
+      c.status === "chaud" &&
+      isInRange(c.created_at as string, cur.start, cur.end)
+  ).length;
+
+  const chaudCreesMoisPrec = conts.filter(
+    (c) =>
+      c.status === "chaud" &&
+      isInRange(c.created_at as string, prev.start, prev.end)
+  ).length;
+
+  const totalContacts = conts.length;
+  const clients = conts.filter((c) => c.status === "client").length;
+  const tauxConversion =
+    totalContacts === 0
+      ? 0
+      : Math.round((clients / totalContacts) * 1000) / 10;
+
+  const clientsCount = clients;
+
+  const contactsCreesCeMois = conts.filter((c) =>
+    isInRange(c.created_at as string, cur.start, cur.end)
+  ).length;
+
+  const contactsCreesMoisPrec = conts.filter((c) =>
+    isInRange(c.created_at as string, prev.start, prev.end)
+  ).length;
+
+  const annoncesIA = gens.length;
+
+  const annoncesCeMois = gens.filter((g) =>
+    isInRange(g.created_at as string, cur.start, cur.end)
+  ).length;
+
+  const annoncesMoisPrec = gens.filter((g) =>
+    isInRange(g.created_at as string, prev.start, prev.end)
+  ).length;
+
+  const nouveauxBiensCeMois = props.filter((p) =>
+    isInLocalMonth(p.created_at as string, cy, cm)
+  ).length;
+
+  const prevMonth = cm === 0 ? 11 : cm - 1;
+  const prevYear = cm === 0 ? cy - 1 : cy;
+  const nouveauxBiensMoisPrec = props.filter((p) =>
+    isInLocalMonth(p.created_at as string, prevYear, prevMonth)
+  ).length;
+
+  const buckets = lastNMonthBuckets(6);
+
+  const chartBiensParMois = buckets.map((b) => ({
+    label: b.label,
+    biens: props.filter((p) =>
+      isInLocalMonth(p.created_at as string, b.year, b.month)
+    ).length,
+  }));
+
+  const statusLabels: Record<string, string> = {
+    froid: "Froid",
+    tiede: "Tiède",
+    chaud: "Chaud",
+    client: "Client",
+  };
+
+  const chartContactsStatut = (["froid", "tiede", "chaud", "client"] as const).map(
+    (s) => {
+      const value = conts.filter((c) => c.status === s).length;
+      return {
+        name: statusLabels[s],
+        value,
+        fill: STATUS_COLORS[statusLabels[s]] ?? "#6366f1",
+      };
+    }
+  );
+
+  const chartFlux = buckets.map((b) => ({
+    label: b.label,
+    disponibles: props.filter(
+      (p) =>
+        p.status === "disponible" &&
+        isInLocalMonth(p.created_at as string, b.year, b.month)
+    ).length,
+    vendusLoues: props.filter(
+      (p) =>
+        (p.status === "vendu" || p.status === "loue") &&
+        p.updated_at &&
+        isInLocalMonth(p.updated_at as string, b.year, b.month)
+    ).length,
+  }));
+
+  const recentProperties = [...props]
+    .sort(
+      (a, b) =>
+        new Date(b.created_at as string).getTime() -
+        new Date(a.created_at as string).getTime()
+    )
+    .slice(0, 5)
+    .map((p) => ({
+      id: p.id as string,
+      title: p.title as string,
+      city: p.city as string,
+      status: p.status as string,
+      created_at: p.created_at as string,
+    }));
+
+  const recentContacts = [...conts]
+    .sort(
+      (a, b) =>
+        new Date(b.created_at as string).getTime() -
+        new Date(a.created_at as string).getTime()
+    )
+    .slice(0, 5)
+    .map((c) => ({
+      id: c.id as string,
+      name: `${c.first_name as string} ${c.last_name as string}`,
+      status: c.status as string,
+      created_at: c.created_at as string,
+    }));
+
+  return {
+    userFirstName,
+    agencyName,
+    metrics: {
+      biensActifs,
+      vendusLouesCeMois,
+      prospectsChauds,
+      totalContacts,
+      annoncesIA,
+      tauxConversion,
+      clientsCount,
+      momPct: {
+        biensActifs: pctChange(nouveauxBiensCeMois, nouveauxBiensMoisPrec),
+        vendusLoues: pctChange(vendusLouesCeMois, vendusLouesMoisPrec),
+        prospectsChauds: pctChange(chaudCreesCeMois, chaudCreesMoisPrec),
+        totalContacts: pctChange(contactsCreesCeMois, contactsCreesMoisPrec),
+        annoncesIA: pctChange(annoncesCeMois, annoncesMoisPrec),
+        tauxConversion: null,
+      },
+    },
+    chartBiensParMois,
+    chartContactsStatut,
+    chartFlux,
+    recentProperties,
+    recentContacts,
+  };
+}

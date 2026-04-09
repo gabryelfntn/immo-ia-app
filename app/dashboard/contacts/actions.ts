@@ -19,6 +19,10 @@ export type UpdateContactNotesResult =
   | { ok: true }
   | { ok: false; error: string };
 
+export type UpdateFollowupOptOutResult =
+  | { ok: true }
+  | { ok: false; error: string };
+
 async function requireAgencyContext() {
   const supabase = await createClient();
   const {
@@ -159,5 +163,39 @@ export async function updateContactNotes(
 
   revalidatePath("/dashboard/contacts");
   revalidatePath(`/dashboard/contacts/${contactId}`);
+  return { ok: true };
+}
+
+export async function updateFollowupOptOut(
+  contactId: string,
+  optOut: boolean
+): Promise<UpdateFollowupOptOutResult> {
+  const { supabase, ctx } = await requireAgencyContext();
+  if (!ctx) {
+    return { ok: false, error: "Session ou agence introuvable." };
+  }
+
+  const { data, error } = await supabase
+    .from("contacts")
+    .update({
+      followup_opt_out: optOut,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", contactId)
+    .eq("agency_id", ctx.agencyId)
+    .select("id");
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+
+  if (!data?.length) {
+    return { ok: false, error: "Contact introuvable." };
+  }
+
+  revalidatePath("/dashboard/contacts");
+  revalidatePath(`/dashboard/contacts/${contactId}`);
+  revalidatePath("/dashboard/relances");
+  revalidatePath("/dashboard/relances/historique");
   return { ok: true };
 }
