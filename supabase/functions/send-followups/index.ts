@@ -1,5 +1,3 @@
-/// <reference types="https://deno.land/x/types/index.d.ts" />
-
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 type FollowupEmail = { subject: string; body: string; tone: string };
