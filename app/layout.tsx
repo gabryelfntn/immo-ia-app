@@ -17,6 +17,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "ImmoAI — Suite agence",
   description: "Espace agence immobilière et annonces IA",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "ImmoAI",
+    statusBarStyle: "default",
+  },
 };
 
 export default function RootLayout({

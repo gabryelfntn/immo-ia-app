@@ -18,6 +18,7 @@ import {
   CONTACT_TYPE_LABELS,
 } from "@/lib/contacts/labels";
 import { PIPELINE_STAGE_LABELS } from "@/lib/contacts/pipeline";
+import { CONTACT_SOURCE_PRESETS } from "@/lib/contacts/source-presets";
 
 function FormSection({
   title,
@@ -60,6 +61,7 @@ export function ContactForm() {
       budget_max: undefined,
       desired_city: "",
       notes: "",
+      source: "",
     },
   });
 
@@ -161,6 +163,30 @@ export function ContactForm() {
               <p className="text-xs text-red-400">{errors.phone.message}</p>
             ) : null}
           </div>
+        </div>
+      </FormSection>
+
+      <FormSection
+        title="Origine du lead"
+        subtitle="Optionnel — utile pour vos statistiques."
+      >
+        <div className="flex flex-col gap-2">
+          <label htmlFor="source" className={labelClass}>
+            Source
+          </label>
+          <input
+            id="source"
+            type="text"
+            list="contact-source-presets-new"
+            className={inputClass}
+            placeholder="Ex. Leboncoin, site web…"
+            {...register("source")}
+          />
+          <datalist id="contact-source-presets-new">
+            {CONTACT_SOURCE_PRESETS.map((s) => (
+              <option key={s} value={s} />
+            ))}
+          </datalist>
         </div>
       </FormSection>
 

@@ -33,6 +33,7 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { DashboardPayload } from "@/lib/dashboard/fetch-dashboard-data";
+import { RecentViewsPanel } from "@/app/dashboard/_components/recent-views-panel";
 import { PROPERTY_STATUS_LABELS } from "@/lib/properties/labels";
 import type { PropertyStatus } from "@/lib/properties/schema";
 import { CONTACT_STATUS_LABELS } from "@/lib/contacts/labels";
@@ -173,14 +174,28 @@ const metricsLayout = [
   },
 ];
 
+export type SendReminderItem = {
+  id: string;
+  remind_at: string;
+  note: string | null;
+  contact_id: string;
+  contactName: string;
+};
+
 type Props = {
   data: DashboardPayload;
   todayLabel: string;
   /** Message si chargement OK mais périmètre vide (ex. agent sans assignations). */
   dataLoadHint?: string | null;
+  sendReminders?: SendReminderItem[];
 };
 
-export function DashboardClient({ data, todayLabel, dataLoadHint }: Props) {
+export function DashboardClient({
+  data,
+  todayLabel,
+  dataLoadHint,
+  sendReminders = [],
+}: Props) {
   const { metrics, chartBiensParMois, chartContactsStatut, chartFlux } = data;
 
   const donutTotal = chartContactsStatut.reduce((s, x) => s + x.value, 0);
@@ -213,6 +228,40 @@ export function DashboardClient({ data, todayLabel, dataLoadHint }: Props) {
           </p>
         </div>
       </header>
+
+      <RecentViewsPanel />
+
+      {sendReminders.length > 0 ? (
+        <section className="card-luxury border-amber-200/80 bg-amber-50/40 p-6">
+          <h2 className="text-lg font-bold text-amber-950">
+            Rappels d&apos;envoi / relance (48 h)
+          </h2>
+          <p className="mt-1 text-sm text-amber-900/80">
+            Mémos que vous avez programmés sur les fiches contacts.
+          </p>
+          <ul className="mt-4 space-y-2">
+            {sendReminders.map((r) => (
+              <li key={r.id}>
+                <Link
+                  href={`/dashboard/contacts/${r.contact_id}`}
+                  className="block rounded-xl border border-amber-200/90 bg-white px-4 py-3 transition hover:border-amber-400"
+                >
+                  <p className="font-semibold text-stone-900">{r.contactName}</p>
+                  <p className="mt-0.5 text-xs text-stone-600">
+                    {new Intl.DateTimeFormat("fr-FR", {
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                    }).format(new Date(r.remind_at))}
+                  </p>
+                  {r.note ? (
+                    <p className="mt-1 text-sm text-stone-700">{r.note}</p>
+                  ) : null}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       <section className="card-luxury p-6">
         <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">

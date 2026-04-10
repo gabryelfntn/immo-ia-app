@@ -5,6 +5,8 @@ import { useCallback, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { DashboardHeader } from "./dashboard-header";
 import { DashboardSidebar } from "./dashboard-sidebar";
+import { PwaRegister } from "@/app/_components/pwa-register";
+import { PushNotificationsOptIn } from "./push-notifications-opt-in";
 
 const STORAGE_KEY = "immo-sidebar-collapsed";
 
@@ -120,6 +122,10 @@ export function DashboardShell({
           sidebarCollapsed={desktopCollapsed}
         />
         <main className="dashboard-main-fade mx-auto max-w-[1440px] px-4 pb-12 pt-1 sm:px-6 lg:px-10 lg:pb-14">
+          <PwaRegister />
+          <div className="mb-4">
+            <PushNotificationsOptIn />
+          </div>
           {children}
         </main>
       </div>

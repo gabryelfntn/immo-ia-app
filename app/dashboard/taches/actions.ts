@@ -119,6 +119,55 @@ export async function completeAgencyTask(taskId: string): Promise<TaskMutationRe
   return { ok: true };
 }
 
+export async function snoozeAgencyTask(
+  taskId: string,
+  preset: "1d" | "7d"
+): Promise<TaskMutationResult> {
+  const { supabase, ctx } = await requireAgencyContext();
+  if (!ctx) {
+    return { ok: false, error: "Session ou agence introuvable." };
+  }
+
+  const { data: row, error: fetchErr } = await supabase
+    .from("agency_tasks")
+    .select("id, due_at, contact_id, property_id")
+    .eq("id", taskId)
+    .eq("agency_id", ctx.agencyId)
+    .maybeSingle();
+
+  if (fetchErr || !row) {
+    return { ok: false, error: "Tâche introuvable." };
+  }
+
+  const base = new Date(row.due_at as string);
+  if (Number.isNaN(base.getTime())) {
+    return { ok: false, error: "Échéance invalide." };
+  }
+
+  const addMs = preset === "7d" ? 7 * 86_400_000 : 86_400_000;
+  const next = new Date(base.getTime() + addMs);
+
+  const { error } = await supabase
+    .from("agency_tasks")
+    .update({ due_at: next.toISOString() })
+    .eq("id", taskId)
+    .eq("agency_id", ctx.agencyId);
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+
+  revalidatePath("/dashboard/taches");
+  revalidatePath("/dashboard");
+  if (row.contact_id) {
+    revalidatePath(`/dashboard/contacts/${row.contact_id as string}`);
+  }
+  if (row.property_id) {
+    revalidatePath(`/dashboard/biens/${row.property_id as string}`);
+  }
+  return { ok: true };
+}
+
 export async function deleteAgencyTask(taskId: string): Promise<TaskMutationResult> {
   const { supabase, ctx } = await requireAgencyContext();
   if (!ctx) {

@@ -7,6 +7,7 @@ import {
   completeAgencyTask,
   createAgencyTask,
   deleteAgencyTask,
+  snoozeAgencyTask,
 } from "@/app/dashboard/taches/actions";
 import { Trash2 } from "lucide-react";
 
@@ -132,7 +133,33 @@ export function ContactTasksPanel({ contactId, tasks }: Props) {
                   }).format(new Date(t.due_at))}
                 </p>
               </div>
-              <div className="flex shrink-0 gap-2">
+              <div className="flex shrink-0 flex-wrap gap-2">
+                <button
+                  type="button"
+                  disabled={pending}
+                  onClick={() =>
+                    startTransition(async () => {
+                      await snoozeAgencyTask(t.id, "1d");
+                      router.refresh();
+                    })
+                  }
+                  className="rounded-lg border border-slate-200/90 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:border-stone-400 disabled:opacity-50"
+                >
+                  +1 j
+                </button>
+                <button
+                  type="button"
+                  disabled={pending}
+                  onClick={() =>
+                    startTransition(async () => {
+                      await snoozeAgencyTask(t.id, "7d");
+                      router.refresh();
+                    })
+                  }
+                  className="rounded-lg border border-slate-200/90 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition-colors hover:border-stone-400 disabled:opacity-50"
+                >
+                  +7 j
+                </button>
                 <button
                   type="button"
                   disabled={pending}

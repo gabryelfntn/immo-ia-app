@@ -1,4 +1,4 @@
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createServiceSupabase } from "@/lib/supabase/admin";
 import { hashPortalToken } from "@/lib/client-portal/token";
 import { PIPELINE_STAGE_LABELS } from "@/lib/contacts/pipeline";
 import type { PipelineStage } from "@/lib/contacts/schema";
@@ -61,10 +61,8 @@ export async function loadClientPortalData(
     return { ok: false, error: "Lien invalide." };
   }
 
-  let admin;
-  try {
-    admin = createAdminClient();
-  } catch {
+  const admin = createServiceSupabase();
+  if (!admin) {
     return {
       ok: false,
       error: "Portail temporairement indisponible (configuration serveur).",

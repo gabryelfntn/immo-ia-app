@@ -6,6 +6,11 @@ import {
   propertyStatusEnum,
 } from "@/lib/properties/schema";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
+import {
+  MANDATE_CHECKLIST_KEYS,
+  type MandateChecklistState,
+} from "@/lib/properties/mandate-checklist";
 
 export type CreatePropertyResult =
   | { ok: true; propertyId: string; agencyId: string }
@@ -165,6 +170,134 @@ export async function updatePropertyStatus(
 
   if (!data?.length) {
     return { ok: false, error: "Bien introuvable." };
+  }
+
+  revalidatePath("/dashboard/biens");
+  revalidatePath(`/dashboard/biens/${propertyId}`);
+  return { ok: true };
+}
+
+export type UpdatePropertyListingExtrasResult =
+  | { ok: true }
+  | { ok: false; error: string };
+
+const listingExtrasSchema = z.object({
+  listing_url: z.string().max(2000).nullable().optional(),
+  mandate_checklist: z.record(z.boolean()).optional(),
+});
+
+export async function updatePropertyListingExtras(
+  propertyId: string,
+  input: unknown
+): Promise<UpdatePropertyListingExtrasResult> {
+  const parsed = listingExtrasSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, error: "Données invalides." };
+  }
+
+  const { supabase, ctx } = await requireAgencyContext();
+  if (!ctx) {
+    return { ok: false, error: "Session ou agence introuvable." };
+  }
+
+  const { data: prop, error: propError } = await supabase
+    .from("properties")
+    .select("id")
+    .eq("id", propertyId)
+    .eq("agency_id", ctx.agencyId)
+    .maybeSingle();
+
+  if (propError || !prop) {
+    return { ok: false, error: "Bien introuvable ou accès refusé." };
+  }
+
+  const urlRaw = parsed.data.listing_url?.trim();
+  const checklistIn = parsed.data.mandate_checklist;
+
+  const patch: Record<string, unknown> = {};
+  if (parsed.data.listing_url !== undefined) {
+    patch.listing_url = urlRaw && urlRaw.length > 0 ? urlRaw : null;
+  }
+  if (checklistIn && typeof checklistIn === "object") {
+    const nextChecklist: MandateChecklistState = {};
+    for (const k of MANDATE_CHECKLIST_KEYS) {
+      if (checklistIn[k] === true) nextChecklist[k] = true;
+    }
+    patch.mandate_checklist = nextChecklist;
+  }
+
+  if (Object.keys(patch).length === 0) {
+    return { ok: true };
+  }
+
+  const { error } = await supabase
+    .from("properties")
+    .update(patch)
+    .eq("id", propertyId)
+    .eq("agency_id", ctx.agencyId);
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+
+  revalidatePath("/dashboard/biens");
+  revalidatePath(`/dashboard/biens/${propertyId}`);
+  return { ok: true };
+}
+
+export type UpdatePropertyPriceResult =
+  | { ok: true }
+  | { ok: false; error: string };
+
+export async function updatePropertyPrice(
+  propertyId: string,
+  newPrice: unknown
+): Promise<UpdatePropertyPriceResult> {
+  const priceParsed = z.coerce.number().nonnegative().safeParse(newPrice);
+  if (!priceParsed.success) {
+    return { ok: false, error: "Prix invalide." };
+  }
+
+  const { supabase, ctx } = await requireAgencyContext();
+  if (!ctx) {
+    return { ok: false, error: "Session ou agence introuvable." };
+  }
+
+  const { data: prop, error: propError } = await supabase
+    .from("properties")
+    .select("id, price")
+    .eq("id", propertyId)
+    .eq("agency_id", ctx.agencyId)
+    .maybeSingle();
+
+  if (propError || !prop) {
+    return { ok: false, error: "Bien introuvable ou accès refusé." };
+  }
+
+  const oldPrice = Number(prop.price);
+  if (oldPrice === priceParsed.data) {
+    return { ok: true };
+  }
+
+  const { error: upErr } = await supabase
+    .from("properties")
+    .update({ price: priceParsed.data })
+    .eq("id", propertyId)
+    .eq("agency_id", ctx.agencyId);
+
+  if (upErr) {
+    return { ok: false, error: upErr.message };
+  }
+
+  const { error: histErr } = await supabase.from("property_price_history").insert({
+    property_id: propertyId,
+    agency_id: ctx.agencyId,
+    price: priceParsed.data,
+    recorded_by: ctx.userId,
+  });
+
+  if (histErr) {
+    return { ok: false, error: histErr.message };
   }
 
   revalidatePath("/dashboard/biens");

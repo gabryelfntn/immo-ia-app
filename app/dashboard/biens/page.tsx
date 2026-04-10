@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { MapPin, Maximize, Plus, DoorOpen } from "lucide-react";
+import { Download, MapPin, Maximize, Plus, DoorOpen } from "lucide-react";
 import {
   PROPERTY_STATUSES,
   PROPERTY_TYPES,
@@ -131,13 +131,22 @@ export default async function BiensPage({ searchParams }: Props) {
             {list.length} bien{list.length !== 1 ? "s" : ""} pour votre agence
           </p>
         </div>
-        <Link
-          href="/dashboard/biens/new"
-          className="btn-luxury-primary inline-flex shrink-0 items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold text-white transition-all duration-300"
-        >
-          <Plus className="relative z-10 h-5 w-5" strokeWidth={2.5} />
-          <span className="relative z-10">Ajouter un bien</span>
-        </Link>
+        <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center">
+          <a
+            href="/api/export/properties"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-stone-400 hover:bg-stone-50"
+          >
+            <Download className="h-5 w-5" strokeWidth={2} />
+            Exporter CSV
+          </a>
+          <Link
+            href="/dashboard/biens/new"
+            className="btn-luxury-primary inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold text-white transition-all duration-300"
+          >
+            <Plus className="relative z-10 h-5 w-5" strokeWidth={2.5} />
+            <span className="relative z-10">Ajouter un bien</span>
+          </Link>
+        </div>
       </div>
 
       <form

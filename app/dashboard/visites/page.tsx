@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { Calendar, Plus } from "lucide-react";
+import { Calendar, CalendarPlus, Plus } from "lucide-react";
 
 type Search = { property?: string; contact?: string; visit?: string };
 
@@ -291,6 +291,13 @@ export default async function VisitesPage({ searchParams }: Props) {
                       <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-slate-500">
                         {v.summary}
                       </p>
+                      <a
+                        href={`/api/calendar/visit/${v.id}`}
+                        className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-amber-800 underline-offset-2 hover:underline"
+                      >
+                        <CalendarPlus className="h-4 w-4" />
+                        Ajouter au calendrier (.ics)
+                      </a>
                     </div>
                   </div>
                 </article>

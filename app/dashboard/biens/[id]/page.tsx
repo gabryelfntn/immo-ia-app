@@ -13,6 +13,10 @@ import {
 import type { PropertyStatus, PropertyType } from "@/lib/properties/schema";
 import { PropertyGallery } from "./property-gallery";
 import { UpdateStatusControl } from "./update-status";
+import { RecordRecentView } from "@/app/dashboard/_components/record-recent-view";
+import { CopyTextButton } from "@/app/dashboard/_components/copy-text-button";
+import { PropertyCrmExtrasPanel } from "./property-crm-extras-panel";
+import { parseMandateChecklist } from "@/lib/properties/mandate-checklist";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -115,8 +119,40 @@ export default async function PropertyDetailPage({ params }: Props) {
 
   const priceLabel = formatPriceEUR(Number(row.price), transaction);
 
+  const rowExt = row as {
+    listing_url?: string | null;
+    mandate_checklist?: unknown;
+  };
+  const listingUrl =
+    typeof rowExt.listing_url === "string" ? rowExt.listing_url : null;
+  const checklist = parseMandateChecklist(rowExt.mandate_checklist);
+
+  const { data: historyRows, error: historyError } = await supabase
+    .from("property_price_history")
+    .select("id, price, recorded_at")
+    .eq("property_id", id)
+    .order("recorded_at", { ascending: false })
+    .limit(30);
+
+  const priceHistory =
+    !historyError && historyRows
+      ? historyRows.map((h) => ({
+          id: h.id as string,
+          price: Number(h.price),
+          recorded_at: h.recorded_at as string,
+        }))
+      : [];
+
+  const addressLine = `${row.address as string}, ${row.zip_code as string} ${row.city as string}`;
+
   return (
     <div className="mx-auto max-w-6xl">
+      <RecordRecentView
+        kind="property"
+        id={id}
+        title={title}
+        href={`/dashboard/biens/${id}`}
+      />
       <Link
         href="/dashboard/biens"
         className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition-all duration-300 hover:text-stone-800"
@@ -182,8 +218,22 @@ export default async function PropertyDetailPage({ params }: Props) {
             <p className="mt-2 text-slate-500">
               {(row.zip_code as string) + " " + (row.city as string)}
             </p>
+            <div className="mt-3">
+              <CopyTextButton text={addressLine} label="Copier l’adresse" />
+            </div>
           </address>
         </section>
+      </div>
+
+      <div className="mt-8">
+        <PropertyCrmExtrasPanel
+          propertyId={id}
+          transaction={transaction}
+          currentPrice={Number(row.price)}
+          initialListingUrl={listingUrl}
+          initialChecklist={checklist}
+          priceHistory={priceHistory}
+        />
       </div>
 
       <section className="mt-6 rounded-2xl border border-slate-200/90 bg-white p-6 card-luxury">

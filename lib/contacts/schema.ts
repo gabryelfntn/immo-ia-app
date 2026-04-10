@@ -55,6 +55,11 @@ export const contactCreateSchema = z
       .transform((s) => (s?.trim() ? s.trim() : undefined)),
     pipeline_stage: pipelineStageEnum.optional().default("premier_contact"),
     prospecting_consent: z.boolean().optional().default(true),
+    source: z
+      .string()
+      .max(120)
+      .optional()
+      .transform((s) => (s?.trim() ? s.trim() : undefined)),
   })
   .superRefine((data, ctx) => {
     if (

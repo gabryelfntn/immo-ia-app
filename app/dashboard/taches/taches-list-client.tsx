@@ -3,7 +3,11 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
-import { completeAgencyTask, deleteAgencyTask } from "./actions";
+import {
+  completeAgencyTask,
+  deleteAgencyTask,
+  snoozeAgencyTask,
+} from "./actions";
 import { Check, Trash2 } from "lucide-react";
 
 type TaskRow = {
@@ -73,7 +77,33 @@ export function TachesListClient({ tasks, contactNames }: Props) {
                     </Link>
                   ) : null}
                 </div>
-                <div className="flex shrink-0 gap-2">
+                <div className="flex shrink-0 flex-wrap gap-2">
+                  <button
+                    type="button"
+                    disabled={pending}
+                    onClick={() =>
+                      startTransition(async () => {
+                        await snoozeAgencyTask(t.id, "1d");
+                        router.refresh();
+                      })
+                    }
+                    className="rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:border-stone-400 disabled:opacity-50"
+                  >
+                    +1 j
+                  </button>
+                  <button
+                    type="button"
+                    disabled={pending}
+                    onClick={() =>
+                      startTransition(async () => {
+                        await snoozeAgencyTask(t.id, "7d");
+                        router.refresh();
+                      })
+                    }
+                    className="rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:border-stone-400 disabled:opacity-50"
+                  >
+                    +7 j
+                  </button>
                   <button
                     type="button"
                     disabled={pending}

@@ -82,6 +82,11 @@ function pickSuggestedProperties(args: {
     }));
 }
 
+/** Vercel Cron appelle les routes en GET (Authorization: Bearer CRON_SECRET). */
+export async function GET(request: Request) {
+  return POST(request);
+}
+
 export async function POST(request: Request) {
   const authErr = requireCronAuth(request);
   if (authErr) {

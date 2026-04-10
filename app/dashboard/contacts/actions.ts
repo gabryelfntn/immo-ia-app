@@ -7,6 +7,7 @@ import {
   pipelineStageEnum,
 } from "@/lib/contacts/schema";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
 export type CreateContactResult =
   | { ok: true; contactId: string }
@@ -29,6 +30,14 @@ export type UpdatePipelineStageResult =
   | { ok: false; error: string };
 
 export type UpdateProspectingConsentResult =
+  | { ok: true }
+  | { ok: false; error: string };
+
+export type UpdateContactCommercialMetaResult =
+  | { ok: true }
+  | { ok: false; error: string };
+
+export type MarkContactCoordinatesVerifiedResult =
   | { ok: true }
   | { ok: false; error: string };
 
@@ -81,6 +90,7 @@ export async function createContact(
     notes,
     pipeline_stage,
     prospecting_consent,
+    source,
     ...rest
   } = parsed.data;
 
@@ -94,6 +104,7 @@ export async function createContact(
       notes: notes ?? null,
       pipeline_stage: pipeline_stage ?? "premier_contact",
       prospecting_consent: prospecting_consent ?? true,
+      source: source?.trim() ? source.trim() : null,
       agency_id: ctx.agencyId,
       agent_id: ctx.userId,
     })
@@ -280,6 +291,95 @@ export async function updateProspectingConsent(
   }
 
   revalidatePath("/dashboard/contacts");
+  revalidatePath(`/dashboard/contacts/${contactId}`);
+  return { ok: true };
+}
+
+const commercialMetaSchema = z.object({
+  source: z.string().max(200).nullable().optional(),
+  next_action_label: z.string().max(500).nullable().optional(),
+  next_action_at: z.string().max(40).nullable().optional(),
+});
+
+export async function updateContactCommercialMeta(
+  contactId: string,
+  input: unknown
+): Promise<UpdateContactCommercialMetaResult> {
+  const parsed = commercialMetaSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, error: "Données invalides." };
+  }
+
+  const { supabase, ctx } = await requireAgencyContext();
+  if (!ctx) {
+    return { ok: false, error: "Session ou agence introuvable." };
+  }
+
+  const src = parsed.data.source?.trim();
+  const label = parsed.data.next_action_label?.trim();
+  const whenRaw = parsed.data.next_action_at?.trim();
+
+  let nextAt: string | null = null;
+  if (whenRaw) {
+    const d = new Date(whenRaw);
+    if (Number.isNaN(d.getTime())) {
+      return { ok: false, error: "Date de prochaine action invalide." };
+    }
+    nextAt = d.toISOString();
+  }
+
+  const { data, error } = await supabase
+    .from("contacts")
+    .update({
+      source: src ? src : null,
+      next_action_label: label ? label : null,
+      next_action_at: nextAt,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", contactId)
+    .eq("agency_id", ctx.agencyId)
+    .select("id");
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+
+  if (!data?.length) {
+    return { ok: false, error: "Contact introuvable." };
+  }
+
+  revalidatePath("/dashboard/contacts");
+  revalidatePath(`/dashboard/contacts/${contactId}`);
+  revalidatePath("/dashboard");
+  return { ok: true };
+}
+
+export async function markContactCoordinatesVerified(
+  contactId: string
+): Promise<MarkContactCoordinatesVerifiedResult> {
+  const { supabase, ctx } = await requireAgencyContext();
+  if (!ctx) {
+    return { ok: false, error: "Session ou agence introuvable." };
+  }
+
+  const { data, error } = await supabase
+    .from("contacts")
+    .update({
+      coordinates_verified_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", contactId)
+    .eq("agency_id", ctx.agencyId)
+    .select("id");
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+
+  if (!data?.length) {
+    return { ok: false, error: "Contact introuvable." };
+  }
+
   revalidatePath(`/dashboard/contacts/${contactId}`);
   return { ok: true };
 }

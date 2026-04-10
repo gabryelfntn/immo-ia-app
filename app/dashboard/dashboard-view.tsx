@@ -120,6 +120,39 @@ export async function DashboardView() {
 
   const payload = result.data;
 
+  const horizon = new Date(Date.now() + 48 * 3600 * 1000).toISOString();
+  const { data: srRows, error: srErr } = await supabase
+    .from("contact_send_reminders")
+    .select(
+      "id, remind_at, note, contact_id, contacts ( first_name, last_name )"
+    )
+    .eq("agent_id", user.id)
+    .eq("agency_id", profile.agency_id)
+    .is("completed_at", null)
+    .lte("remind_at", horizon)
+    .order("remind_at", { ascending: true })
+    .limit(20);
+
+  type RemContactRow = { first_name: string; last_name: string };
+
+  const sendReminders =
+    !srErr && srRows
+      ? srRows.map((r) => {
+          const rawC = r.contacts as
+            | RemContactRow
+            | RemContactRow[]
+            | null;
+          const c = Array.isArray(rawC) ? rawC[0] ?? null : rawC;
+          return {
+            id: r.id as string,
+            remind_at: r.remind_at as string,
+            note: (r.note as string | null) ?? null,
+            contact_id: r.contact_id as string,
+            contactName: c ? `${c.first_name} ${c.last_name}` : "Contact",
+          };
+        })
+      : [];
+
   const raw = new Intl.DateTimeFormat("fr-FR", {
     weekday: "long",
     day: "numeric",
@@ -147,6 +180,7 @@ export async function DashboardView() {
       data={payload}
       todayLabel={todayLabel}
       dataLoadHint={agentEmptyHint ?? adminEmptyHint}
+      sendReminders={sendReminders}
     />
   );
 }

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { BellOff, Mail, MapPin, Phone, Plus } from "lucide-react";
+import { BellOff, Download, Mail, MapPin, Phone, Plus } from "lucide-react";
 import { computeLeadScore } from "@/lib/dashboard/lead-score";
 import {
   parsePipelineStage,
@@ -27,8 +27,25 @@ import type {
   PipelineStage,
 } from "@/lib/contacts/schema";
 import { normalizeRole, isAgentOnly } from "@/lib/auth/agency-scope";
+import { CONTACT_SOURCE_PRESETS } from "@/lib/contacts/source-presets";
 
-type Search = { status?: string; type?: string; pipeline?: string; tag?: string };
+type Search = {
+  status?: string;
+  type?: string;
+  pipeline?: string;
+  tag?: string;
+  sort?: string;
+  source?: string;
+};
+
+type ContactSort = "created_desc" | "updated_desc" | "name_asc" | "next_asc";
+
+function parseContactSort(raw: string | undefined): ContactSort {
+  if (raw === "updated_desc") return "updated_desc";
+  if (raw === "name_asc") return "name_asc";
+  if (raw === "next_asc") return "next_asc";
+  return "created_desc";
+}
 
 function parseStatusFilter(raw: string | undefined): ContactStatus | undefined {
   if (!raw) return undefined;
@@ -109,6 +126,8 @@ export default async function ContactsPage({ searchParams }: Props) {
   const typeFilter = parseTypeFilter(sp.type);
   const pipelineFilter = parsePipelineFilter(sp.pipeline);
   const tagSlug = sp.tag?.trim() || "";
+  const sort = parseContactSort(sp.sort);
+  const sourceFilter = sp.source?.trim() || "";
 
   const supabase = await createClient();
   const {
@@ -163,8 +182,7 @@ export default async function ContactsPage({ searchParams }: Props) {
   let query = supabase
     .from("contacts")
     .select("*")
-    .eq("agency_id", profile.agency_id)
-    .order("created_at", { ascending: false });
+    .eq("agency_id", profile.agency_id);
 
   if (statusFilter) {
     query = query.eq("status", statusFilter);
@@ -175,10 +193,32 @@ export default async function ContactsPage({ searchParams }: Props) {
   if (pipelineFilter) {
     query = query.eq("pipeline_stage", pipelineFilter);
   }
+  if (sourceFilter) {
+    query = query.eq("source", sourceFilter);
+  }
 
   const userRole = normalizeRole(profile.role as string | null);
   if (isAgentOnly(userRole)) {
     query = query.eq("agent_id", user.id);
+  }
+
+  switch (sort) {
+    case "updated_desc":
+      query = query.order("updated_at", { ascending: false });
+      break;
+    case "name_asc":
+      query = query
+        .order("last_name", { ascending: true })
+        .order("first_name", { ascending: true });
+      break;
+    case "next_asc":
+      query = query.order("next_action_at", {
+        ascending: true,
+        nullsFirst: false,
+      });
+      break;
+    default:
+      query = query.order("created_at", { ascending: false });
   }
 
   if (tagContactIds !== null && tagContactIds.length > 0) {
@@ -225,13 +265,22 @@ export default async function ContactsPage({ searchParams }: Props) {
             {list.length} contact{list.length !== 1 ? "s" : ""} pour votre agence
           </p>
         </div>
-        <Link
-          href="/dashboard/contacts/new"
-          className="btn-luxury-primary inline-flex shrink-0 items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold text-white transition-all duration-300"
-        >
-          <Plus className="relative z-10 h-5 w-5" strokeWidth={2.5} />
-          <span className="relative z-10">Ajouter un contact</span>
-        </Link>
+        <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center">
+          <a
+            href="/api/export/contacts"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-stone-400 hover:bg-stone-50"
+          >
+            <Download className="h-5 w-5" strokeWidth={2} />
+            Exporter CSV
+          </a>
+          <Link
+            href="/dashboard/contacts/new"
+            className="btn-luxury-primary inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold text-white transition-all duration-300"
+          >
+            <Plus className="relative z-10 h-5 w-5" strokeWidth={2.5} />
+            <span className="relative z-10">Ajouter un contact</span>
+          </Link>
+        </div>
       </div>
 
       <form
@@ -296,6 +345,30 @@ export default async function ContactsPage({ searchParams }: Props) {
               </option>
             ))}
           </select>
+          <select
+            id="filter-source"
+            name="source"
+            defaultValue={sourceFilter}
+            className="max-w-[220px] rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-stone-400 focus:ring-2 focus:ring-stone-500/20"
+          >
+            <option value="">Toutes les sources</option>
+            {CONTACT_SOURCE_PRESETS.map((s) => (
+              <option key={s} value={s} className="bg-white">
+                {s}
+              </option>
+            ))}
+          </select>
+          <select
+            id="sort-contacts"
+            name="sort"
+            defaultValue={sort}
+            className="rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-stone-400 focus:ring-2 focus:ring-stone-500/20"
+          >
+            <option value="created_desc">Tri : création (récent)</option>
+            <option value="updated_desc">Tri : dernière maj</option>
+            <option value="name_asc">Tri : nom A → Z</option>
+            <option value="next_asc">Tri : prochaine action</option>
+          </select>
           <button
             type="submit"
             className="rounded-full bg-amber-500/15 px-5 py-2 text-sm font-semibold text-amber-800 transition-all duration-300 hover:bg-amber-500/25"
@@ -303,7 +376,12 @@ export default async function ContactsPage({ searchParams }: Props) {
             Appliquer
           </button>
         </div>
-        {(statusFilter || typeFilter || pipelineFilter || tagSlug) && (
+        {(statusFilter ||
+          typeFilter ||
+          pipelineFilter ||
+          tagSlug ||
+          sourceFilter ||
+          sort !== "created_desc") && (
           <Link
             href="/dashboard/contacts"
             className="text-sm font-medium text-slate-500 transition-all duration-300 hover:text-amber-400"
@@ -319,7 +397,12 @@ export default async function ContactsPage({ searchParams }: Props) {
             Aucun contact pour l&apos;instant
           </p>
           <p className="mt-2 max-w-md text-sm text-slate-500">
-            {statusFilter || typeFilter || pipelineFilter || tagSlug
+            {statusFilter ||
+            typeFilter ||
+            pipelineFilter ||
+            tagSlug ||
+            sourceFilter ||
+            sort !== "created_desc"
               ? "Aucun contact ne correspond aux filtres."
               : "Ajoutez votre premier contact pour suivre prospects et mandants."}
           </p>
@@ -420,6 +503,12 @@ export default async function ContactsPage({ searchParams }: Props) {
                         <span className="inline-flex items-center gap-1.5 text-slate-500">
                           <MapPin className="h-4 w-4 text-stone-600/70" />
                           {c.desired_city}
+                        </span>
+                      ) : null}
+                      {typeof (c as { source?: string }).source === "string" &&
+                      (c as { source?: string }).source?.trim() ? (
+                        <span className="text-slate-400">
+                          Source : {(c as { source: string }).source.trim()}
                         </span>
                       ) : null}
                     </div>

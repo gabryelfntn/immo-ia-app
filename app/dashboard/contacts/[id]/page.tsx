@@ -18,6 +18,15 @@ import { UpdateContactStatusControl } from "./update-contact-status";
 import { UpdatePipelineStageControl } from "./update-pipeline-stage";
 import { ContactPortalPanel } from "./contact-portal-panel";
 import { ContactTagsPanel } from "./contact-tags-panel";
+import { ContactAttachmentsPanel } from "./contact-attachments-panel";
+import { ContactRemindersPanel } from "./contact-reminders-panel";
+import { RecordRecentView } from "@/app/dashboard/_components/record-recent-view";
+import { ContactQuickActions } from "./contact-quick-actions";
+import { ContactCommercialPanel } from "./contact-commercial-panel";
+import {
+  ContactDuplicateBanner,
+  type DuplicateRow,
+} from "./contact-duplicate-banner";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -117,7 +126,40 @@ export default async function ContactDetailPage({ params }: Props) {
     last_followup_sent_at?: string | null;
     pipeline_stage?: string | null;
     prospecting_consent?: boolean | null;
+    source?: string | null;
+    next_action_at?: string | null;
+    next_action_label?: string | null;
+    coordinates_verified_at?: string | null;
   };
+
+  const agencyId = profile.agency_id as string;
+  const emailStr = row.email as string;
+  const phoneStr = row.phone as string;
+
+  const [dupEmail, dupPhone] = await Promise.all([
+    supabase
+      .from("contacts")
+      .select("id, first_name, last_name")
+      .eq("agency_id", agencyId)
+      .eq("email", emailStr)
+      .neq("id", id),
+    supabase
+      .from("contacts")
+      .select("id, first_name, last_name")
+      .eq("agency_id", agencyId)
+      .eq("phone", phoneStr)
+      .neq("id", id),
+  ]);
+
+  const dupMap = new Map<string, DuplicateRow>();
+  for (const r of [...(dupEmail.data ?? []), ...(dupPhone.data ?? [])]) {
+    dupMap.set(r.id as string, {
+      id: r.id as string,
+      first_name: r.first_name as string,
+      last_name: r.last_name as string,
+    });
+  }
+  const duplicates = [...dupMap.values()];
 
   const pipelineStage = parsePipelineStage(ext.pipeline_stage) as PipelineStage;
   const prospectingConsent =
@@ -160,14 +202,57 @@ export default async function ContactDetailPage({ params }: Props) {
   const agencyTags = tagListRes.error || !tagListRes.data ? [] : tagListRes.data;
   const initialTagIds = (linkRes.data ?? []).map((l) => l.tag_id as string);
 
+  const { data: attachmentRows } = await supabase
+    .from("contact_attachments")
+    .select("id, storage_path, file_name, label")
+    .eq("contact_id", id)
+    .eq("agency_id", agencyId)
+    .order("created_at", { ascending: false });
+
+  const attachments =
+    attachmentRows?.map((a) => ({
+      id: a.id as string,
+      storage_path: a.storage_path as string,
+      file_name: a.file_name as string,
+      label: (a.label as string | null) ?? null,
+    })) ?? [];
+
+  const { data: reminderRows } = await supabase
+    .from("contact_send_reminders")
+    .select("id, remind_at, note")
+    .eq("contact_id", id)
+    .eq("agency_id", agencyId)
+    .is("completed_at", null)
+    .order("remind_at", { ascending: true });
+
+  const reminders =
+    reminderRows?.map((r) => ({
+      id: r.id as string,
+      remind_at: r.remind_at as string,
+      note: (r.note as string | null) ?? null,
+    })) ?? [];
+
+  const desiredCity =
+    typeof row.desired_city === "string" ? row.desired_city.trim() : "";
+
   return (
     <div className="mx-auto max-w-3xl">
+      <RecordRecentView
+        kind="contact"
+        id={id}
+        title={fullName}
+        href={`/dashboard/contacts/${id}`}
+      />
       <Link
         href="/dashboard/contacts"
         className="text-sm font-medium text-slate-500 transition-all duration-300 hover:text-stone-800"
       >
         ← Retour aux contacts
       </Link>
+
+      <div className="mt-6">
+        <ContactDuplicateBanner duplicates={duplicates} />
+      </div>
 
       <div className="mt-8 flex flex-col gap-6 rounded-2xl border border-slate-200/90 bg-white p-6 card-luxury sm:flex-row sm:items-start sm:justify-between">
         <div>
@@ -177,6 +262,22 @@ export default async function ContactDetailPage({ params }: Props) {
           </h1>
           <p className="mt-3 text-sm text-slate-500">{row.email as string}</p>
           <p className="mt-1 text-sm text-slate-500">{row.phone as string}</p>
+          {ext.next_action_label || ext.next_action_at ? (
+            <p className="mt-3 rounded-lg border border-amber-200/80 bg-amber-50/80 px-3 py-2 text-sm text-amber-950">
+              <span className="font-semibold">Prochaine action : </span>
+              {ext.next_action_label || "—"}
+              {ext.next_action_at
+                ? ` · ${formatDateTimeFr(ext.next_action_at)}`
+                : null}
+            </p>
+          ) : null}
+          <div className="mt-4">
+            <ContactQuickActions
+              email={emailStr}
+              phone={phoneStr}
+              mapsQuery={desiredCity || null}
+            />
+          </div>
         </div>
         <div className="flex shrink-0 flex-col gap-4 sm:items-end">
           <div className="rounded-xl border border-stone-500/20 bg-stone-700/10 px-5 py-4 text-right">
@@ -199,6 +300,12 @@ export default async function ContactDetailPage({ params }: Props) {
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <dl className="rounded-2xl border border-slate-200/90 bg-white p-6 card-luxury">
           <dt className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500">
+            Source
+          </dt>
+          <dd className="mt-2 font-medium text-slate-900">
+            {ext.source?.trim() ? ext.source.trim() : "—"}
+          </dd>
+          <dt className="mt-6 text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500">
             Type
           </dt>
           <dd className="mt-2 font-medium text-slate-900">
@@ -250,6 +357,16 @@ export default async function ContactDetailPage({ params }: Props) {
         </dd>
       </dl>
 
+      <section className="mt-8">
+        <ContactCommercialPanel
+          contactId={id}
+          initialSource={ext.source ?? null}
+          initialNextLabel={ext.next_action_label ?? null}
+          initialNextAt={ext.next_action_at ?? null}
+          initialVerifiedAt={ext.coordinates_verified_at ?? null}
+        />
+      </section>
+
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <FollowupOptOutToggle contactId={id} initialOptOut={followupOptOut} />
         <ProspectingConsentToggle
@@ -257,6 +374,18 @@ export default async function ContactDetailPage({ params }: Props) {
           initialConsent={prospectingConsent}
         />
       </div>
+
+      <section className="mt-8">
+        <ContactAttachmentsPanel
+          contactId={id}
+          agencyId={agencyId}
+          attachments={attachments}
+        />
+      </section>
+
+      <section className="mt-8">
+        <ContactRemindersPanel contactId={id} reminders={reminders} />
+      </section>
 
       <section className="mt-8">
         <ContactTasksPanel contactId={id} tasks={contactTasks} />
