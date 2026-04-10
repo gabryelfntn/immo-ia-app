@@ -1,6 +1,7 @@
 "use client";
 
 import { Home } from "lucide-react";
+import { usePathname } from "next/navigation";
 import {
   type ReactNode,
   useCallback,
@@ -9,15 +10,19 @@ import {
   useState,
 } from "react";
 
-const STORAGE_KEY = "immo-launch-seen";
+/** v2 : la v1 ne tournait que sur `/`, souvent contournée par la redirection dashboard. */
+const STORAGE_KEY = "immo-launch-seen-v2";
 
 type Boot = "ssr" | "splash" | "nosplash";
 type Phase = "playing" | "handoff" | "done";
 
 export function AppLaunchSequence({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
   const [boot, setBoot] = useState<Boot>("ssr");
   const [phase, setPhase] = useState<Phase>("playing");
   const [reducedMotion, setReducedMotion] = useState(false);
+
+  const skipSplashRoute = (pathname ?? "").startsWith("/client");
 
   const finish = useCallback(() => {
     setPhase((p) => (p === "done" ? p : "handoff"));
@@ -29,6 +34,11 @@ export function AppLaunchSequence({ children }: { children: ReactNode }) {
   }, []);
 
   useLayoutEffect(() => {
+    if (skipSplashRoute) {
+      setBoot("nosplash");
+      setPhase("done");
+      return;
+    }
     try {
       if (sessionStorage.getItem(STORAGE_KEY) === "1") {
         setBoot("nosplash");
@@ -40,7 +50,7 @@ export function AppLaunchSequence({ children }: { children: ReactNode }) {
     }
     setBoot("splash");
     setPhase("playing");
-  }, []);
+  }, [skipSplashRoute]);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -69,12 +79,19 @@ export function AppLaunchSequence({ children }: { children: ReactNode }) {
   }, [phase]);
 
   const showOverlay =
-    boot === "splash" && (phase === "playing" || phase === "handoff");
+    !skipSplashRoute &&
+    boot === "splash" &&
+    (phase === "playing" || phase === "handoff");
   const revealContent =
+    skipSplashRoute ||
     boot === "nosplash" ||
     boot === "ssr" ||
     phase === "handoff" ||
     phase === "done";
+
+  if (skipSplashRoute) {
+    return <>{children}</>;
+  }
 
   return (
     <>
