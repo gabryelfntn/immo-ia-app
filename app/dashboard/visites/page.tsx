@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Calendar, Plus } from "lucide-react";
 
-type Search = { property?: string; contact?: string };
+type Search = { property?: string; contact?: string; visit?: string };
 
 type VisitRow = {
   id: string;
@@ -58,6 +58,11 @@ export default async function VisitesPage({ searchParams }: Props) {
   const sp = (await searchParams) ?? {};
   const propertyFilter = sp.property?.trim() || "";
   const contactFilter = sp.contact?.trim() || "";
+  const visitFilter = sp.visit?.trim() || "";
+  const visitUuid =
+    visitFilter && /^[0-9a-f-]{36}$/i.test(visitFilter)
+      ? visitFilter
+      : "";
 
   const supabase = await createClient();
   const {
@@ -122,6 +127,9 @@ export default async function VisitesPage({ searchParams }: Props) {
   }
   if (contactFilter) {
     query = query.eq("contact_id", contactFilter);
+  }
+  if (visitUuid) {
+    query = query.eq("id", visitUuid);
   }
 
   const { data: visits, error } = await query;
@@ -214,7 +222,7 @@ export default async function VisitesPage({ searchParams }: Props) {
             Filtrer
           </button>
         </div>
-        {(propertyFilter || contactFilter) && (
+        {(propertyFilter || contactFilter || visitUuid) && (
           <Link
             href="/dashboard/visites"
             className="text-sm font-medium text-slate-500 transition-all duration-300 hover:text-amber-400"
@@ -231,7 +239,7 @@ export default async function VisitesPage({ searchParams }: Props) {
             Aucun rapport de visite
           </p>
           <p className="mt-2 max-w-md text-sm text-slate-500">
-            {propertyFilter || contactFilter
+            {propertyFilter || contactFilter || visitUuid
               ? "Aucun résultat pour ces filtres."
               : "Créez un compte-rendu structuré avec l’IA après une visite."}
           </p>

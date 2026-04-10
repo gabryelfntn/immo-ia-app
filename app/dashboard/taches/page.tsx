@@ -4,7 +4,18 @@ import { createClient } from "@/lib/supabase/server";
 import { ListTodo } from "lucide-react";
 import { TachesListClient } from "./taches-list-client";
 
-export default async function TachesPage() {
+type Search = { task?: string };
+
+export default async function TachesPage({
+  searchParams,
+}: {
+  searchParams?: Promise<Search>;
+}) {
+  const sp = (await searchParams) ?? {};
+  const taskRaw = sp.task?.trim() ?? "";
+  const taskUuid =
+    taskRaw && /^[0-9a-f-]{36}$/i.test(taskRaw) ? taskRaw : "";
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -33,11 +44,17 @@ export default async function TachesPage() {
 
   const agencyId = profile.agency_id;
 
-  const { data: taskRows, error } = await supabase
+  let taskQuery = supabase
     .from("agency_tasks")
     .select("id, title, due_at, completed_at, contact_id")
     .eq("agency_id", agencyId)
     .order("due_at", { ascending: true });
+
+  if (taskUuid) {
+    taskQuery = taskQuery.eq("id", taskUuid);
+  }
+
+  const { data: taskRows, error } = await taskQuery;
 
   if (error) {
     return (
@@ -97,12 +114,22 @@ export default async function TachesPage() {
             Rappels et actions pour votre agence.
           </p>
         </div>
-        <Link
-          href="/dashboard"
-          className="text-sm font-medium text-slate-500 hover:text-stone-800"
-        >
-          ← Tableau de bord
-        </Link>
+        <div className="flex flex-col items-end gap-2 sm:shrink-0">
+          {taskUuid ? (
+            <Link
+              href="/dashboard/taches"
+              className="text-sm font-medium text-stone-600 hover:text-stone-900"
+            >
+              Toutes les tâches
+            </Link>
+          ) : null}
+          <Link
+            href="/dashboard"
+            className="text-sm font-medium text-slate-500 hover:text-stone-800"
+          >
+            ← Tableau de bord
+          </Link>
+        </div>
       </div>
 
       <TachesListClient tasks={tasks} contactNames={nameMap} />

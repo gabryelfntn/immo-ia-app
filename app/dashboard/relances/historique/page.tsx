@@ -40,7 +40,18 @@ function statusBadge(status: string): string {
   return "border-rose-500/35 bg-rose-500/10 text-rose-200";
 }
 
-export default async function RelancesHistoriquePage() {
+type HistoriqueSearch = { fe?: string };
+
+export default async function RelancesHistoriquePage({
+  searchParams,
+}: {
+  searchParams?: Promise<HistoriqueSearch>;
+}) {
+  const sp = (await searchParams) ?? {};
+  const feRaw = sp.fe?.trim() ?? "";
+  const feUuid =
+    feRaw && /^[0-9a-f-]{36}$/i.test(feRaw) ? feRaw : "";
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -68,17 +79,10 @@ export default async function RelancesHistoriquePage() {
   const agencyId = profile.agency_id as string;
   const cur = currentMonthRangeISO();
 
-  const [
-    listRes,
-    sentTotalRes,
-    failedTotalRes,
-    sentMonthRes,
-    failedMonthRes,
-  ] = await Promise.all([
-    supabase
-      .from("followup_emails")
-      .select(
-        `
+  let listQuery = supabase
+    .from("followup_emails")
+    .select(
+      `
       id,
       created_at,
       status,
@@ -89,10 +93,24 @@ export default async function RelancesHistoriquePage() {
       contact_id,
       contacts ( first_name, last_name, email )
     `
-      )
-      .eq("agency_id", agencyId)
-      .order("created_at", { ascending: false })
-      .limit(150),
+    )
+    .eq("agency_id", agencyId)
+    .order("created_at", { ascending: false });
+
+  if (feUuid) {
+    listQuery = listQuery.eq("id", feUuid).limit(5);
+  } else {
+    listQuery = listQuery.limit(150);
+  }
+
+  const [
+    listRes,
+    sentTotalRes,
+    failedTotalRes,
+    sentMonthRes,
+    failedMonthRes,
+  ] = await Promise.all([
+    listQuery,
     supabase
       .from("followup_emails")
       .select("id", { count: "exact", head: true })
@@ -198,6 +216,17 @@ export default async function RelancesHistoriquePage() {
       </div>
 
       <RelancesSubnav current="historique" />
+
+      {feUuid ? (
+        <div className="mt-4">
+          <Link
+            href="/dashboard/relances/historique"
+            className="text-sm font-medium text-stone-600 transition-colors hover:text-stone-900"
+          >
+            ← Voir tout l’historique des relances
+          </Link>
+        </div>
+      ) : null}
 
       {list.length === 0 ? (
         <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200/90 bg-white/[0.03] px-8 py-20 text-center">
