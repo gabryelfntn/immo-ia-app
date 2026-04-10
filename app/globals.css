@@ -455,21 +455,19 @@ body {
   color: #1c1917;
 }
 
+/* Pas de transform ici : sinon tout `position:fixed` enfant (sidebar) est
+   ancré à ce bloc et s’étire avec la hauteur du contenu (bug mobile). */
 .app-launch-content {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: translateY(14px);
-  transition:
-    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.12s,
-    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.12s;
+  transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.12s;
 }
 
 .app-launch-content--visible {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: translateY(0);
 }
 
 @media (prefers-reduced-motion: reduce) {

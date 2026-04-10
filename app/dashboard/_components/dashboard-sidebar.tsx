@@ -74,8 +74,8 @@ export function DashboardSidebar({
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-50 flex flex-col border-r border-stone-200/90 bg-[#faf8f4] shadow-[4px_0_32px_-12px_rgba(28,25,23,0.06)] backdrop-blur-xl transition-[width,transform] duration-300 ease-out motion-reduce:transition-none ${
-        narrowDesktop ? "w-[272px] lg:w-[76px]" : "w-[272px]"
+      className={`fixed left-0 top-0 z-50 flex h-[100dvh] max-h-[100dvh] w-[272px] flex-col overflow-hidden border-r border-stone-200/90 bg-[#faf8f4] shadow-[4px_0_32px_-12px_rgba(28,25,23,0.06)] backdrop-blur-xl transition-[width,transform] duration-300 ease-out motion-reduce:transition-none lg:inset-y-0 lg:h-auto lg:max-h-none ${
+        narrowDesktop ? "lg:w-[76px]" : ""
       } ${
         mobileDrawerOpen ? "max-lg:translate-x-0" : "max-lg:-translate-x-full"
       } lg:translate-x-0`}
@@ -131,7 +131,7 @@ export function DashboardSidebar({
         </button>
       </div>
 
-      <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto overflow-x-hidden px-2 py-4">
+      <nav className="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto overflow-x-hidden overscroll-y-contain px-2 py-4">
         {!collapsed ? (
           <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400">
             Navigation
