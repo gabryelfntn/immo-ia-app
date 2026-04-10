@@ -11,9 +11,11 @@ import {
   LayoutDashboard,
   ListTodo,
   LogOut,
+  Rocket,
   Sparkles,
   UserRoundCog,
   Users,
+  Wand2,
   X,
 } from "lucide-react";
 import Link from "next/link";
@@ -29,6 +31,8 @@ const baseNav = [
   { href: "/dashboard/visites", label: "Visites", icon: Calendar },
   { href: "/dashboard/taches", label: "Tâches", icon: ListTodo },
   { href: "/dashboard/annonces", label: "Annonces IA", icon: Sparkles },
+  { href: "/dashboard/outils-ia", label: "Outils IA", icon: Wand2 },
+  { href: "/dashboard/onboarding", label: "Premiers pas", icon: Rocket },
 ] as const;
 
 const teamNavItem = {
