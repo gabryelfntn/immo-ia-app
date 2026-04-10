@@ -1,7 +1,13 @@
 import type { ReactNode } from "react";
 import { createClient } from "@/lib/supabase/server";
-import { normalizeRole, canViewTeamPerformance } from "@/lib/auth/agency-scope";
+import {
+  normalizeRole,
+  canViewTeamPerformance,
+  roleDisplayLabel,
+} from "@/lib/auth/agency-scope";
 import { DashboardShell } from "./_components/dashboard-shell";
+
+export const dynamic = "force-dynamic";
 
 export default async function DashboardLayout({
   children,
@@ -16,6 +22,7 @@ export default async function DashboardLayout({
   let userName = user?.email ?? "Utilisateur";
   let agencyName: string | null = null;
   let showTeamNav = false;
+  let roleLabel = "—";
 
   if (user) {
     const { data: profile } = await supabase
@@ -37,17 +44,20 @@ export default async function DashboardLayout({
       agencyName = agency?.name ?? null;
     }
 
-    showTeamNav = canViewTeamPerformance(
-      normalizeRole(
-        typeof profile?.role === "string" ? profile.role : null
-      )
+    const role = normalizeRole(
+      profile?.role != null && profile.role !== ""
+        ? String(profile.role)
+        : null
     );
+    roleLabel = roleDisplayLabel(role);
+    showTeamNav = canViewTeamPerformance(role);
   }
 
   return (
     <DashboardShell
       userName={userName}
       agencyName={agencyName}
+      roleLabel={roleLabel}
       showTeamNav={showTeamNav}
     >
       {children}

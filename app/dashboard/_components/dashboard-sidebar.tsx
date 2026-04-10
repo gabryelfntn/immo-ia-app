@@ -40,6 +40,7 @@ const teamNavItem = {
 type Props = {
   userName: string;
   agencyName: string | null;
+  roleLabel: string;
   showTeamNav?: boolean;
   narrowDesktop: boolean;
   mobileDrawerOpen: boolean;
@@ -58,6 +59,7 @@ function initials(name: string): string {
 export function DashboardSidebar({
   userName,
   agencyName,
+  roleLabel,
   showTeamNav = false,
   narrowDesktop,
   mobileDrawerOpen,
@@ -223,7 +225,7 @@ export function DashboardSidebar({
         >
           <div
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-stone-200 text-xs font-bold text-stone-800 ring-1 ring-stone-300/80"
-            title={userName}
+            title={`${userName} · ${roleLabel}`}
           >
             {initials(userName)}
           </div>
@@ -237,6 +239,9 @@ export function DashboardSidebar({
               ) : (
                 <p className="truncate text-xs text-stone-500">Agence</p>
               )}
+              <p className="mt-0.5 truncate text-[11px] font-medium uppercase tracking-wide text-stone-400">
+                {roleLabel}
+              </p>
             </div>
           ) : null}
         </div>
