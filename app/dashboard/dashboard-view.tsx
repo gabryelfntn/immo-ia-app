@@ -139,7 +139,7 @@ export async function DashboardView() {
     !isAgentOnly(userRole) &&
     payload.recentProperties.length === 0 &&
     payload.recentContacts.length === 0
-      ? "Aucun bien ni contact renvoyé pour ton agence : contrôle dans Supabase que properties.agency_id et contacts.agency_id correspondent exactement à ton profiles.agency_id. Si les données sont là mais toujours invisibles, exécute la migration SQL core_rls (lecture RLS) dans le SQL Editor."
+      ? "Aucun bien ni contact renvoyé : 1) Vérifie que la ligne profiles.id est exactement le même UUID que Authentication → Users pour ce compte (erreur fréquente si le profil a été dupliqué ou mal lié). 2) Vérifie que properties.agency_id et contacts.agency_id = profiles.agency_id. 3) Dans SQL Editor, exécute la migration 20260410160000_rls_auth_user_agency_id_fn.sql (fonction auth_user_agency_id + politiques) si la RLS filtre encore à tort."
       : null;
 
   return (

@@ -34,3 +34,15 @@ group by agency_id;
 --
 -- 5) Si agency_id des biens existe mais PAS dans agencies (agence supprimée) :
 -- il faut recréer l’agence ou restaurer une sauvegarde ; contacter le support sinon.
+--
+-- 6) Compte « isolé » : bon agency_id mais 0 donnée dans l’app
+--    → profiles.id DOIT être égal à auth.users.id (pas une autre ligne « copie »).
+--    Remplace l’email ci-dessous :
+--
+-- select au.id as auth_user_id, au.email, p.id as profile_id, p.agency_id, p.role
+-- from auth.users au
+-- left join public.profiles p on p.id = au.id
+-- where au.email = 'email.du.collegue@example.com';
+--
+-- Si profile_id est NULL : insérer le profil avec id = auth_user_id.
+-- Si profile_id ≠ auth_user_id : tu as une ligne profiles orpheline ; corrige l’id ou supprime le doublon.
