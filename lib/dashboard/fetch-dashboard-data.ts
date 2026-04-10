@@ -21,6 +21,18 @@ import {
   type SuggestionPropertyRow,
 } from "@/lib/dashboard/suggestions";
 
+export type DashboardFetchFailure = {
+  ok: false;
+  errors: {
+    properties?: string;
+    contacts?: string;
+  };
+};
+
+export type DashboardFetchSuccess = { ok: true; data: DashboardPayload };
+
+export type DashboardFetchResult = DashboardFetchSuccess | DashboardFetchFailure;
+
 export type DashboardPayload = {
   userFirstName: string | null;
   agencyName: string;
@@ -125,7 +137,7 @@ export async function fetchDashboardData(
   supabase: SupabaseClient,
   agencyId: string,
   userId: string
-): Promise<DashboardPayload | null> {
+): Promise<DashboardFetchResult> {
   const { data: profile } = await supabase
     .from("profiles")
     .select("full_name, role")
@@ -133,7 +145,9 @@ export async function fetchDashboardData(
     .maybeSingle();
 
   const role = normalizeRole(
-    typeof profile?.role === "string" ? profile.role : null
+    profile?.role != null && profile.role !== ""
+      ? String(profile.role)
+      : null
   );
 
   const { data: agency } = await supabase
@@ -179,7 +193,13 @@ export async function fetchDashboardData(
   ]);
 
   if (propErr || contErr) {
-    return null;
+    return {
+      ok: false,
+      errors: {
+        ...(propErr ? { properties: propErr.message } : {}),
+        ...(contErr ? { contacts: contErr.message } : {}),
+      },
+    };
   }
 
   const propsRaw = properties ?? [];
@@ -443,6 +463,8 @@ export async function fetchDashboardData(
   );
 
   return {
+    ok: true,
+    data: {
     userFirstName,
     agencyName,
     metrics: {
@@ -481,5 +503,6 @@ export async function fetchDashboardData(
     },
     topLeads,
     suggestions,
+    },
   };
 }

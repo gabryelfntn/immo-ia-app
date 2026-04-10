@@ -176,9 +176,11 @@ const metricsLayout = [
 type Props = {
   data: DashboardPayload;
   todayLabel: string;
+  /** Message si chargement OK mais périmètre vide (ex. agent sans assignations). */
+  dataLoadHint?: string | null;
 };
 
-export function DashboardClient({ data, todayLabel }: Props) {
+export function DashboardClient({ data, todayLabel, dataLoadHint }: Props) {
   const { metrics, chartBiensParMois, chartContactsStatut, chartFlux } = data;
 
   const donutTotal = chartContactsStatut.reduce((s, x) => s + x.value, 0);
@@ -189,6 +191,11 @@ export function DashboardClient({ data, todayLabel }: Props) {
 
   return (
     <div className="space-y-10">
+      {dataLoadHint ? (
+        <div className="rounded-2xl border border-amber-200/90 bg-amber-50/90 px-4 py-3 text-sm text-amber-950">
+          {dataLoadHint}
+        </div>
+      ) : null}
       <header className="flex flex-col gap-4 border-b border-slate-100 pb-8 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-sm font-medium text-slate-500">{todayLabel}</p>

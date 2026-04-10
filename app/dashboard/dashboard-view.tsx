@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { fetchDashboardData } from "@/lib/dashboard/fetch-dashboard-data";
+import { normalizeRole, isAgentOnly } from "@/lib/auth/agency-scope";
 import { redirect } from "next/navigation";
 import { DashboardClient } from "./dashboard-client";
 
@@ -15,9 +16,15 @@ export async function DashboardView() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("agency_id")
+    .select("agency_id, role")
     .eq("id", user.id)
     .maybeSingle();
+
+  const userRole = normalizeRole(
+    profile?.role != null && profile.role !== ""
+      ? String(profile.role)
+      : null
+  );
 
   if (!profile?.agency_id) {
     return (
@@ -47,19 +54,47 @@ export async function DashboardView() {
     );
   }
 
-  const payload = await fetchDashboardData(
+  const result = await fetchDashboardData(
     supabase,
     profile.agency_id,
     user.id
   );
 
-  if (!payload) {
+  if (!result.ok) {
+    const parts = [
+      result.errors.properties
+        ? `Biens : ${result.errors.properties}`
+        : null,
+      result.errors.contacts
+        ? `Contacts : ${result.errors.contacts}`
+        : null,
+    ].filter(Boolean);
     return (
-      <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-6 py-4 text-red-700">
-        Impossible de charger les statistiques. Vérifiez vos tables Supabase.
+      <div className="max-w-2xl space-y-4 rounded-2xl border border-red-500/20 bg-red-500/10 px-6 py-5 text-red-800">
+        <p className="font-semibold">
+          Impossible de charger les données du tableau de bord.
+        </p>
+        {parts.length > 0 ? (
+          <ul className="list-inside list-disc text-sm">
+            {parts.map((p) => (
+              <li key={p}>{p}</li>
+            ))}
+          </ul>
+        ) : null}
+        <p className="text-sm text-red-700/90">
+          Si tu vois « permission », « policy » ou « RLS », exécute la migration
+          SQL{" "}
+          <code className="rounded bg-red-100/80 px-1 text-xs text-red-900">
+            supabase/migrations/20260410140000_rls_core_tables_select.sql
+          </code>{" "}
+          dans le SQL Editor Supabase (politiques de lecture sur properties,
+          contacts, etc.).
+        </p>
       </div>
     );
   }
+
+  const payload = result.data;
 
   const raw = new Intl.DateTimeFormat("fr-FR", {
     weekday: "long",
@@ -69,5 +104,25 @@ export async function DashboardView() {
   }).format(new Date());
   const todayLabel = raw.charAt(0).toUpperCase() + raw.slice(1);
 
-  return <DashboardClient data={payload} todayLabel={todayLabel} />;
+  const agentEmptyHint =
+    isAgentOnly(userRole) &&
+    payload.recentProperties.length === 0 &&
+    payload.recentContacts.length === 0
+      ? "Compte agent : seuls les biens et contacts dont tu es le responsable (agent_id) apparaissent ici. Vérifie dans Supabase que tes lignes pointent bien vers ton id utilisateur, ou passe ton rôle en admin/manager pour voir toute l’agence."
+      : null;
+
+  const adminEmptyHint =
+    !isAgentOnly(userRole) &&
+    payload.recentProperties.length === 0 &&
+    payload.recentContacts.length === 0
+      ? "Aucun bien ni contact renvoyé pour ton agence : contrôle dans Supabase que properties.agency_id et contacts.agency_id correspondent exactement à ton profiles.agency_id. Si les données sont là mais toujours invisibles, exécute la migration SQL core_rls (lecture RLS) dans le SQL Editor."
+      : null;
+
+  return (
+    <DashboardClient
+      data={payload}
+      todayLabel={todayLabel}
+      dataLoadHint={agentEmptyHint ?? adminEmptyHint}
+    />
+  );
 }
