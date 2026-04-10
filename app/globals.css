@@ -188,3 +188,276 @@ body {
     transparent 58%
   );
 }
+
+/* --- Séquence d’accueil (page d’accueil, 1× par session) --- */
+@keyframes launch-aurora {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1) translate(0, 0);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.08) translate(2%, -1%);
+  }
+}
+
+@keyframes launch-mark-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.88) translateY(12px);
+    filter: blur(8px);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1.02) translateY(0);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes launch-brand-in {
+  0% {
+    opacity: 0;
+    letter-spacing: 0.35em;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    letter-spacing: -0.02em;
+    transform: translateY(0);
+  }
+}
+
+@keyframes launch-tagline-in {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes launch-rule-in {
+  0% {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+@keyframes launch-shine {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.app-launch-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f7f4ee;
+  background-image:
+    linear-gradient(rgba(28, 25, 23, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(28, 25, 23, 0.04) 1px, transparent 1px),
+    radial-gradient(ellipse 100% 60% at 50% -15%, rgba(120, 113, 108, 0.12), transparent 55%);
+  background-size: 44px 44px, 44px 44px, 100% 100%;
+  transition:
+    opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.85s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 0.6s ease;
+}
+
+.app-launch-layer--out {
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(1.03) translateY(-18px);
+  filter: blur(10px);
+}
+
+.app-launch-aurora {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(ellipse 42% 38% at 72% 28%, rgba(168, 162, 158, 0.35), transparent 55%),
+    radial-gradient(ellipse 50% 45% at 18% 72%, rgba(120, 113, 108, 0.22), transparent 50%),
+    radial-gradient(ellipse 35% 30% at 50% 50%, rgba(28, 25, 23, 0.06), transparent 60%);
+  animation: launch-aurora 5.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.app-launch-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.45;
+  background-image: linear-gradient(
+    rgba(28, 25, 23, 0.028) 1px,
+    transparent 1px
+  );
+  background-size: 100% 11px;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse 70% 65% at 50% 45%, black 20%, transparent 75%);
+}
+
+.app-launch-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.app-launch-mark {
+  display: flex;
+  height: 5rem;
+  width: 5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.5rem;
+  color: #fff;
+  background: linear-gradient(145deg, #44403c 0%, #1c1917 48%, #0c0a09 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+    0 4px 24px -4px rgba(0, 0, 0, 0.35),
+    0 20px 48px -16px rgba(28, 25, 23, 0.35);
+  animation: launch-mark-in 1.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.app-launch-mark--static {
+  animation: none;
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+.app-launch-brand {
+  margin-top: 1.75rem;
+  font-size: clamp(2.25rem, 6vw, 3.25rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  background: linear-gradient(
+    120deg,
+    #292524 0%,
+    #0c0a09 22%,
+    #44403c 45%,
+    #0c0a09 72%,
+    #292524 100%
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation:
+    launch-brand-in 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both,
+    launch-shine 4s ease-in-out 1s infinite;
+}
+
+.app-launch-brand--static {
+  animation: none;
+  background: #1c1917;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+  color: #1c1917;
+}
+
+.app-launch-tagline {
+  margin-top: 0.65rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #57534e;
+  animation: launch-tagline-in 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.55s both;
+}
+
+.app-launch-tagline--static {
+  animation: none;
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+.app-launch-rule {
+  margin-top: 1.75rem;
+  height: 2px;
+  width: 132px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(28, 25, 23, 0.45) 30%,
+    rgba(120, 113, 108, 0.55) 50%,
+    rgba(28, 25, 23, 0.45) 70%,
+    transparent
+  );
+  transform-origin: center;
+  animation: launch-rule-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.85s both;
+}
+
+.app-launch-rule--static {
+  animation: none;
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.app-launch-skip {
+  position: absolute;
+  bottom: 1.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #78716c;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  transition: color 0.2s ease;
+}
+
+.app-launch-skip:hover {
+  color: #1c1917;
+}
+
+.app-launch-content {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.12s,
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.12s;
+}
+
+.app-launch-content--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-launch-aurora {
+    animation: none;
+    opacity: 0.5;
+  }
+}
