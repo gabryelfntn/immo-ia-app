@@ -26,13 +26,19 @@ export async function completeRegistration(input: {
     };
   }
 
+  const email =
+    input.email.trim() || user.email?.trim() || "";
+  if (!email) {
+    return { ok: false, error: "Email introuvable sur le compte." };
+  }
+
   const { data: existing } = await supabase
     .from("profiles")
-    .select("id")
+    .select("id, agency_id")
     .eq("id", user.id)
     .maybeSingle();
 
-  if (existing) {
+  if (existing?.agency_id) {
     return { ok: true };
   }
 
@@ -40,7 +46,7 @@ export async function completeRegistration(input: {
     .from("agencies")
     .insert({
       name: input.agencyName.trim(),
-      email: input.email.trim(),
+      email,
     })
     .select("id")
     .single();
@@ -50,6 +56,24 @@ export async function completeRegistration(input: {
       ok: false,
       error: agencyError?.message ?? "Impossible de créer l'agence.",
     };
+  }
+
+  if (existing && !existing.agency_id) {
+    const { error: profileError } = await supabase
+      .from("profiles")
+      .update({
+        agency_id: agency.id,
+        full_name: input.fullName.trim(),
+        role: "admin",
+      })
+      .eq("id", user.id);
+
+    if (profileError) {
+      return { ok: false, error: profileError.message };
+    }
+
+    revalidatePath("/", "layout");
+    return { ok: true };
   }
 
   const { error: profileError } = await supabase.from("profiles").insert({

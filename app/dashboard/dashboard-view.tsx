@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { fetchDashboardData } from "@/lib/dashboard/fetch-dashboard-data";
 import { normalizeRole, isAgentOnly } from "@/lib/auth/agency-scope";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { DashboardClient } from "./dashboard-client";
 
@@ -27,28 +28,51 @@ export async function DashboardView() {
   );
 
   if (!profile?.agency_id) {
+    const noProfileRow = profile == null;
     return (
-      <div className="max-w-xl">
+      <div className="max-w-xl space-y-4">
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">
           Tableau de bord
         </h1>
-        <p className="mt-2 text-slate-600">
-          Aucune agence n’est liée à votre profil dans Supabase (
-          <code className="rounded bg-slate-100 px-1 text-sm">profiles.agency_id</code>
-          ). Les données existent souvent encore (biens, contacts) mais l’app ne peut pas
-          les afficher sans cette liaison.
-        </p>
-        <p className="mt-4 text-sm text-slate-500">
-          Ouvre le{" "}
-          <strong>SQL Editor</strong> Supabase, exécute le diagnostic dans{" "}
+        {noProfileRow ? (
+          <p className="text-slate-600">
+            Aucune ligne <code className="rounded bg-slate-100 px-1 text-sm">profiles</code>{" "}
+            n’a été trouvée pour ton compte (ou la{" "}
+            <strong className="font-semibold text-slate-800">RLS</strong> empêche la lecture).
+            Ça arrive souvent après une inscription avec confirmation e-mail : l’étape « créer
+            l’agence » n’a pas été exécutée, ou un trigger a créé un profil vide.
+          </p>
+        ) : (
+          <p className="text-slate-600">
+            Ton profil existe, mais{" "}
+            <code className="rounded bg-slate-100 px-1 text-sm">profiles.agency_id</code> est
+            vide. Sans agence liée, l’app ne peut pas charger biens et contacts.
+          </p>
+        )}
+        <div className="rounded-2xl border border-stone-200 bg-stone-50/80 px-4 py-4">
+          <p className="text-sm font-semibold text-slate-800">
+            Solution la plus simple depuis l’app
+          </p>
+          <p className="mt-1 text-sm text-slate-600">
+            Crée l’agence et rattache ton profil en un formulaire.
+          </p>
+          <Link
+            href="/dashboard/complete-agency"
+            className="mt-3 inline-flex rounded-xl bg-stone-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-800"
+          >
+            Finaliser mon agence
+          </Link>
+        </div>
+        <p className="text-sm text-slate-500">
+          <strong className="text-slate-700">Si tes données sont déjà dans Supabase</strong>{" "}
+          (biens, contacts) sous une agence existante, ne crée pas une deuxième agence : dans le{" "}
+          <strong>SQL Editor</strong>, mets à jour{" "}
+          <code className="rounded bg-slate-100 px-1 text-xs">profiles.agency_id</code> avec
+          l’UUID de cette agence (voir le fichier{" "}
           <code className="rounded bg-slate-100 px-1 text-xs">
             supabase/manual/repair_profiles_agency_id.sql
           </code>
-          , puis mets à jour <code className="rounded bg-slate-100 px-1 text-xs">agency_id</code>{" "}
-          sur ta ligne <code className="rounded bg-slate-100 px-1 text-xs">profiles</code> avec
-          l’UUID de ton agence (table <code className="rounded bg-slate-100 px-1 text-xs">agencies</code>
-          , ou le même <code className="rounded bg-slate-100 px-1 text-xs">agency_id</code> que sur un
-          bien).
+          ).
         </p>
       </div>
     );
