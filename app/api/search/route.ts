@@ -218,6 +218,13 @@ export async function GET(request: Request) {
       .order("created_at", { ascending: false })
       .limit(MAX_EACH),
     supabase
+      .from("properties")
+      .select(propSelect)
+      .eq("agency_id", agencyId)
+      .ilike("zip_code", pat)
+      .order("created_at", { ascending: false })
+      .limit(MAX_EACH),
+    supabase
       .from("contacts")
       .select("id, first_name, last_name, email, type")
       .eq("agency_id", agencyId)

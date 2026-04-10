@@ -7,6 +7,13 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(self.clients.claim());
 });
 
+/* File d’attente basique : les échecs réseau sur POST pourront être rejoués (placeholder). */
+self.addEventListener("sync", (event) => {
+  if (event.tag === "immo-sync") {
+    event.waitUntil(Promise.resolve());
+  }
+});
+
 self.addEventListener("push", (event) => {
   let payload = { title: "ImmoAI", body: "" };
   try {

@@ -16,7 +16,10 @@ import { UpdateStatusControl } from "./update-status";
 import { RecordRecentView } from "@/app/dashboard/_components/record-recent-view";
 import { CopyTextButton } from "@/app/dashboard/_components/copy-text-button";
 import { PropertyCrmExtrasPanel } from "./property-crm-extras-panel";
+import { PropertyCompliancePanel } from "./property-compliance-panel";
+import { PropertyTimelineSection } from "./property-timeline-section";
 import { parseMandateChecklist } from "@/lib/properties/mandate-checklist";
+import { buildPropertyTimeline } from "@/lib/activity/property-timeline";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -122,6 +125,9 @@ export default async function PropertyDetailPage({ params }: Props) {
   const rowExt = row as {
     listing_url?: string | null;
     mandate_checklist?: unknown;
+    energy_rating?: string | null;
+    diagnostics_valid_until?: string | null;
+    mandate_expires_at?: string | null;
   };
   const listingUrl =
     typeof rowExt.listing_url === "string" ? rowExt.listing_url : null;
@@ -142,6 +148,12 @@ export default async function PropertyDetailPage({ params }: Props) {
           recorded_at: h.recorded_at as string,
         }))
       : [];
+
+  const propertyTimeline = await buildPropertyTimeline(
+    supabase,
+    id,
+    profile.agency_id as string
+  );
 
   const addressLine = `${row.address as string}, ${row.zip_code as string} ${row.city as string}`;
 
@@ -235,6 +247,35 @@ export default async function PropertyDetailPage({ params }: Props) {
           priceHistory={priceHistory}
         />
       </div>
+
+      <div className="mt-8">
+        <PropertyCompliancePanel
+          propertyId={id}
+          initialEnergy={rowExt.energy_rating ?? null}
+          initialDiag={
+            rowExt.diagnostics_valid_until
+              ? String(rowExt.diagnostics_valid_until).slice(0, 10)
+              : ""
+          }
+          initialMandateEnd={
+            rowExt.mandate_expires_at
+              ? String(rowExt.mandate_expires_at).slice(0, 10)
+              : ""
+          }
+        />
+      </div>
+
+      <section className="mt-8 rounded-2xl border border-slate-200/90 bg-white p-6 card-luxury">
+        <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-stone-800">
+          Chronologie (bien)
+        </h2>
+        <p className="mt-1 text-sm text-slate-500">
+          Visites, tâches et historique de prix.
+        </p>
+        <div className="mt-4">
+          <PropertyTimelineSection items={propertyTimeline} />
+        </div>
+      </section>
 
       <section className="mt-6 rounded-2xl border border-slate-200/90 bg-white p-6 card-luxury">
         <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">

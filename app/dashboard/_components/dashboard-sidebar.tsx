@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  BarChart2,
   Building2,
   Bell,
   Calendar,
@@ -11,8 +12,10 @@ import {
   LayoutDashboard,
   ListTodo,
   LogOut,
+  Radar,
   Rocket,
   Sparkles,
+  User,
   UserRoundCog,
   Users,
   Wand2,
@@ -30,8 +33,11 @@ const baseNav = [
   { href: "/dashboard/relances", label: "Relances", icon: Bell },
   { href: "/dashboard/visites", label: "Visites", icon: Calendar },
   { href: "/dashboard/taches", label: "Tâches", icon: ListTodo },
+  { href: "/dashboard/veille", label: "Veille biens", icon: Radar },
   { href: "/dashboard/annonces", label: "Annonces IA", icon: Sparkles },
   { href: "/dashboard/outils-ia", label: "Outils IA", icon: Wand2 },
+  { href: "/dashboard/insights", label: "Indicateurs IA", icon: BarChart2 },
+  { href: "/dashboard/compte", label: "Compte", icon: User },
   { href: "/dashboard/onboarding", label: "Premiers pas", icon: Rocket },
 ] as const;
 

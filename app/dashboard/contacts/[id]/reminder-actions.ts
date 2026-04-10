@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { insertSelfNotification } from "@/lib/notifications/in-app-self";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -81,6 +82,15 @@ export async function createContactSendReminder(
   if (error) {
     return { ok: false, error: error.message };
   }
+
+  await insertSelfNotification(supabase, {
+    agencyId: ctx.agencyId,
+    userId: ctx.userId,
+    kind: "reminder",
+    title: "Rappel d’envoi planifié",
+    body: `Le ${when.toLocaleString("fr-FR")}${parsed.data.note?.trim() ? ` — ${parsed.data.note.trim()}` : ""}`,
+    link: `/dashboard/contacts/${parsed.data.contactId}`,
+  });
 
   revalidatePath(`/dashboard/contacts/${parsed.data.contactId}`);
   revalidatePath("/dashboard");

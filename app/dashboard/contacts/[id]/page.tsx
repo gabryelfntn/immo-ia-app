@@ -27,6 +27,14 @@ import {
   ContactDuplicateBanner,
   type DuplicateRow,
 } from "./contact-duplicate-banner";
+import { buildContactTimeline } from "@/lib/activity/contact-timeline";
+import { normalizeRole } from "@/lib/auth/agency-scope";
+import { canDeleteContact } from "@/lib/auth/permissions";
+import { ContactTimelineSection } from "./contact-timeline-section";
+import { ContactCopilotPanel } from "./contact-copilot-panel";
+import { ContactMessageDrafts } from "./contact-message-drafts";
+import { ContactDocumentAi } from "./contact-document-ai";
+import { ContactGdprPanel } from "./contact-gdpr-panel";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -86,7 +94,7 @@ export default async function ContactDetailPage({ params }: Props) {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("agency_id")
+    .select("agency_id, role")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -232,6 +240,16 @@ export default async function ContactDetailPage({ params }: Props) {
       note: (r.note as string | null) ?? null,
     })) ?? [];
 
+  const timelineItems = await buildContactTimeline(
+    supabase,
+    id,
+    agencyId
+  );
+
+  const userRole = normalizeRole(profile?.role as string | null);
+  const contactAgentId = row.agent_id as string;
+  const allowDelete = canDeleteContact(userRole, user.id, contactAgentId);
+
   const desiredCity =
     typeof row.desired_city === "string" ? row.desired_city.trim() : "";
 
@@ -367,6 +385,53 @@ export default async function ContactDetailPage({ params }: Props) {
         />
       </section>
 
+      <section className="mt-8 rounded-2xl border border-slate-200/90 bg-white p-6 card-luxury">
+        <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-stone-800">
+          Chronologie
+        </h2>
+        <p className="mt-1 text-sm text-slate-500">
+          Visites, relances email, tâches et rappels liés à ce contact.
+        </p>
+        <div className="mt-4">
+          <ContactTimelineSection items={timelineItems} />
+        </div>
+      </section>
+
+      <section className="mt-8 rounded-2xl border border-slate-200/90 bg-white p-6 card-luxury">
+        <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-stone-800">
+          Assistant IA (fiche contact)
+        </h2>
+        <div className="mt-4 space-y-8">
+          <div>
+            <h3 className="text-sm font-semibold text-slate-900">
+              Copilote
+            </h3>
+            <p className="text-xs text-slate-500">
+              Synthèse et pistes d’actions (Claude).
+            </p>
+            <div className="mt-2">
+              <ContactCopilotPanel contactId={id} />
+            </div>
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-slate-900">
+              Brouillons message
+            </h3>
+            <div className="mt-2">
+              <ContactMessageDrafts contactId={id} />
+            </div>
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-slate-900">
+              Texte document → champs CRM
+            </h3>
+            <div className="mt-2">
+              <ContactDocumentAi contactId={id} />
+            </div>
+          </div>
+        </div>
+      </section>
+
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <FollowupOptOutToggle contactId={id} initialOptOut={followupOptOut} />
         <ProspectingConsentToggle
@@ -409,6 +474,10 @@ export default async function ContactDetailPage({ params }: Props) {
 
       <section className="mt-6 rounded-2xl border border-slate-200/90 bg-white p-6 card-luxury">
         <ContactNotesForm contactId={id} initialNotes={notesText} />
+      </section>
+
+      <section className="mt-8">
+        <ContactGdprPanel contactId={id} canDelete={allowDelete} />
       </section>
     </div>
   );

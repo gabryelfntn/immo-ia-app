@@ -304,3 +304,71 @@ export async function updatePropertyPrice(
   revalidatePath(`/dashboard/biens/${propertyId}`);
   return { ok: true };
 }
+
+const complianceSchema = z.object({
+  energy_rating: z.string().max(8).nullable().optional(),
+  diagnostics_valid_until: z.string().max(40).nullable().optional(),
+  mandate_expires_at: z.string().max(40).nullable().optional(),
+});
+
+export type UpdatePropertyComplianceResult =
+  | { ok: true }
+  | { ok: false; error: string };
+
+export async function updatePropertyCompliance(
+  propertyId: string,
+  input: unknown
+): Promise<UpdatePropertyComplianceResult> {
+  const parsed = complianceSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, error: "Données invalides." };
+  }
+
+  const { supabase, ctx } = await requireAgencyContext();
+  if (!ctx) {
+    return { ok: false, error: "Session ou agence introuvable." };
+  }
+
+  const { data: prop, error: propError } = await supabase
+    .from("properties")
+    .select("id")
+    .eq("id", propertyId)
+    .eq("agency_id", ctx.agencyId)
+    .maybeSingle();
+
+  if (propError || !prop) {
+    return { ok: false, error: "Bien introuvable ou accès refusé." };
+  }
+
+  const patch: Record<string, unknown> = {};
+  if (parsed.data.energy_rating !== undefined) {
+    const e = parsed.data.energy_rating?.trim();
+    patch.energy_rating = e && e.length > 0 ? e : null;
+  }
+  if (parsed.data.diagnostics_valid_until !== undefined) {
+    const d = parsed.data.diagnostics_valid_until?.trim();
+    patch.diagnostics_valid_until = d && d.length > 0 ? d : null;
+  }
+  if (parsed.data.mandate_expires_at !== undefined) {
+    const m = parsed.data.mandate_expires_at?.trim();
+    patch.mandate_expires_at = m && m.length > 0 ? m : null;
+  }
+
+  if (Object.keys(patch).length === 0) {
+    return { ok: true };
+  }
+
+  const { error } = await supabase
+    .from("properties")
+    .update(patch)
+    .eq("id", propertyId)
+    .eq("agency_id", ctx.agencyId);
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+
+  revalidatePath("/dashboard/biens");
+  revalidatePath(`/dashboard/biens/${propertyId}`);
+  return { ok: true };
+}

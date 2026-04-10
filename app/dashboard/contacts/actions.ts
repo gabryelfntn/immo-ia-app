@@ -1,6 +1,8 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { normalizeRole } from "@/lib/auth/agency-scope";
+import { canDeleteContact } from "@/lib/auth/permissions";
 import {
   contactCreateSchema,
   contactStatusEnum,
@@ -41,6 +43,8 @@ export type MarkContactCoordinatesVerifiedResult =
   | { ok: true }
   | { ok: false; error: string };
 
+export type DeleteContactResult = { ok: true } | { ok: false; error: string };
+
 async function requireAgencyContext() {
   const supabase = await createClient();
   const {
@@ -49,12 +53,19 @@ async function requireAgencyContext() {
   } = await supabase.auth.getUser();
 
   if (userError || !user) {
-    return { supabase, ctx: null as null | { userId: string; agencyId: string } };
+    return {
+      supabase,
+      ctx: null as null | {
+        userId: string;
+        agencyId: string;
+        role: import("@/lib/auth/agency-scope").AgencyRole;
+      },
+    };
   }
 
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("agency_id")
+    .select("agency_id, role")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -64,7 +75,11 @@ async function requireAgencyContext() {
 
   return {
     supabase,
-    ctx: { userId: user.id, agencyId: profile.agency_id },
+    ctx: {
+      userId: user.id,
+      agencyId: profile.agency_id,
+      role: normalizeRole(profile.role as string | null),
+    },
   };
 }
 
@@ -381,5 +396,40 @@ export async function markContactCoordinatesVerified(
   }
 
   revalidatePath(`/dashboard/contacts/${contactId}`);
+  return { ok: true };
+}
+
+export async function deleteContact(contactId: string): Promise<DeleteContactResult> {
+  const { supabase, ctx } = await requireAgencyContext();
+  if (!ctx) {
+    return { ok: false, error: "Session ou agence introuvable." };
+  }
+
+  const { data: row } = await supabase
+    .from("contacts")
+    .select("id, agent_id")
+    .eq("id", contactId)
+    .eq("agency_id", ctx.agencyId)
+    .maybeSingle();
+
+  if (!row) {
+    return { ok: false, error: "Contact introuvable." };
+  }
+
+  if (!canDeleteContact(ctx.role, ctx.userId, row.agent_id as string)) {
+    return {
+      ok: false,
+      error: "Droits insuffisants pour supprimer ce contact.",
+    };
+  }
+
+  const { error } = await supabase.from("contacts").delete().eq("id", contactId);
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+
+  revalidatePath("/dashboard/contacts");
+  revalidatePath("/dashboard");
   return { ok: true };
 }

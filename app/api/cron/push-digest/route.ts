@@ -52,12 +52,34 @@ export async function POST(request: Request) {
     return Response.json({ error: error.message }, { status: 500 });
   }
 
+  const userIds = [...new Set((subs ?? []).map((s) => s.user_id as string))];
+  const muteWeekend = new Map<string, boolean>();
+  if (userIds.length > 0) {
+    const { data: prefRows } = await admin
+      .from("notification_preferences")
+      .select("user_id, push_mute_weekends")
+      .in("user_id", userIds);
+    for (const p of prefRows ?? []) {
+      muteWeekend.set(
+        p.user_id as string,
+        Boolean((p as { push_mute_weekends?: boolean }).push_mute_weekends)
+      );
+    }
+  }
+
+  const utcDow = new Date().getUTCDay();
+  const isWeekendUtc = utcDow === 0 || utcDow === 6;
+
   const horizon = new Date(Date.now() + 36 * 3600 * 1000).toISOString();
   let sent = 0;
 
   for (const row of subs ?? []) {
     const uid = row.user_id as string;
     const sub = row.subscription as webpush.PushSubscription;
+
+    if (isWeekendUtc && muteWeekend.get(uid)) {
+      continue;
+    }
 
     const { count: taskCount } = await admin
       .from("agency_tasks")

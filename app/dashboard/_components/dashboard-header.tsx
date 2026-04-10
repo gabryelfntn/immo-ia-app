@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Bell,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
@@ -11,6 +10,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { DashboardGlobalSearch } from "./dashboard-global-search";
+import { NotificationBell } from "./notification-bell";
 
 const LABELS: Record<string, string> = {
   dashboard: "Tableau de bord",
@@ -20,6 +20,9 @@ const LABELS: Record<string, string> = {
   relances: "Relances",
   visites: "Visites",
   taches: "Tâches",
+  veille: "Veille biens",
+  insights: "Indicateurs IA",
+  compte: "Compte",
   historique: "Historique",
   new: "Nouveau",
   annonce: "Annonce IA",
@@ -147,13 +150,7 @@ export function DashboardHeader({
         <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:justify-end lg:max-w-xl">
           <DashboardGlobalSearch />
           <div className="flex shrink-0 items-center justify-end gap-2">
-            <button
-              type="button"
-              aria-label="Notifications"
-              className="rounded-xl border border-stone-200 bg-white p-2.5 text-stone-500 shadow-sm transition-all duration-300 hover:border-stone-400 hover:bg-stone-50 hover:text-stone-900"
-            >
-              <Bell className="h-5 w-5" strokeWidth={1.65} />
-            </button>
+            <NotificationBell />
             <div className="flex items-center gap-2.5 rounded-xl border border-stone-200 bg-white py-1 pl-1 pr-3 shadow-sm">
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-neutral-800 to-stone-900 text-xs font-bold text-white shadow-md shadow-stone-900/20">
                 {initials(userName)}
