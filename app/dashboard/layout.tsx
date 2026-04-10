@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { createClient } from "@/lib/supabase/server";
+import { normalizeRole, canViewTeamPerformance } from "@/lib/auth/agency-scope";
 import { DashboardShell } from "./_components/dashboard-shell";
 
 export default async function DashboardLayout({
@@ -14,11 +15,12 @@ export default async function DashboardLayout({
 
   let userName = user?.email ?? "Utilisateur";
   let agencyName: string | null = null;
+  let showTeamNav = false;
 
   if (user) {
     const { data: profile } = await supabase
       .from("profiles")
-      .select("full_name, agency_id")
+      .select("full_name, agency_id, role")
       .eq("id", user.id)
       .maybeSingle();
 
@@ -34,10 +36,20 @@ export default async function DashboardLayout({
         .maybeSingle();
       agencyName = agency?.name ?? null;
     }
+
+    showTeamNav = canViewTeamPerformance(
+      normalizeRole(
+        typeof profile?.role === "string" ? profile.role : null
+      )
+    );
   }
 
   return (
-    <DashboardShell userName={userName} agencyName={agencyName}>
+    <DashboardShell
+      userName={userName}
+      agencyName={agencyName}
+      showTeamNav={showTeamNav}
+    >
       {children}
     </DashboardShell>
   );

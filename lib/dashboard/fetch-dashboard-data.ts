@@ -13,6 +13,13 @@ import {
   lastNMonthBuckets,
   previousMonthRangeISO,
 } from "./time";
+import { normalizeRole, isAgentOnly } from "@/lib/auth/agency-scope";
+import {
+  buildDashboardSuggestions,
+  type DashboardSuggestion,
+  type SuggestionContactRow,
+  type SuggestionPropertyRow,
+} from "@/lib/dashboard/suggestions";
 
 export type DashboardPayload = {
   userFirstName: string | null;
@@ -73,6 +80,8 @@ export type DashboardPayload = {
     pipeline_stage: PipelineStage;
     status: ContactStatus;
   }[];
+  /** Actions recommandées (règles métier locales). */
+  suggestions: DashboardSuggestion[];
 };
 
 const STATUS_COLORS: Record<string, string> = {
@@ -119,9 +128,13 @@ export async function fetchDashboardData(
 ): Promise<DashboardPayload | null> {
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name")
+    .select("full_name, role")
     .eq("id", userId)
     .maybeSingle();
+
+  const role = normalizeRole(
+    typeof profile?.role === "string" ? profile.role : null
+  );
 
   const { data: agency } = await supabase
     .from("agencies")
@@ -144,21 +157,23 @@ export async function fetchDashboardData(
   ] = await Promise.all([
     supabase
       .from("properties")
-      .select("id, title, city, status, created_at, updated_at")
+      .select(
+        "id, title, city, status, created_at, updated_at, agent_id"
+      )
       .eq("agency_id", agencyId),
     supabase
       .from("contacts")
       .select(
-        "id, first_name, last_name, status, pipeline_stage, budget_min, budget_max, desired_city, created_at, last_contacted_at, followup_opt_out"
+        "id, first_name, last_name, type, status, pipeline_stage, budget_min, budget_max, desired_city, created_at, last_contacted_at, followup_opt_out, agent_id"
       )
       .eq("agency_id", agencyId),
     supabase
       .from("generated_listings")
-      .select("created_at")
+      .select("property_id, created_at")
       .eq("agency_id", agencyId),
     supabase
       .from("agency_tasks")
-      .select("id, due_at, completed_at")
+      .select("id, due_at, completed_at, agent_id")
       .eq("agency_id", agencyId)
       .limit(2000),
   ]);
@@ -167,11 +182,29 @@ export async function fetchDashboardData(
     return null;
   }
 
-  const props = properties ?? [];
-  const conts = contacts ?? [];
-  const gens = listErr ? [] : (listings ?? []);
-  const tasksRows =
+  const propsRaw = properties ?? [];
+  const contsRaw = contacts ?? [];
+  const props = isAgentOnly(role)
+    ? propsRaw.filter((p) => (p as { agent_id?: string }).agent_id === userId)
+    : propsRaw;
+  const conts = isAgentOnly(role)
+    ? contsRaw.filter((c) => (c as { agent_id?: string }).agent_id === userId)
+    : contsRaw;
+
+  const agentPropIds = new Set(props.map((p) => p.id as string));
+  const gensRaw = listErr ? [] : (listings ?? []);
+  const gens = isAgentOnly(role)
+    ? gensRaw.filter((g) => {
+        const pid = (g as { property_id?: string }).property_id;
+        return typeof pid === "string" && agentPropIds.has(pid);
+      })
+    : gensRaw;
+
+  const tasksAll =
     tasksRes.error || !tasksRes.data ? [] : tasksRes.data;
+  const tasksRows = isAgentOnly(role)
+    ? tasksAll.filter((t) => (t as { agent_id?: string }).agent_id === userId)
+    : tasksAll;
 
   const now = new Date();
   const cy = now.getFullYear();
@@ -336,12 +369,18 @@ export async function fetchDashboardData(
   let followupsFailedThisMonth = 0;
   const fuRes = await supabase
     .from("followup_emails")
-    .select("created_at, status")
+    .select("created_at, status, agent_id")
     .eq("agency_id", agencyId)
     .limit(4000);
 
   if (!fuRes.error && fuRes.data) {
     for (const row of fuRes.data) {
+      if (
+        isAgentOnly(role) &&
+        (row as { agent_id?: string }).agent_id !== userId
+      ) {
+        continue;
+      }
       const iso = row.created_at as string;
       if (!isInRange(iso, cur.start, cur.end)) continue;
       if (row.status === "sent") followupsSentThisMonth += 1;
@@ -398,6 +437,11 @@ export async function fetchDashboardData(
   scored.sort((a, b) => b.score - a.score);
   const topLeads = scored.slice(0, 5);
 
+  const suggestions = buildDashboardSuggestions(
+    conts as unknown as SuggestionContactRow[],
+    props as unknown as SuggestionPropertyRow[]
+  );
+
   return {
     userFirstName,
     agencyName,
@@ -436,5 +480,6 @@ export async function fetchDashboardData(
       dueToday,
     },
     topLeads,
+    suggestions,
   };
 }

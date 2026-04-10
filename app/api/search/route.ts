@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { normalizeRole, isAgentOnly } from "@/lib/auth/agency-scope";
 
 /** Escape % and _ so user input is literal in ILIKE. */
 function ilikePattern(raw: string): string {
@@ -40,6 +41,7 @@ type VisitRow = {
   property_title: string | null;
   property_city: string | null;
   contact_name: string | null;
+  contact_id: string;
 };
 
 type TaskRow = {
@@ -47,6 +49,7 @@ type TaskRow = {
   title: string;
   due_at: string;
   contact_id: string | null;
+  agent_id: string;
 };
 
 type FollowupRow = {
@@ -104,6 +107,7 @@ function mapVisit(r: Record<string, unknown>): VisitRow {
     contact_name: c
       ? `${c.first_name ?? ""} ${c.last_name ?? ""}`.trim() || null
       : null,
+    contact_id: r.contact_id as string,
   };
 }
 
@@ -124,6 +128,7 @@ const visitSelect = `
   id,
   visit_date,
   summary,
+  contact_id,
   properties ( title, city ),
   contacts ( first_name, last_name )
 `;
@@ -165,7 +170,7 @@ export async function GET(request: Request) {
 
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("agency_id")
+    .select("agency_id, role")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -174,8 +179,14 @@ export async function GET(request: Request) {
   }
 
   const agencyId = profile.agency_id;
+  const agentId = isAgentOnly(
+    normalizeRole(typeof profile.role === "string" ? profile.role : null)
+  )
+    ? user.id
+    : null;
+
   const propSelect = "id, title, city, status";
-  const taskSelect = "id, title, due_at, contact_id";
+  const taskSelect = "id, title, due_at, contact_id, agent_id";
 
   const settled = await Promise.allSettled([
     supabase
@@ -396,12 +407,63 @@ export async function GET(request: Request) {
   ];
   const followups = mergeUnique<FollowupRow>(followupGroups, MAX_EACH);
 
+  let outProps = properties;
+  let outConts = contacts;
+  let outListings = listings;
+  let outVisits = visits;
+  let outTasks = tasks;
+  let outFollowups = followups;
+
+  if (agentId) {
+    const [{ data: ap }, { data: ac }] = await Promise.all([
+      supabase
+        .from("properties")
+        .select("id")
+        .eq("agency_id", agencyId)
+        .eq("agent_id", agentId),
+      supabase
+        .from("contacts")
+        .select("id")
+        .eq("agency_id", agencyId)
+        .eq("agent_id", agentId),
+    ]);
+    const pSet = new Set((ap ?? []).map((p) => p.id as string));
+    const cSet = new Set((ac ?? []).map((c) => c.id as string));
+    outProps = properties.filter((p) => pSet.has(p.id));
+    outConts = contacts.filter((c) => cSet.has(c.id));
+    outListings = listings.filter((l) => pSet.has(l.property_id));
+    outVisits = visits.filter((v) => cSet.has(v.contact_id));
+    outTasks = tasks.filter((t) => t.agent_id === agentId);
+    outFollowups = followups.filter((f) => cSet.has(f.contact_id));
+  }
+
   return Response.json({
-    properties,
-    contacts,
-    listings,
-    visits,
-    tasks,
-    followups,
+    properties: outProps,
+    contacts: outConts,
+    listings: outListings,
+    visits: outVisits.map(
+      ({
+        id,
+        visit_date,
+        summary_line,
+        property_title,
+        property_city,
+        contact_name,
+      }) => ({
+        id,
+        visit_date,
+        summary_line,
+        property_title,
+        property_city,
+        contact_name,
+      })
+    ),
+    tasks: outTasks.map(({ id, title, due_at, contact_id }) => ({
+      id,
+      title,
+      due_at,
+      contact_id,
+    })),
+    followups: outFollowups,
   });
 }

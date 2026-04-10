@@ -26,8 +26,9 @@ import type {
   ContactType,
   PipelineStage,
 } from "@/lib/contacts/schema";
+import { normalizeRole, isAgentOnly } from "@/lib/auth/agency-scope";
 
-type Search = { status?: string; type?: string; pipeline?: string };
+type Search = { status?: string; type?: string; pipeline?: string; tag?: string };
 
 function parseStatusFilter(raw: string | undefined): ContactStatus | undefined {
   if (!raw) return undefined;
@@ -107,6 +108,7 @@ export default async function ContactsPage({ searchParams }: Props) {
   const statusFilter = parseStatusFilter(sp.status);
   const typeFilter = parseTypeFilter(sp.type);
   const pipelineFilter = parsePipelineFilter(sp.pipeline);
+  const tagSlug = sp.tag?.trim() || "";
 
   const supabase = await createClient();
   const {
@@ -119,7 +121,7 @@ export default async function ContactsPage({ searchParams }: Props) {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("agency_id")
+    .select("agency_id, role")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -132,6 +134,30 @@ export default async function ContactsPage({ searchParams }: Props) {
         </p>
       </div>
     );
+  }
+
+  const { data: tagRows, error: tagListErr } = await supabase
+    .from("contact_tags")
+    .select("id, slug, label")
+    .eq("agency_id", profile.agency_id)
+    .order("label", { ascending: true });
+
+  const tagsForFilter = tagListErr ? [] : (tagRows ?? []);
+
+  let tagContactIds: string[] | null = null;
+  if (tagSlug) {
+    const tagId = tagsForFilter.find((t) => t.slug === tagSlug)?.id as
+      | string
+      | undefined;
+    if (!tagId) {
+      tagContactIds = [];
+    } else {
+      const { data: links } = await supabase
+        .from("contact_tag_links")
+        .select("contact_id")
+        .eq("tag_id", tagId);
+      tagContactIds = (links ?? []).map((l) => l.contact_id as string);
+    }
   }
 
   let query = supabase
@@ -150,7 +176,20 @@ export default async function ContactsPage({ searchParams }: Props) {
     query = query.eq("pipeline_stage", pipelineFilter);
   }
 
-  const { data: contacts, error } = await query;
+  const userRole = normalizeRole(profile.role as string | null);
+  if (isAgentOnly(userRole)) {
+    query = query.eq("agent_id", user.id);
+  }
+
+  if (tagContactIds !== null && tagContactIds.length > 0) {
+    query = query.in("id", tagContactIds);
+  }
+
+  const skipQuery = tagSlug && tagContactIds !== null && tagContactIds.length === 0;
+
+  const { data: contacts, error } = skipQuery
+    ? { data: [], error: null as null }
+    : await query;
 
   if (error) {
     return (
@@ -240,6 +279,23 @@ export default async function ContactsPage({ searchParams }: Props) {
               </option>
             ))}
           </select>
+          <select
+            id="filter-tag"
+            name="tag"
+            defaultValue={tagSlug}
+            className="max-w-[200px] rounded-full border border-slate-200/90 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 outline-none transition-all duration-300 focus:border-stone-400 focus:ring-2 focus:ring-stone-500/20"
+          >
+            <option value="">Tous les tags</option>
+            {tagsForFilter.map((t) => (
+              <option
+                key={t.id as string}
+                value={t.slug as string}
+                className="bg-white"
+              >
+                {t.label as string}
+              </option>
+            ))}
+          </select>
           <button
             type="submit"
             className="rounded-full bg-amber-500/15 px-5 py-2 text-sm font-semibold text-amber-800 transition-all duration-300 hover:bg-amber-500/25"
@@ -247,7 +303,7 @@ export default async function ContactsPage({ searchParams }: Props) {
             Appliquer
           </button>
         </div>
-        {(statusFilter || typeFilter || pipelineFilter) && (
+        {(statusFilter || typeFilter || pipelineFilter || tagSlug) && (
           <Link
             href="/dashboard/contacts"
             className="text-sm font-medium text-slate-500 transition-all duration-300 hover:text-amber-400"
@@ -263,7 +319,7 @@ export default async function ContactsPage({ searchParams }: Props) {
             Aucun contact pour l&apos;instant
           </p>
           <p className="mt-2 max-w-md text-sm text-slate-500">
-            {statusFilter || typeFilter || pipelineFilter
+            {statusFilter || typeFilter || pipelineFilter || tagSlug
               ? "Aucun contact ne correspond aux filtres."
               : "Ajoutez votre premier contact pour suivre prospects et mandants."}
           </p>

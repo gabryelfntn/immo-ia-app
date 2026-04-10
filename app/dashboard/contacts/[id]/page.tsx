@@ -16,6 +16,8 @@ import { ContactTasksPanel } from "./contact-tasks";
 import { ProspectingConsentToggle } from "./prospecting-consent-toggle";
 import { UpdateContactStatusControl } from "./update-contact-status";
 import { UpdatePipelineStageControl } from "./update-pipeline-stage";
+import { ContactPortalPanel } from "./contact-portal-panel";
+import { ContactTagsPanel } from "./contact-tags-panel";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -143,6 +145,21 @@ export default async function ContactDetailPage({ params }: Props) {
 
   const contactTasks = taskRes.error || !taskRes.data ? [] : taskRes.data;
 
+  const [tagListRes, linkRes] = await Promise.all([
+    supabase
+      .from("contact_tags")
+      .select("id, slug, label, color")
+      .eq("agency_id", profile.agency_id)
+      .order("label", { ascending: true }),
+    supabase
+      .from("contact_tag_links")
+      .select("tag_id")
+      .eq("contact_id", id),
+  ]);
+
+  const agencyTags = tagListRes.error || !tagListRes.data ? [] : tagListRes.data;
+  const initialTagIds = (linkRes.data ?? []).map((l) => l.tag_id as string);
+
   return (
     <div className="mx-auto max-w-3xl">
       <Link
@@ -243,6 +260,18 @@ export default async function ContactDetailPage({ params }: Props) {
 
       <section className="mt-8">
         <ContactTasksPanel contactId={id} tasks={contactTasks} />
+      </section>
+
+      <section className="mt-8">
+        <ContactPortalPanel contactId={id} />
+      </section>
+
+      <section className="mt-8">
+        <ContactTagsPanel
+          contactId={id}
+          agencyTags={agencyTags}
+          initialTagIds={initialTagIds}
+        />
       </section>
 
       <section className="mt-8 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 card-luxury">

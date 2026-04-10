@@ -21,6 +21,7 @@ import {
   Flame,
   GitBranch,
   Home,
+  Lightbulb,
   ListTodo,
   Percent,
   Sparkles,
@@ -205,6 +206,36 @@ export function DashboardClient({ data, todayLabel }: Props) {
           </p>
         </div>
       </header>
+
+      <section className="card-luxury p-6">
+        <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">
+          <Lightbulb className="h-5 w-5 text-amber-600" />
+          Actions recommandées aujourd&apos;hui
+        </h2>
+        <p className="mt-1 text-sm text-slate-600">
+          Suggestions basées sur la récence des contacts, le pipeline et le
+          score interne.
+        </p>
+        {data.suggestions.length === 0 ? (
+          <p className="mt-4 text-sm text-slate-500">
+            Rien de prioritaire détecté pour l&apos;instant.
+          </p>
+        ) : (
+          <ul className="mt-4 space-y-3">
+            {data.suggestions.map((s) => (
+              <li key={s.id}>
+                <Link
+                  href={s.href}
+                  className="block rounded-xl border border-stone-200/90 bg-[#faf9f6] px-4 py-3 transition-colors hover:border-stone-400 hover:bg-stone-100"
+                >
+                  <p className="font-semibold text-stone-900">{s.title}</p>
+                  <p className="mt-1 text-sm text-stone-600">{s.description}</p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       <section className="grid gap-6 lg:grid-cols-3">
         <div className="card-luxury p-6 lg:col-span-2">

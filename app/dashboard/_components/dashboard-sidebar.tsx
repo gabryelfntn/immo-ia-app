@@ -4,6 +4,7 @@ import {
   Building2,
   Bell,
   Calendar,
+  CalendarClock,
   ChevronsLeft,
   ChevronsRight,
   Home,
@@ -11,6 +12,7 @@ import {
   ListTodo,
   LogOut,
   Sparkles,
+  UserRoundCog,
   Users,
   X,
 } from "lucide-react";
@@ -18,8 +20,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "../actions";
 
-const nav = [
+const baseNav = [
   { href: "/dashboard", label: "Tableau de bord", icon: LayoutDashboard },
+  { href: "/dashboard/journee", label: "Ma journée", icon: CalendarClock },
   { href: "/dashboard/biens", label: "Biens", icon: Building2 },
   { href: "/dashboard/contacts", label: "Contacts", icon: Users },
   { href: "/dashboard/relances", label: "Relances", icon: Bell },
@@ -28,9 +31,16 @@ const nav = [
   { href: "/dashboard/annonces", label: "Annonces IA", icon: Sparkles },
 ] as const;
 
+const teamNavItem = {
+  href: "/dashboard/equipe",
+  label: "Équipe",
+  icon: UserRoundCog,
+} as const;
+
 type Props = {
   userName: string;
   agencyName: string | null;
+  showTeamNav?: boolean;
   narrowDesktop: boolean;
   mobileDrawerOpen: boolean;
   isDesktopLayout: boolean;
@@ -48,6 +58,7 @@ function initials(name: string): string {
 export function DashboardSidebar({
   userName,
   agencyName,
+  showTeamNav = false,
   narrowDesktop,
   mobileDrawerOpen,
   isDesktopLayout,
@@ -55,6 +66,9 @@ export function DashboardSidebar({
 }: Props) {
   const pathname = usePathname();
   const collapsed = narrowDesktop && isDesktopLayout;
+  const nav = showTeamNav
+    ? [...baseNav.slice(0, 2), teamNavItem, ...baseNav.slice(2)]
+    : [...baseNav];
 
   return (
     <aside

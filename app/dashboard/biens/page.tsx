@@ -16,6 +16,7 @@ import {
   statusBadgeClass,
 } from "@/lib/properties/labels";
 import type { PropertyStatus, PropertyType } from "@/lib/properties/schema";
+import { normalizeRole, isAgentOnly } from "@/lib/auth/agency-scope";
 
 type Search = { status?: string; type?: string };
 
@@ -63,7 +64,7 @@ export default async function BiensPage({ searchParams }: Props) {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("agency_id")
+    .select("agency_id, role")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -89,6 +90,11 @@ export default async function BiensPage({ searchParams }: Props) {
   }
   if (typeFilter) {
     query = query.eq("type", typeFilter);
+  }
+
+  const userRole = normalizeRole(profile.role as string | null);
+  if (isAgentOnly(userRole)) {
+    query = query.eq("agent_id", user.id);
   }
 
   const { data: properties, error } = await query;

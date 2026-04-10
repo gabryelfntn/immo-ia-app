@@ -11,10 +11,16 @@ const STORAGE_KEY = "immo-sidebar-collapsed";
 type Props = {
   userName: string;
   agencyName: string | null;
+  showTeamNav?: boolean;
   children: ReactNode;
 };
 
-export function DashboardShell({ userName, agencyName, children }: Props) {
+export function DashboardShell({
+  userName,
+  agencyName,
+  showTeamNav = false,
+  children,
+}: Props) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [ready, setReady] = useState(false);
@@ -83,6 +89,7 @@ export function DashboardShell({ userName, agencyName, children }: Props) {
       <DashboardSidebar
         userName={userName}
         agencyName={agencyName}
+        showTeamNav={showTeamNav}
         narrowDesktop={narrowDesktop}
         mobileDrawerOpen={mobileNavOpen}
         isDesktopLayout={isLg}

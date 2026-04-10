@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
-const publicPrefixes = ["/login", "/register"];
+const publicPrefixes = ["/login", "/register", "/client"];
 
 function isPublicPath(pathname: string) {
   return publicPrefixes.some(
@@ -50,7 +50,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (user && isPublicPath(pathname)) {
+  if (user && isPublicPath(pathname) && !pathname.startsWith("/client")) {
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard";
     return NextResponse.redirect(url);
