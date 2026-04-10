@@ -82,12 +82,13 @@ export function AppLaunchSequence({ children }: { children: ReactNode }) {
     !skipSplashRoute &&
     boot === "splash" &&
     (phase === "playing" || phase === "handoff");
+  /** Jamais `boot === "ssr"` ici : sinon flash du site avant useLayoutEffect. */
   const revealContent =
     skipSplashRoute ||
     boot === "nosplash" ||
-    boot === "ssr" ||
     phase === "handoff" ||
     phase === "done";
+  const showCurtain = !skipSplashRoute && boot === "ssr";
 
   if (skipSplashRoute) {
     return <>{children}</>;
@@ -95,6 +96,7 @@ export function AppLaunchSequence({ children }: { children: ReactNode }) {
 
   return (
     <>
+      {showCurtain ? <div className="app-launch-curtain" aria-hidden /> : null}
       {showOverlay ? (
         <div
           className={`app-launch-layer ${phase === "handoff" ? "app-launch-layer--out" : ""}`}
@@ -135,6 +137,7 @@ export function AppLaunchSequence({ children }: { children: ReactNode }) {
             ? "app-launch-content app-launch-content--visible"
             : "app-launch-content"
         }
+        aria-hidden={!revealContent}
       >
         {children}
       </div>

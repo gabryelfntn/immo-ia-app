@@ -28,6 +28,7 @@ export default function RootLayout({
     <html
       lang="fr"
       className={`${plusJakarta.variable} ${geistMono.variable} h-full antialiased`}
+      style={{ backgroundColor: "#f7f4ee" }}
     >
       <body className="flex min-h-full flex-col bg-app-shell text-stone-900 antialiased">
         <AppLaunchSequence>{children}</AppLaunchSequence>

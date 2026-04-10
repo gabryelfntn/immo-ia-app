@@ -190,6 +190,19 @@ body {
 }
 
 /* --- Séquence d’accueil (page d’accueil, 1× par session) --- */
+.app-launch-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 9997;
+  background-color: #f7f4ee;
+  background-image:
+    linear-gradient(rgba(28, 25, 23, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(28, 25, 23, 0.04) 1px, transparent 1px),
+    radial-gradient(ellipse 100% 60% at 50% -15%, rgba(120, 113, 108, 0.12), transparent 55%);
+  background-size: 44px 44px, 44px 44px, 100% 100%;
+  pointer-events: none;
+}
+
 @keyframes launch-aurora {
   0%,
   100% {
@@ -444,6 +457,8 @@ body {
 
 .app-launch-content {
   opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
   transform: translateY(14px);
   transition:
     opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.12s,
@@ -452,6 +467,8 @@ body {
 
 .app-launch-content--visible {
   opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
   transform: translateY(0);
 }
 
