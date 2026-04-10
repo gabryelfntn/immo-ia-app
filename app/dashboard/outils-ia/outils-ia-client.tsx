@@ -27,13 +27,30 @@ const tabs: { id: TabId; label: string }[] = [
   { id: "onboarding", label: "Onboarding" },
 ];
 
-function getSpeechRecognitionCtor():
-  | (new () => SpeechRecognition)
-  | undefined {
+/** Sous-ensemble de l’API Web Speech (les noms globaux TS varient selon l’environnement de build). */
+type WebSpeechResultEvent = {
+  resultIndex: number;
+  results: { length: number; [i: number]: { 0: { transcript: string } } };
+};
+
+type WebSpeechRecognition = {
+  lang: string;
+  interimResults: boolean;
+  continuous: boolean;
+  onresult: ((ev: WebSpeechResultEvent) => void) | null;
+  onerror: (() => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+};
+
+type WebSpeechRecognitionCtor = new () => WebSpeechRecognition;
+
+function getSpeechRecognitionCtor(): WebSpeechRecognitionCtor | undefined {
   if (typeof window === "undefined") return undefined;
   const w = window as unknown as {
-    SpeechRecognition?: new () => SpeechRecognition;
-    webkitSpeechRecognition?: new () => SpeechRecognition;
+    SpeechRecognition?: WebSpeechRecognitionCtor;
+    webkitSpeechRecognition?: WebSpeechRecognitionCtor;
   };
   return w.SpeechRecognition ?? w.webkitSpeechRecognition;
 }
@@ -246,7 +263,7 @@ function DictationPanel() {
     tags?: string[];
   } | null>(null);
   const [listening, setListening] = useState(false);
-  const recRef = useRef<SpeechRecognition | null>(null);
+  const recRef = useRef<WebSpeechRecognition | null>(null);
 
   const stopRec = useCallback(() => {
     recRef.current?.stop();
@@ -265,7 +282,7 @@ function DictationPanel() {
     rec.lang = "fr-FR";
     rec.interimResults = false;
     rec.continuous = true;
-    rec.onresult = (ev: SpeechRecognitionEvent) => {
+    rec.onresult = (ev: WebSpeechResultEvent) => {
       let chunk = "";
       for (let i = ev.resultIndex; i < ev.results.length; i++) {
         chunk += ev.results[i]![0]!.transcript;
