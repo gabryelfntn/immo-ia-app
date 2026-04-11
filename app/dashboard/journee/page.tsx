@@ -8,6 +8,8 @@ import { PIPELINE_STAGE_LABELS } from "@/lib/contacts/pipeline";
 import type { ContactStatus, PipelineStage } from "@/lib/contacts/schema";
 import { CONTACT_STATUS_LABELS } from "@/lib/contacts/labels";
 import { Calendar, ListTodo, Phone, Target, Bell } from "lucide-react";
+import { RelanceSnoozeButtons } from "./relance-snooze-buttons";
+import { RelanceTemplatesBlock } from "./relance-templates-block";
 
 function startOfLocalDay(): number {
   const d = new Date();
@@ -82,7 +84,7 @@ export default async function JourneePage() {
   let contactQ = supabase
     .from("contacts")
     .select(
-      "id, first_name, last_name, email, status, type, pipeline_stage, budget_min, budget_max, desired_city, last_contacted_at, created_at, followup_opt_out, agent_id"
+      "id, first_name, last_name, email, status, type, pipeline_stage, budget_min, budget_max, desired_city, last_contacted_at, created_at, followup_opt_out, agent_id, relance_snooze_until"
     )
     .eq("agency_id", agencyId)
     .eq("followup_opt_out", false);
@@ -93,7 +95,17 @@ export default async function JourneePage() {
 
   const { data: allContacts } = await contactQ;
 
+  const nowMs = Date.now();
   const relanceCandidates = (allContacts ?? [])
+    .filter((c) => {
+      const raw = (c as { relance_snooze_until?: string | null })
+        .relance_snooze_until;
+      if (typeof raw === "string" && raw) {
+        const until = new Date(raw).getTime();
+        if (!Number.isNaN(until) && until > nowMs) return false;
+      }
+      return true;
+    })
     .map((c) => {
       const last =
         (typeof c.last_contacted_at === "string" && c.last_contacted_at) ||
@@ -260,21 +272,29 @@ export default async function JourneePage() {
             Relances à prévoir
           </h2>
           <p className="mt-1 text-sm text-slate-500">
-            Contacts sans activité depuis au moins 7 jours (hors opt-out).
+            Contacts sans activité depuis au moins 7 jours (hors opt-out). Les
+            relances reportées (+1 j / +7 j) sont masquées jusqu’à la date
+            choisie.
           </p>
           <ul className="mt-4 space-y-2 text-sm">
             {relanceCandidates.length === 0 ? (
               <li className="text-slate-500">Rien d&apos;urgent ici.</li>
             ) : (
               relanceCandidates.map((c) => (
-                <li key={c.id}>
-                  <Link
-                    href={`/dashboard/contacts/${c.id}`}
-                    className="font-medium text-stone-800 hover:underline"
-                  >
-                    {c.name}
-                  </Link>
-                  <span className="text-slate-500"> · {c.days} j.</span>
+                <li
+                  key={c.id}
+                  className="flex flex-wrap items-center justify-between gap-2"
+                >
+                  <span>
+                    <Link
+                      href={`/dashboard/contacts/${c.id}`}
+                      className="font-medium text-stone-800 hover:underline"
+                    >
+                      {c.name}
+                    </Link>
+                    <span className="text-slate-500"> · {c.days} j.</span>
+                  </span>
+                  <RelanceSnoozeButtons contactId={c.id} />
                 </li>
               ))
             )}
@@ -287,6 +307,16 @@ export default async function JourneePage() {
           </Link>
         </section>
       </div>
+
+      <section className="mt-6 card-luxury rounded-2xl border border-slate-200/90 bg-white p-6">
+        <h2 className="text-lg font-bold text-slate-900">
+          Modèles de messages (relance)
+        </h2>
+        <p className="mt-1 text-sm text-slate-500">
+          Textes courts à adapter avant envoi — un clic copie dans le presse-papiers.
+        </p>
+        <RelanceTemplatesBlock />
+      </section>
 
       <section className="mt-6 card-luxury rounded-2xl border border-slate-200/90 bg-white p-6">
         <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">

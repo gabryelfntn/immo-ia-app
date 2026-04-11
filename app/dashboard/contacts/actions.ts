@@ -8,6 +8,7 @@ import {
   contactStatusEnum,
   pipelineStageEnum,
 } from "@/lib/contacts/schema";
+import { logAuditEvent } from "@/lib/audit/log";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -44,6 +45,8 @@ export type MarkContactCoordinatesVerifiedResult =
   | { ok: false; error: string };
 
 export type DeleteContactResult = { ok: true } | { ok: false; error: string };
+
+export type SnoozeRelanceResult = { ok: true } | { ok: false; error: string };
 
 async function requireAgencyContext() {
   const supabase = await createClient();
@@ -275,6 +278,63 @@ export async function updateContactPipelineStage(
   revalidatePath(`/dashboard/contacts/${contactId}`);
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/taches");
+  revalidatePath("/dashboard/contacts/pipeline");
+  revalidatePath("/dashboard/journee");
+
+  await logAuditEvent(supabase, {
+    agencyId: ctx.agencyId,
+    actorId: ctx.userId,
+    entityType: "contact",
+    entityId: contactId,
+    action: "pipeline_update",
+    payload: { pipeline_stage: parsed.data },
+  });
+
+  return { ok: true };
+}
+
+export async function snoozeContactRelance(
+  contactId: string,
+  days: 1 | 7
+): Promise<SnoozeRelanceResult> {
+  const { supabase, ctx } = await requireAgencyContext();
+  if (!ctx) {
+    return { ok: false, error: "Session ou agence introuvable." };
+  }
+
+  const until = new Date();
+  until.setDate(until.getDate() + days);
+
+  const { data, error } = await supabase
+    .from("contacts")
+    .update({
+      relance_snooze_until: until.toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", contactId)
+    .eq("agency_id", ctx.agencyId)
+    .select("id");
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+  if (!data?.length) {
+    return { ok: false, error: "Contact introuvable." };
+  }
+
+  revalidatePath("/dashboard/journee");
+  revalidatePath("/dashboard/relances");
+  revalidatePath(`/dashboard/contacts/${contactId}`);
+
+  await logAuditEvent(supabase, {
+    agencyId: ctx.agencyId,
+    actorId: ctx.userId,
+    entityType: "contact",
+    entityId: contactId,
+    action: "relance_snooze",
+    payload: { days, until: until.toISOString() },
+  });
+
   return { ok: true };
 }
 
@@ -429,7 +489,17 @@ export async function deleteContact(contactId: string): Promise<DeleteContactRes
     return { ok: false, error: error.message };
   }
 
+  await logAuditEvent(supabase, {
+    agencyId: ctx.agencyId,
+    actorId: ctx.userId,
+    entityType: "contact",
+    entityId: contactId,
+    action: "delete",
+    payload: { agent_id: row.agent_id },
+  });
+
   revalidatePath("/dashboard/contacts");
   revalidatePath("/dashboard");
+  revalidatePath("/dashboard/contacts/pipeline");
   return { ok: true };
 }

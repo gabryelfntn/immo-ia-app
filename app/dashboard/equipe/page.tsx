@@ -39,7 +39,10 @@ export default async function EquipePerformancePage() {
         .from("profiles")
         .select("id, full_name, role")
         .eq("agency_id", agencyId),
-      supabase.from("contacts").select("agent_id").eq("agency_id", agencyId),
+      supabase
+        .from("contacts")
+        .select("agent_id, status, pipeline_stage")
+        .eq("agency_id", agencyId),
       supabase.from("properties").select("agent_id").eq("agency_id", agencyId),
     ]);
 
@@ -50,6 +53,25 @@ export default async function EquipePerformancePage() {
   function countFor(agentId: string | null | undefined, rows: { agent_id?: string | null }[]) {
     if (!agentId) return 0;
     return rows.filter((r) => (r.agent_id as string | null) === agentId).length;
+  }
+
+  const hotPipeline = new Set(["offre", "signature", "visite"]);
+
+  function priorityLeadsFor(
+    agentId: string | null | undefined,
+    rows: {
+      agent_id?: string | null;
+      status?: string | null;
+      pipeline_stage?: string | null;
+    }[]
+  ): number {
+    if (!agentId) return 0;
+    return rows.filter((r) => {
+      if ((r.agent_id as string | null) !== agentId) return false;
+      const st = typeof r.status === "string" ? r.status : "";
+      const ps = typeof r.pipeline_stage === "string" ? r.pipeline_stage : "";
+      return st === "chaud" || hotPipeline.has(ps);
+    }).length;
   }
 
   return (
@@ -64,7 +86,8 @@ export default async function EquipePerformancePage() {
             Performance par agent
           </h1>
           <p className="mt-2 text-slate-500">
-            Répartition des contacts et des biens par responsable (agent_id).
+            Contacts, biens et leads prioritaires (statut chaud ou étape pipeline
+            visite / offre / signature) par agent.
           </p>
         </div>
         <Link
@@ -83,12 +106,15 @@ export default async function EquipePerformancePage() {
               <th className="px-5 py-3 font-semibold">Rôle</th>
               <th className="px-5 py-3 font-semibold tabular-nums">Contacts</th>
               <th className="px-5 py-3 font-semibold tabular-nums">Biens</th>
+              <th className="px-5 py-3 font-semibold tabular-nums">
+                Leads prioritaires
+              </th>
             </tr>
           </thead>
           <tbody className="text-slate-700">
             {memberList.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-5 py-8 text-center text-slate-500">
+                <td colSpan={5} className="px-5 py-8 text-center text-slate-500">
                   Aucun membre trouvé. Vérifiez les politiques RLS sur{" "}
                   <code className="rounded bg-slate-100 px-1">profiles</code> si
                   la liste est vide.
@@ -99,6 +125,14 @@ export default async function EquipePerformancePage() {
                 const id = m.id as string;
                 const nc = countFor(id, contactRows as { agent_id?: string | null }[]);
                 const np = countFor(id, propertyRows as { agent_id?: string | null }[]);
+                const pri = priorityLeadsFor(
+                  id,
+                  contactRows as {
+                    agent_id?: string | null;
+                    status?: string | null;
+                    pipeline_stage?: string | null;
+                  }[]
+                );
                 return (
                   <tr key={id} className="border-t border-slate-100">
                     <td className="px-5 py-3 font-medium text-slate-900">
@@ -109,6 +143,9 @@ export default async function EquipePerformancePage() {
                     </td>
                     <td className="px-5 py-3 tabular-nums">{nc}</td>
                     <td className="px-5 py-3 tabular-nums">{np}</td>
+                    <td className="px-5 py-3 tabular-nums text-amber-900/90">
+                      {pri}
+                    </td>
                   </tr>
                 );
               })

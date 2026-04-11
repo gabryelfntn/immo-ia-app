@@ -18,6 +18,7 @@ import { CopyTextButton } from "@/app/dashboard/_components/copy-text-button";
 import { PropertyCrmExtrasPanel } from "./property-crm-extras-panel";
 import { PropertyCompliancePanel } from "./property-compliance-panel";
 import { PropertyTimelineSection } from "./property-timeline-section";
+import { PropertyContactLinksPanel } from "./property-contact-links-panel";
 import { parseMandateChecklist } from "@/lib/properties/mandate-checklist";
 import { buildPropertyTimeline } from "@/lib/activity/property-timeline";
 
@@ -155,6 +156,57 @@ export default async function PropertyDetailPage({ params }: Props) {
     profile.agency_id as string
   );
 
+  const agencyIdStr = profile.agency_id as string;
+
+  const [{ data: contactLinkRows }, { data: contactPickList }] =
+    await Promise.all([
+      supabase
+        .from("contact_property_links")
+        .select(
+          `
+          id,
+          link_type,
+          note,
+          contact_id,
+          contacts ( first_name, last_name )
+        `
+        )
+        .eq("property_id", id)
+        .eq("agency_id", agencyIdStr)
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("contacts")
+        .select("id, first_name, last_name")
+        .eq("agency_id", agencyIdStr)
+        .order("last_name", { ascending: true })
+        .limit(200),
+    ]);
+
+  const contactLinksForProperty =
+    contactLinkRows?.map((row) => {
+      const raw = row.contacts;
+      const c = Array.isArray(raw) ? raw[0] : raw;
+      return {
+        id: row.id as string,
+        link_type: row.link_type as string,
+        note: (row.note as string | null) ?? null,
+        contact_id: row.contact_id as string,
+        contacts: c
+          ? {
+              first_name: String((c as { first_name?: string }).first_name ?? ""),
+              last_name: String((c as { last_name?: string }).last_name ?? ""),
+            }
+          : null,
+      };
+    }) ?? [];
+
+  const contactOptions =
+    contactPickList?.map((c) => ({
+      id: c.id as string,
+      first_name: c.first_name as string,
+      last_name: c.last_name as string,
+    })) ?? [];
+
   const addressLine = `${row.address as string}, ${row.zip_code as string} ${row.city as string}`;
 
   return (
@@ -235,6 +287,14 @@ export default async function PropertyDetailPage({ params }: Props) {
             </div>
           </address>
         </section>
+      </div>
+
+      <div className="mt-8">
+        <PropertyContactLinksPanel
+          propertyId={id}
+          initialLinks={contactLinksForProperty}
+          contactOptions={contactOptions}
+        />
       </div>
 
       <div className="mt-8">

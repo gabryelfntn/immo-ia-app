@@ -18,7 +18,9 @@ import {
 import type { PropertyStatus, PropertyType } from "@/lib/properties/schema";
 import { normalizeRole, isAgentOnly } from "@/lib/auth/agency-scope";
 
-type Search = { status?: string; type?: string };
+const PAGE_SIZE = 24;
+
+type Search = { status?: string; type?: string; page?: string };
 
 function parseStatusFilter(raw: string | undefined): PropertyStatus | undefined {
   if (!raw) return undefined;
@@ -52,6 +54,7 @@ export default async function BiensPage({ searchParams }: Props) {
   const sp = (await searchParams) ?? {};
   const statusFilter = parseStatusFilter(sp.status);
   const typeFilter = parseTypeFilter(sp.type);
+  const pageNum = Math.max(1, Math.floor(Number(sp.page) || 1));
 
   const supabase = await createClient();
   const {
@@ -81,7 +84,7 @@ export default async function BiensPage({ searchParams }: Props) {
 
   let query = supabase
     .from("properties")
-    .select("*")
+    .select("*", { count: "exact" })
     .eq("agency_id", profile.agency_id)
     .order("created_at", { ascending: false });
 
@@ -97,7 +100,10 @@ export default async function BiensPage({ searchParams }: Props) {
     query = query.eq("agent_id", user.id);
   }
 
-  const { data: properties, error } = await query;
+  const from = (pageNum - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE - 1;
+
+  const { data: properties, error, count } = await query.range(from, to);
 
   if (error) {
     return (
@@ -116,6 +122,17 @@ export default async function BiensPage({ searchParams }: Props) {
   }
 
   const list = properties ?? [];
+  const totalCount = count ?? list.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+
+  const buildPageHref = (p: number) => {
+    const u = new URLSearchParams();
+    if (statusFilter) u.set("status", statusFilter);
+    if (typeFilter) u.set("type", typeFilter);
+    if (p > 1) u.set("page", String(p));
+    const q = u.toString();
+    return q ? `/dashboard/biens?${q}` : "/dashboard/biens";
+  };
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -128,7 +145,9 @@ export default async function BiensPage({ searchParams }: Props) {
             Biens
           </h1>
           <p className="mt-2 text-slate-500">
-            {list.length} bien{list.length !== 1 ? "s" : ""} pour votre agence
+            {totalCount} bien{totalCount !== 1 ? "s" : ""}
+            {totalPages > 1 ? ` · page ${pageNum} / ${totalPages}` : ""} pour
+            votre agence
           </p>
         </div>
         <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center">
@@ -284,6 +303,33 @@ export default async function BiensPage({ searchParams }: Props) {
           })}
         </ul>
       )}
+
+      {totalPages > 1 && list.length > 0 ? (
+        <nav
+          className="mt-10 flex flex-wrap items-center justify-center gap-2"
+          aria-label="Pagination biens"
+        >
+          {pageNum > 1 ? (
+            <Link
+              href={buildPageHref(pageNum - 1)}
+              className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-stone-50"
+            >
+              Précédent
+            </Link>
+          ) : null}
+          <span className="px-3 text-sm text-slate-600">
+            Page {pageNum} / {totalPages}
+          </span>
+          {pageNum < totalPages ? (
+            <Link
+              href={buildPageHref(pageNum + 1)}
+              className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-stone-50"
+            >
+              Suivant
+            </Link>
+          ) : null}
+        </nav>
+      ) : null}
     </div>
   );
 }

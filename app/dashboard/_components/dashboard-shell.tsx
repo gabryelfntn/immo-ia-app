@@ -7,6 +7,7 @@ import { DashboardHeader } from "./dashboard-header";
 import { DashboardSidebar } from "./dashboard-sidebar";
 import { PwaRegister } from "@/app/_components/pwa-register";
 import { PushNotificationsOptIn } from "./push-notifications-opt-in";
+import { DashboardKeyboardShortcuts } from "./dashboard-keyboard-shortcuts";
 
 const STORAGE_KEY = "immo-sidebar-collapsed";
 
@@ -90,6 +91,7 @@ export function DashboardShell({
 
   return (
     <div className="min-h-screen text-stone-900 antialiased">
+      <DashboardKeyboardShortcuts />
       <DashboardSidebar
         userName={userName}
         agencyName={agencyName}

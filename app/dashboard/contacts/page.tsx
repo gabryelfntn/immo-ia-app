@@ -29,6 +29,8 @@ import type {
 import { normalizeRole, isAgentOnly } from "@/lib/auth/agency-scope";
 import { CONTACT_SOURCE_PRESETS } from "@/lib/contacts/source-presets";
 
+const PAGE_SIZE = 24;
+
 type Search = {
   status?: string;
   type?: string;
@@ -36,6 +38,7 @@ type Search = {
   tag?: string;
   sort?: string;
   source?: string;
+  page?: string;
 };
 
 type ContactSort = "created_desc" | "updated_desc" | "name_asc" | "next_asc";
@@ -128,6 +131,7 @@ export default async function ContactsPage({ searchParams }: Props) {
   const tagSlug = sp.tag?.trim() || "";
   const sort = parseContactSort(sp.sort);
   const sourceFilter = sp.source?.trim() || "";
+  const pageNum = Math.max(1, Math.floor(Number(sp.page) || 1));
 
   const supabase = await createClient();
   const {
@@ -181,7 +185,7 @@ export default async function ContactsPage({ searchParams }: Props) {
 
   let query = supabase
     .from("contacts")
-    .select("*")
+    .select("*", { count: "exact" })
     .eq("agency_id", profile.agency_id);
 
   if (statusFilter) {
@@ -227,9 +231,12 @@ export default async function ContactsPage({ searchParams }: Props) {
 
   const skipQuery = tagSlug && tagContactIds !== null && tagContactIds.length === 0;
 
-  const { data: contacts, error } = skipQuery
-    ? { data: [], error: null as null }
-    : await query;
+  const from = (pageNum - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE - 1;
+
+  const { data: contacts, error, count } = skipQuery
+    ? { data: [], error: null as null, count: 0 }
+    : await query.range(from, to);
 
   if (error) {
     return (
@@ -250,6 +257,21 @@ export default async function ContactsPage({ searchParams }: Props) {
   }
 
   const list = contacts ?? [];
+  const totalCount = count ?? list.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+
+  const buildPageHref = (p: number) => {
+    const u = new URLSearchParams();
+    if (statusFilter) u.set("status", statusFilter);
+    if (typeFilter) u.set("type", typeFilter);
+    if (pipelineFilter) u.set("pipeline", pipelineFilter);
+    if (tagSlug) u.set("tag", tagSlug);
+    if (sourceFilter) u.set("source", sourceFilter);
+    if (sort !== "created_desc") u.set("sort", sort);
+    if (p > 1) u.set("page", String(p));
+    const q = u.toString();
+    return q ? `/dashboard/contacts?${q}` : "/dashboard/contacts";
+  };
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -262,7 +284,11 @@ export default async function ContactsPage({ searchParams }: Props) {
             Contacts
           </h1>
           <p className="mt-2 text-slate-500">
-            {list.length} contact{list.length !== 1 ? "s" : ""} pour votre agence
+            {totalCount} contact{totalCount !== 1 ? "s" : ""}
+            {totalPages > 1
+              ? ` · page ${pageNum} / ${totalPages}`
+              : ""}{" "}
+            pour votre agence
           </p>
         </div>
         <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-center">
@@ -273,6 +299,12 @@ export default async function ContactsPage({ searchParams }: Props) {
             <Download className="h-5 w-5" strokeWidth={2} />
             Exporter CSV
           </a>
+          <Link
+            href="/dashboard/contacts/pipeline"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-stone-400"
+          >
+            Pipeline
+          </Link>
           <Link
             href="/dashboard/contacts/new"
             className="btn-luxury-primary inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold text-white transition-all duration-300"
@@ -519,6 +551,33 @@ export default async function ContactsPage({ searchParams }: Props) {
           })}
         </ul>
       )}
+
+      {totalPages > 1 && list.length > 0 ? (
+        <nav
+          className="mt-10 flex flex-wrap items-center justify-center gap-2"
+          aria-label="Pagination contacts"
+        >
+          {pageNum > 1 ? (
+            <Link
+              href={buildPageHref(pageNum - 1)}
+              className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-stone-50"
+            >
+              Précédent
+            </Link>
+          ) : null}
+          <span className="px-3 text-sm text-slate-600">
+            Page {pageNum} / {totalPages}
+          </span>
+          {pageNum < totalPages ? (
+            <Link
+              href={buildPageHref(pageNum + 1)}
+              className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-stone-50"
+            >
+              Suivant
+            </Link>
+          ) : null}
+        </nav>
+      ) : null}
     </div>
   );
 }

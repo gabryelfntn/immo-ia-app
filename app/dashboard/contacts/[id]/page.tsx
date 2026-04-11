@@ -35,6 +35,7 @@ import { ContactCopilotPanel } from "./contact-copilot-panel";
 import { ContactMessageDrafts } from "./contact-message-drafts";
 import { ContactDocumentAi } from "./contact-document-ai";
 import { ContactGdprPanel } from "./contact-gdpr-panel";
+import { ContactPropertyLinksPanel } from "./contact-property-links-panel";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -246,6 +247,58 @@ export default async function ContactDetailPage({ params }: Props) {
     agencyId
   );
 
+  const [{ data: propertyLinkRows }, { data: propertyPickList }] =
+    await Promise.all([
+      supabase
+        .from("contact_property_links")
+        .select(
+          `
+          id,
+          link_type,
+          note,
+          property_id,
+          properties ( title, city )
+        `
+        )
+        .eq("contact_id", id)
+        .eq("agency_id", agencyId)
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("properties")
+        .select("id, title, city")
+        .eq("agency_id", agencyId)
+        .order("created_at", { ascending: false })
+        .limit(120),
+    ]);
+
+  const propertyLinks =
+    propertyLinkRows?.map((row) => {
+      const raw = row.properties;
+      const p = Array.isArray(raw) ? raw[0] : raw;
+      return {
+        id: row.id as string,
+        link_type: row.link_type as string,
+        note: (row.note as string | null) ?? null,
+        property_id: row.property_id as string,
+        properties: p
+          ? {
+              title: String((p as { title?: string }).title ?? ""),
+              city:
+                (p as { city?: string | null }).city != null
+                  ? String((p as { city?: string | null }).city)
+                  : null,
+            }
+          : null,
+      };
+    }) ?? [];
+
+  const propertyOptions =
+    propertyPickList?.map((p) => ({
+      id: p.id as string,
+      title: p.title as string,
+      city: (p.city as string | null) ?? null,
+    })) ?? [];
+
   const userRole = normalizeRole(profile?.role as string | null);
   const contactAgentId = row.agent_id as string;
   const allowDelete = canDeleteContact(userRole, user.id, contactAgentId);
@@ -296,6 +349,16 @@ export default async function ContactDetailPage({ params }: Props) {
               mapsQuery={desiredCity || null}
             />
           </div>
+          <p className="mt-3 text-sm">
+            <a
+              href={`/api/reports/contact/${id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-stone-700 underline-offset-2 hover:underline"
+            >
+              Exporter la fiche PDF
+            </a>
+          </p>
         </div>
         <div className="flex shrink-0 flex-col gap-4 sm:items-end">
           <div className="rounded-xl border border-stone-500/20 bg-stone-700/10 px-5 py-4 text-right">
@@ -382,6 +445,14 @@ export default async function ContactDetailPage({ params }: Props) {
           initialNextLabel={ext.next_action_label ?? null}
           initialNextAt={ext.next_action_at ?? null}
           initialVerifiedAt={ext.coordinates_verified_at ?? null}
+        />
+      </section>
+
+      <section className="mt-8">
+        <ContactPropertyLinksPanel
+          contactId={id}
+          initialLinks={propertyLinks}
+          propertyOptions={propertyOptions}
         />
       </section>
 
